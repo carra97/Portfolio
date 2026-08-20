@@ -1,0 +1,214 @@
+@import 'tailwindcss';
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   Tokens — DISENO.md §2. Definidos UNA sola vez. Cero hex sueltos en componentes.
+   El modo oscuro es el default real: vive en :root. El claro es una derivación
+   explícita bajo [data-theme="light"], no una inversión ni un media query.
+   ───────────────────────────────────────────────────────────────────────────── */
+
+:root {
+  color-scheme: dark;
+
+  --bg-page: #0c0b0a;
+  --bg-surface: #151412;
+  --bg-hover: #1d1b18;
+  --border: #262320;
+  --border-strong: #37332e;
+  --text-heading: #f2efe9;
+  --text-body: #b3aea4;
+  --text-muted: #8a857a;
+  --beige-quiet: #c4bba9;
+  --accent: #c49a6c;
+  --accent-hover: #d2a679;
+  --accent-dim: #5c4530;
+  --accent-bg: #191410;
+  --accent-on: #0c0b0a;
+  --state-ok: #8fae93;
+  --state-error: #ce8e86;
+
+  --dur-fast: 150ms;
+  --dur-base: 250ms;
+  --dur-slow: 400ms;
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+[data-theme='light'] {
+  color-scheme: light;
+
+  --bg-page: #faf7f1;
+  --bg-surface: #ffffff;
+  --bg-hover: #f0ebe1;
+  --border: #e6e0d4;
+  --border-strong: #d3ccbf;
+  --text-heading: #1a1511;
+  --text-body: #4b4740;
+  --text-muted: #6e6961;
+  --beige-quiet: #6e6961;
+  --accent: #6f5230;
+  --accent-hover: #573f22;
+  --accent-dim: #d3ccbf;
+  --accent-bg: #f0ebe1;
+  --accent-on: #faf7f1;
+  --state-ok: #3a6b45;
+  --state-error: #a03f36;
+}
+
+@theme inline {
+  --color-page: var(--bg-page);
+  --color-surface: var(--bg-surface);
+  --color-hover: var(--bg-hover);
+  --color-line: var(--border);
+  --color-line-strong: var(--border-strong);
+  --color-heading: var(--text-heading);
+  --color-body: var(--text-body);
+  --color-muted: var(--text-muted);
+  --color-quiet: var(--beige-quiet);
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-accent-dim: var(--accent-dim);
+  --color-accent-bg: var(--accent-bg);
+  --color-accent-on: var(--accent-on);
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+}
+
+/* ── Base ─────────────────────────────────────────────────────────────────── */
+
+html {
+  scroll-behavior: smooth;
+  /* Compensa el header sticky al saltar a un ancla. */
+  scroll-padding-top: 5rem;
+}
+
+body {
+  background-color: var(--bg-page);
+  color: var(--text-body);
+  font-family: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  /* Body 17px / 1.7 — DISENO.md §3. 17 y no 16: el sitio se lee, no se escanea. */
+  font-size: 17px;
+  line-height: 1.7;
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Solo dos pesos en todo el sitio: 400 y 500. El 600/700 lee pesado y barato. */
+h1,
+h2,
+h3,
+h4,
+strong,
+b {
+  font-weight: 500;
+  color: var(--text-heading);
+}
+
+/* Anillo de foco en --text-heading, no en el acento: tiene que verse sobre
+   cualquier superficie, incluida la del propio CTA. */
+:focus-visible {
+  outline: 2px solid var(--text-heading);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+::selection {
+  background: var(--accent-dim);
+  color: var(--text-heading);
+}
+
+/* ── Utilidades tipográficas ──────────────────────────────────────────────── */
+
+.display {
+  font-size: clamp(2.5rem, 6vw, 3.5rem);
+  line-height: 1.05;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  color: var(--text-heading);
+}
+
+.h2 {
+  font-size: 2rem;
+  line-height: 1.2;
+  font-weight: 500;
+}
+
+.h3 {
+  font-size: 1.25rem;
+  line-height: 1.4;
+  font-weight: 500;
+}
+
+.eyebrow {
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: 0.75rem;
+  line-height: 1.4;
+  letter-spacing: 0.12em;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+.small {
+  font-size: 0.875rem;
+  line-height: 1.6;
+  color: var(--text-muted);
+}
+
+/* Medida de línea 65–75 caracteres. Lo que más impacta en que un sitio se sienta
+   profesional, y es gratis. */
+.measure {
+  max-width: 68ch;
+}
+
+/* Links en texto corrido: color + subrayado SIEMPRE visible. WCAG 1.4.1 —
+   el color no puede ser el único medio para transmitir información. */
+.prose-link {
+  color: var(--accent);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+  transition: color var(--dur-fast) var(--ease);
+}
+.prose-link:hover {
+  color: var(--accent-hover);
+}
+
+/* ── Movimiento — DISENO.md §5 ────────────────────────────────────────────── */
+
+/* Único momento protagonista: la entrada del hero. Se ejecuta una vez. */
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.rise {
+  animation: rise var(--dur-slow) var(--ease) both;
+}
+
+/* Revelado de secciones con animation-timeline: CSS puro, 0 KB, corre en el
+   compositor. Sin IntersectionObserver ni librería. */
+@supports (animation-timeline: view()) {
+  .reveal {
+    animation: rise var(--dur-base) var(--ease) both;
+    animation-timeline: view();
+    animation-range: entry 0% entry 40%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

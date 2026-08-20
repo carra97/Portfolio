@@ -1,0 +1,144 @@
+[
+  {
+    "slug": "salario-familiar",
+    "lang": "es",
+    "title": "Sistema de Carga y Validación de Certificados de Salario Familiar",
+    "summary": "Digitalización provincial de un trámite que vivía en papel: de 4 meses a 5 semanas de resolución promedio, con una campaña anual concentrada de 20.000 a 30.000 expedientes y cerca de 50.000 archivos, sobre un stack heredado y sin poder instalar una sola librería externa.",
+    "context": "El Consejo General de Educación es el organismo rector del sistema educativo de la provincia de Entre Ríos. El sistema es de alcance provincial: lo usa todo el personal escolar —docentes, directivos, administrativos y auxiliares—, no solo el personal del organismo.",
+    "problem": [
+      "El trámite de salario familiar se hacía en papel. Cada establecimiento educativo mantenía sus propias planillas físicas, y la documentación viajaba hasta el área de Liquidaciones para ser validada a mano.",
+      "El volumen no es continuo: se concentra en una campaña única de tres a cuatro meses por año, con entre 20.000 y 30.000 trámites. Cada trámite lleva dos archivos y pasa por dos etapas de validación, así que la campaña mueve alrededor de 50.000 archivos en una ventana corta.",
+      "En papel no había forma de responder dos preguntas básicas: dónde está mi trámite, y quién validó qué. Sin trazabilidad, cada consulta era una búsqueda manual."
+    ],
+    "constraints": [
+      "Stack heredado no negociable: PHP 7 y SQL Server. El organismo no iba a migrar por este proyecto.",
+      "Restricción técnica del organismo: no se podían instalar librerías externas. Todo lo que no viniera con PHP había que escribirlo.",
+      "Integración obligatoria con el SAGE, el sistema de administración de la gestión educativa provincial ya en uso.",
+      "Los usuarios finales son todo el personal escolar de la provincia, en su enorme mayoría sin formación técnica y con conectividad desigual.",
+      "El pico es estacional y no se puede diferir: si el sistema falla durante la campaña, el trámite no espera al año siguiente."
+    ],
+    "decisions": [
+      {
+        "title": "Escribir la capa de seguridad de carga de archivos desde cero, en PHP nativo",
+        "rationale": "Subir archivos es la superficie de ataque más peligrosa de un sistema público: si se acepta cualquier cosa, el servidor termina ejecutando lo que le manden. Sin librerías disponibles, implementé validación de tipo real, saneamiento de nombres y control de acceso a la descarga, todo con las primitivas del lenguaje.",
+        "tradeoff": "Código propio de seguridad es código propio que hay que mantener y auditar, y no tiene detrás los años de escrutinio público de una librería establecida. Lo asumí porque la alternativa no era usar una librería, era no validar."
+      },
+      {
+        "title": "Auditoría y trazabilidad dentro del modelo de datos, no como log adjunto",
+        "rationale": "En un trámite que afecta la liquidación de un sueldo, la pregunta “quién validó esto y cuándo” no es diagnóstico: es parte del expediente. Modelarlo en la base, y no en un archivo de log aparte, hace que la respuesta sea una consulta y no una investigación.",
+        "tradeoff": "Más escrituras por trámite y un esquema más pesado. A cambio, la trazabilidad no se puede perder ni rotar por accidente."
+      },
+      {
+        "title": "Dos etapas de validación por trámite",
+        "rationale": "Separar la validación permite frenar un expediente incompleto antes de que llegue a liquidación, que es donde un error cuesta plata y retrabajo real.",
+        "tradeoff": "Un paso más para el usuario y el doble de archivos a procesar. El costo se paga en la campaña; el error, en el sueldo de alguien."
+      },
+      {
+        "title": "Documentar en dos formatos: manual escrito y videos instructivos",
+        "rationale": "Escribí los manuales en PDF, pero para una audiencia de toda la provincia y sin formación técnica un documento no alcanza: hay gente que no lo va a abrir nunca. Dirigí además los videos instructivos, que muestran la pantalla real paso a paso y se difundieron para toda la comunidad educativa. No era elegir uno u otro: era cubrir a quien lee y a quien no.",
+        "tradeoff": "Dos materiales que mantener en lugar de uno. Si cambia la interfaz hay que rehacer los dos, y el video es el caro de rehacer. Para un sistema con una única campaña al año, el intercambio conviene."
+      }
+    ],
+    "architecture": "Backend en PHP 7 sobre SQL Server, con la base modelada alrededor del expediente y sus estados de validación. El frontend es JavaScript con jQuery y AJAX para que la carga y el seguimiento no exijan recargar la página en conexiones lentas. La capa de archivos está separada del resto: recibe, valida, sanea y recién entonces persiste, y toda descarga pasa por control de acceso en lugar de servirse directo del filesystem. Las consultas de seguimiento y los procesos de carga masiva están optimizados para el pico de campaña, que es cuando el sistema realmente se prueba.",
+    "metrics": [
+      {
+        "label": "Tiempo de resolución",
+        "value": "4 meses → 5 semanas",
+        "note": "Promedio del trámite, antes y después"
+      },
+      {
+        "label": "Trámites por campaña",
+        "value": "20.000–30.000",
+        "note": "Campaña única anual de 3 a 4 meses"
+      },
+      {
+        "label": "Archivos procesados",
+        "value": "≈50.000",
+        "note": "2 archivos y 2 etapas de validación por trámite"
+      }
+    ],
+    "outcome": [
+      "Redujo el tiempo promedio de resolución del trámite de 4 meses a 5 semanas.",
+      "Eliminó las planillas físicas en cada establecimiento educativo de la provincia.",
+      "Fue presentado en acto oficial en el salón de actos del Consejo General de Educación, en abril de 2024.",
+      "La nota de prensa oficial del organismo me identifica como programador y creador del sistema. Es el activo más verificable de mi perfil, porque no lo escribí yo."
+    ],
+    "retrospective": [
+      "Procesaría las validaciones fuera del request. Durante el pico de campaña, hacer todo el trabajo de forma síncrona convierte cada lentitud en una espera del usuario; una cola simple habría absorbido el pico sin tocar la experiencia.",
+      "Sacaría los archivos del filesystem de la aplicación. Almacenamiento aparte, con URLs firmadas de vida corta, reduce la superficie de ataque y hace que crecer no dependa del disco del servidor.",
+      "Escribiría tests automatizados sobre la capa de carga. Es el componente con más riesgo y el que más veces toqué a mano: es exactamente donde una suite de tests se paga sola.",
+      "La restricción de no poder usar librerías externas la planteé y la dejé documentada por escrito en su momento; nunca se levantó. Lo que cambiaría hoy no es haberla discutido, sino cómo: llevarla con un riesgo concreto y su costo estimado en lugar de un argumento técnico. En un organismo público una restricción se mueve cuando alguien puede firmar el riesgo, no cuando entiende el razonamiento."
+    ],
+    "tech": [
+      "PHP 7",
+      "SQL Server",
+      "JavaScript",
+      "jQuery",
+      "AJAX",
+      "Bootstrap"
+    ]
+  },
+  {
+    "slug": "portfolio-chatbot",
+    "lang": "es",
+    "title": "Este portfolio y su chatbot",
+    "summary": "El único proyecto de mi perfil que quien me evalúa puede auditar entero: el repositorio es público y cada decisión de arquitectura está justificada por escrito, incluida la de no usar RAG.",
+    "context": "Un portfolio con un chatbot que responde sobre mi perfil profesional. Lo construí en público, con el repositorio abierto, porque en un perfil de IA aplicada el código verificable vale más que la descripción de un proyecto que nadie puede abrir.",
+    "problem": [
+      "Un CV afirma cosas y hay que creerle. Quería que al menos un proyecto de mi perfil fuera enteramente auditable por quien lo lee.",
+      "El chatbot suma un riesgo que un sitio estático no tiene: un endpoint de modelo expuesto a internet es, sin límites, una factura abierta para cualquiera que encuentre la URL.",
+      "El contenido tiene que ser consistente entre el sitio, el bot y mi CV. Tres lugares afirmando lo mismo divergen; es cuestión de tiempo, no de disciplina."
+    ],
+    "constraints": [
+      "Costo de infraestructura cero.",
+      "Repositorio público: cualquier decisión mala queda expuesta, y ningún dato sensible puede entrar al historial de Git.",
+      "El sitio tiene que ser completamente usable con el chatbot apagado.",
+      "Una sola fuente de verdad para los hechos: si un dato no está en el dossier, no existe para el sitio ni para el bot."
+    ],
+    "decisions": [
+      {
+        "title": "Sin RAG, deliberadamente",
+        "rationale": "El corpus completo de mi perfil entra holgadamente en la ventana de contexto del modelo. La regla es que el retrieval se justifica cuando el corpus NO entra; acá no es el caso. Es la decisión de la que más orgulloso estoy del proyecto, porque la respuesta fácil era agregar un vector store y decir que hago RAG.",
+        "tradeoff": "Cada llamada envía el corpus entero, así que el costo por request es mayor y crece si el corpus crece. A esta escala es irrelevante, y el día que deje de serlo, la condición para revisar la decisión ya está escrita."
+      },
+      {
+        "title": "El proveedor de LLM detrás de una interfaz",
+        "rationale": "El proveedor es la dependencia con más probabilidad de cambiar —por precio, disponibilidad o calidad— y la más fácil de aislar. Una variable de entorno selecciona la implementación y el resto del código no sabe cuál está activa.",
+        "tradeoff": "Una capa de indirección por adelantado, que normalmente evito. La acepto acá porque el eje de cambio está identificado, no supuesto."
+      },
+      {
+        "title": "Contenido en JSON tipado, sin CMS",
+        "rationale": "El contenido cambia pocas veces por año y lo edita una sola persona. El esquema de tipos es la barrera: un proyecto marcado como archivado no puede renderizarse como enlace, y una recomendación no puede existir sin declarar la relación de quien la escribió. Esas reglas las hace cumplir el compilador, no la memoria.",
+        "tradeoff": "Editar contenido requiere un commit. Es aceptable, y hasta deseable: deja cada cambio de una afirmación pública en el historial."
+      },
+      {
+        "title": "Entorno validado con Zod, fallando en build",
+        "rationale": "Dos requisitos que se contradicen: el repo tiene que compilar recién clonado sin credenciales, y un valor malformado no puede llegar a producción. La solución es que nada sea obligatorio pero todo valide su forma cuando está presente. Ausencia igual a degradación prevista; presencia inválida igual a build roto.",
+        "tradeoff": "Es más código que leer `process.env` directo, y obliga a pensar qué pasa visualmente cuando cada variable falta."
+      },
+      {
+        "title": "Rate limit y tope de gasto como condición de arranque",
+        "rationale": "El chat solo se habilita si están el kill switch encendido, la clave del proveedor y el backend de rate limit. Si falta cualquiera de los tres, el chat queda apagado y el sitio se sirve completo.",
+        "tradeoff": "Más configuración antes del primer deploy del endpoint. Prefiero un portfolio sin chat que un chat usable como cómputo gratuito."
+      }
+    ],
+    "architecture": "Next.js con App Router y TypeScript. El sitio es enteramente Server Components y se prerenderiza estático: no envía JavaScript de cliente, salvo el selector de tema. El contenido vive en JSON tipado que se valida contra el esquema en tiempo de compilación, así que un dato que no cumple el contrato rompe el build en lugar de la página. El chatbot es un Route Handler que inyecta el corpus completo como contexto, con el proveedor detrás de una interfaz intercambiable, reglas duras en el prompt, rate limit por IP y kill switch. La entrada del usuario siempre viaja en su propio turno, nunca concatenada al prompt de sistema.",
+    "outcome": [
+      "Repositorio público y auditable, con un README que funciona como registro de decisiones.",
+      "Infraestructura de costo cero.",
+      "El sitio funciona completo con el chatbot apagado, que era el requisito de diseño principal."
+    ],
+    "retrospective": [
+      "El chatbot todavía no está deployado: primero va el sitio estático. Es una secuencia que me impuse a propósito, porque la tentación de mostrar el bot antes de que el resto esté sólido es fuerte.",
+      "Falta el conjunto de preguntas de referencia corriendo en cada cambio del prompt de sistema. Sin eso, cualquier ajuste al prompt es a ciegas — es el mismo argumento que uso para los evals en mi trabajo.",
+      "La política de Content-Security-Policy está pendiente a propósito: definirla antes de conocer los orígenes reales del endpoint de chat lleva a una política laxa que después nadie ajusta."
+    ],
+    "tech": [
+      "Next.js",
+      "TypeScript",
+      "Tailwind CSS",
+      "Zod",
+      "Vercel"
+    ]
+  }
+]

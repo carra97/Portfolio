@@ -1,0 +1,446 @@
+{
+  "meta": {
+    "lang": "es",
+    "title": "Santiago Carrattini — Team Leader & Senior Full Stack Developer",
+    "description": "Desarrollador Full Stack con base fuerte en backend (Node.js/TypeScript) y especialización en IA aplicada: apps con LLMs, agentes y Model Context Protocol. Lidera un equipo de 3 desarrolladores sin dejar de estar hands-on."
+  },
+  "nav": [
+    {
+      "href": "#sobre-mi",
+      "label": "Sobre mí"
+    },
+    {
+      "href": "#experiencia",
+      "label": "Experiencia"
+    },
+    {
+      "href": "#proyectos",
+      "label": "Proyectos"
+    },
+    {
+      "href": "#stack",
+      "label": "Stack"
+    },
+    {
+      "href": "#recomendaciones",
+      "label": "Recomendaciones"
+    },
+    {
+      "href": "#formacion",
+      "label": "Formación"
+    },
+    {
+      "href": "#hobbies",
+      "label": "Fuera del editor"
+    },
+    {
+      "href": "#contacto",
+      "label": "Contacto"
+    }
+  ],
+  "sections": {
+    "about": "Sobre mí",
+    "experience": "Experiencia",
+    "projects": "Proyectos",
+    "skills": "Stack",
+    "testimonials": "Recomendaciones",
+    "hobbies": "Fuera del editor",
+    "certifications": "Formación y certificaciones",
+    "contact": "Contacto"
+  },
+  "ui": {
+    "skipToContent": "Saltar al contenido",
+    "currentBadge": "Actual",
+    "verifiableBadge": "Verificable",
+    "projectArchived": "Proyecto cerrado — sin repositorio ni demo",
+    "relationReportedTo": "Reportaba a Santiago",
+    "relationLead": "Líder de Santiago",
+    "contactIntro": "Disponible full-time en modalidad remota. Con disposición a viajar a Buenos Aires para instancias presenciales puntuales, hasta una vez cada quince días. Escribime por donde te quede más cómodo.",
+    "contactWhatsApp": "Escribirme por WhatsApp",
+    "contactEmail": "Escribirme por email",
+    "photoCaption": "Santiago Carrattini",
+    "themeToggle": "Cambiar tema",
+    "timelineTitle": "Cómo llegué acá",
+    "caseStudyLink": "Ver el case study"
+  },
+  "hero": {
+    "eyebrow": "Paraná, Entre Ríos · Argentina",
+    "name": "Santiago Carrattini",
+    "headline": "Team Leader & Senior Full Stack Developer",
+    "tagline": "Backend en Node.js y TypeScript, con especialización en IA aplicada: apps con LLMs, agentes y Model Context Protocol. Lidero un equipo de 3 desarrolladores sin dejar de estar hands-on.",
+    "location": "Paraná, Entre Ríos, Argentina",
+    "availability": "Full-time · Remoto · Disponible para viajar a Buenos Aires hasta cada 15 días"
+  },
+  "about": {
+    "narrative": [
+      "Llegué a la programación queriendo entender cómo funcionaban las cosas por dentro, incluido cómo se rompían. Fue el puntapié inicial: muy rápido me enganchó más construir que romper, y seguí por ahí. Tendría doce años, con un tío que estudiaba ingeniería electrónica de fondo. Me enganché con Linux, empecé a trastear mi propia PC y a escribir scripts para hacerles bromas a mis amigos. Era juego, pero también la primera vez que sentí que podía hacer que una máquina hiciera lo que yo quería.",
+      "De ahí salió mi primer blog, y después algo que me marcó más: un sistema de turnos que armé y que se usó durante años en una clínica, antes de que compraran uno comercial. Fue la primera vez que algo que escribí le servía a otra persona todos los días. Ahí entendí que la programación no era el objetivo: era la herramienta para resolver problemas reales.",
+      "Nunca dejó de ser un hobby. Simplemente ahora me pagan por hacerlo y lo tomo con otra responsabilidad. Sigo disfrutando lo mismo que a los doce: un problema que todavía no sé resolver."
+    ],
+    "principle": "La vara de que entendiste algo es poder explicarlo en un nivel de simplificación que entienda un chico. Si no llegás a ese nivel, todavía no lo aprendiste bien.",
+    "principleSupport": [
+      "Lidero un equipo de tres desarrolladores: explicar decisiones técnicas y hacer crecer a otros es parte del trabajo, no una anécdota.",
+      "Dirigí los videos instructivos del sistema de asignaciones familiares, paso a paso, para toda la comunidad educativa de la provincia: gente sin formación técnica."
+    ],
+    "timeline": [
+      {
+        "at": "~12 años",
+        "title": "La curiosidad",
+        "body": "Querer entender cómo funcionan los sistemas por dentro. Linux, trastear la propia PC, scripts de cmd para bromas entre amigos. La máquina empezó a hacer lo que yo quería."
+      },
+      {
+        "at": "Adolescencia",
+        "title": "El primer blog",
+        "body": "Lo primero hecho por mí funcionando en un navegador. No importaba que fuera simple: importaba que era mío y que andaba."
+      },
+      {
+        "at": "El primer usuario real",
+        "title": "Un sistema de turnos",
+        "body": "Lo armé y se usó durante años en una clínica, antes de que compraran uno comercial. Mi código sirviéndole a otras personas todos los días. Ahí dejó de ser un ejercicio."
+      },
+      {
+        "at": "Formación",
+        "title": "UTN y Henry",
+        "body": "Estudiar en serio lo que ya venía haciendo solo: darle nombre, estructura y método a una década de prueba y error."
+      },
+      {
+        "at": "Hoy",
+        "title": "De hobby a profesión",
+        "body": "Sistemas críticos en el sector público usados por miles de personas, y después IA aplicada en producción. Nunca dejó de ser pasión; ahora, además, es profesión."
+      }
+    ]
+  },
+  "experience": [
+    {
+      "company": "PHINX Lab",
+      "role": "Team Leader & Senior Full Stack Developer",
+      "period": "Dic 2025 – Presente",
+      "location": "Remoto",
+      "current": true,
+      "context": "Plataforma de IA basada en orquestador + skills. Senior desde el ingreso; Team Leader desde junio de 2026.",
+      "achievements": [
+        "Lidero un equipo de 3 desarrolladores: planificación técnica, code reviews y decisiones de arquitectura, manteniéndome hands-on en backend e IA aplicada.",
+        "Soy autor principal de dos servicios de la plataforma — un agente de análisis documental y un servidor MCP —, donde el problema difícil no es llamar al modelo sino que el sistema sea determinista y operable.",
+        "Diseñé una arquitectura de orquestación en dos niveles: un orquestador central que despacha a 7 skills de extracción estructurada, cada una con su propio sub-orquestador.",
+        "Construí un pipeline multimodal de 5 etapas: visión, OCR, parseo de documentos vectorizados como texto, verificación normativa y síntesis de respuesta.",
+        "Desarrollé de punta a punta el sistema de verificación normativa: modelado y carga del corpus legal, indexación y búsqueda, evaluación de reglas de compliance y generación del informe de resultados.",
+        "Expuse los servicios internos vía MCP —recuperación, generación de informes técnicos y validación documental— como herramientas consumibles por LLMs.",
+        "Determinismo de salida: guardas de estado y concurrencia en el pipeline de análisis, tests de contrato para las skills y regresión con fixtures reales, para que un cambio de prompt no rompa el formato en silencio.",
+        "Detecté y eliminé reglas que se contradecían entre distintas skills del sistema: una clase de bug que no aparece hasta que el agente responde mal.",
+        "Diseñé una estrategia de indexación cacheada y carga selectiva de contexto que redujo significativamente los costos de consumo de LLM y bajó la latencia de recuperación documental.",
+        "Construí workers especializados y motores de consenso para procesamiento estructurado y toma de decisiones en flujos de IA.",
+        "Integré modelos vía Model Context Protocol (MCP) y orquestación de herramientas hacia sistemas externos, con arquitecturas de agentes y subagentes.",
+        "Mantengo y corrijo un parser de formato binario escrito en Python, invocado desde el pipeline TypeScript: interoperabilidad entre runtimes dentro de un mismo flujo."
+      ],
+      "stack": [
+        "Node.js",
+        "TypeScript",
+        "Fastify",
+        "PostgreSQL",
+        "TypeORM",
+        "Redis",
+        "Python",
+        "React",
+        "Docker",
+        "AWS (S3, Bedrock)",
+        "MCP"
+      ]
+    },
+    {
+      "company": "Consejo General de Educación de Entre Ríos",
+      "role": "Desarrollador Full Stack",
+      "period": "Jul 2023 – Dic 2025",
+      "location": "Paraná, Entre Ríos",
+      "current": false,
+      "context": "Sector público. El CGE es el organismo rector del sistema educativo de la provincia de Entre Ríos.",
+      "achievements": [
+        "Desarrollé el Sistema de Carga y Validación de Certificados de Salario Familiar, de alcance provincial: 20.000 a 30.000 trámites por campaña anual y cerca de 50.000 archivos, con auditoría y trazabilidad completas. Redujo el tiempo promedio de resolución del trámite de 4 meses a 5 semanas.",
+        "Implementé desde cero la capa de seguridad de carga de archivos en PHP nativo —validación de tipo, saneamiento y control de acceso— sin librerías externas, por restricción técnica del organismo.",
+        "Lideré la Plataforma de Gestión de Trámites y Notas Internas: digitalicé los circuitos en papel de 6 áreas con permisos jerárquicos diferenciados, bandeja de trabajo por área, trazabilidad y logs de auditoría sobre cada expediente.",
+        "Modelé la máquina de estados de expedientes —puesta en guarda, finalización y reingreso con generación de un nuevo informe—, relevada junto al área de Liquidaciones (~100 usuarios).",
+        "Escribí los manuales y dirigí los videos instructivos del sistema para toda la comunidad educativa provincial.",
+        "Optimicé consultas en SQL Server y procesos de carga masiva de expedientes, y refactoricé código legacy con foco en rendimiento, seguridad y mantenibilidad."
+      ],
+      "stack": [
+        "PHP 7",
+        "SQL Server",
+        "JavaScript (jQuery, AJAX)",
+        "Bootstrap",
+        "HTML5",
+        "CSS3"
+      ]
+    }
+  ],
+  "projects": [
+    {
+      "name": "Sistema de Carga y Validación de Certificados de Salario Familiar",
+      "period": "Consejo General de Educación · 2023–2025",
+      "status": "verifiable",
+      "description": "Alcance provincial: lo usa todo el personal escolar de Entre Ríos — docentes, directivos, administrativos y auxiliares. Carga, validación y seguimiento con auditoría y trazabilidad completas, integrado al SAGE provincial. Incluye una capa de seguridad de carga de archivos escrita desde cero en PHP nativo, sin librerías externas por restricción técnica del organismo.",
+      "result": "Redujo el tiempo promedio de resolución del trámite de 4 meses a 5 semanas. 20.000 a 30.000 trámites por campaña anual y cerca de 50.000 archivos. Eliminó las planillas físicas en cada establecimiento educativo. Presentado en acto oficial en abril de 2024.",
+      "tech": [
+        "PHP 7",
+        "SQL Server",
+        "JavaScript",
+        "Bootstrap"
+      ],
+      "image": {
+        "src": "/presentacion-cge.jpg",
+        "alt": "Santiago Carrattini presentando el sistema en el salón de actos del Consejo General de Educación, con la aplicación proyectada detrás",
+        "caption": "Presentación del sistema en acto oficial — Consejo General de Educación de Entre Ríos, abril de 2024."
+      },
+      "press": {
+        "outlet": "Consejo General de Educación de Entre Ríos",
+        "title": "Se presentó la nueva modalidad de carga de documentación de asignaciones familiares",
+        "date": "04/04/2024",
+        "quote": "programador y creador del sistema",
+        "url": "https://cge.entrerios.gov.ar/2024/04/se-presento-la-nueva-modalidad-de-carga-de-documentacion-de-asignaciones-familiares/"
+      },
+      "slug": "salario-familiar"
+    },
+    {
+      "name": "Plataforma de Gestión de Trámites y Notas Internas",
+      "period": "Consejo General de Educación · 2023–2025",
+      "status": "archived",
+      "description": "Sistema interno del organismo: digitalizó los circuitos en papel de 6 áreas con permisos jerárquicos en dos ejes —área y capa de jefatura—, trazabilidad y logs de auditoría. El núcleo es la máquina de estados del expediente, incluidos la puesta en guarda y el reingreso con generación de un informe nuevo, relevada junto al área de Liquidaciones. Bandeja de trabajo por área, historial completo de movimientos y filtros por tipo, estado, fecha y agente.",
+      "tech": [
+        "PHP 7",
+        "SQL Server",
+        "JavaScript (jQuery, AJAX)",
+        "Bootstrap"
+      ]
+    },
+    {
+      "name": "Este portfolio y su chatbot",
+      "period": "2026",
+      "status": "live",
+      "description": "El chatbot inyecta el perfil completo como contexto, sin RAG: el corpus entra en la ventana, así que un retrieval sería sobre-ingeniería a esta escala — más piezas móviles, más latencia y un modo de falla nuevo a cambio de nada. La decisión está documentada en el README. El proveedor de LLM va detrás de una interfaz intercambiable, con reglas duras en el prompt, evals de guardarraíles, rate limit y kill switch.",
+      "result": "Repo público y auditable. Infraestructura de costo cero.",
+      "tech": [
+        "Next.js",
+        "TypeScript",
+        "Tailwind CSS",
+        "Zod",
+        "Vercel"
+      ],
+      "slug": "portfolio-chatbot"
+    },
+    {
+      "name": "XSports — E-commerce para gimnasio",
+      "period": "2022–2023",
+      "status": "archived",
+      "description": "Proyecto full stack de formación: ventas, autenticación con Passport, checkout con Mercado Pago y catálogo.",
+      "tech": [
+        "Node.js",
+        "Express",
+        "PostgreSQL",
+        "Prisma",
+        "TypeScript",
+        "React"
+      ]
+    }
+  ],
+  "skills": [
+    {
+      "category": "languages",
+      "label": "Lenguajes",
+      "items": [
+        "TypeScript",
+        "JavaScript",
+        "PHP",
+        "SQL",
+        "Python",
+        "HTML5",
+        "CSS3"
+      ],
+      "note": "Python lo uso para interoperabilidad y mantenimiento dentro de pipelines Node, no para construir sistemas completos. Mi lenguaje de trabajo es TypeScript."
+    },
+    {
+      "category": "backend",
+      "label": "Backend y APIs",
+      "items": [
+        "Node.js",
+        "Fastify",
+        "Express",
+        "NestJS",
+        "Laravel",
+        "Diseño de APIs REST"
+      ]
+    },
+    {
+      "category": "ai",
+      "label": "IA Generativa",
+      "items": [
+        "Apps con LLMs",
+        "Agentes y subagentes",
+        "Pipelines multimodales (visión, OCR)",
+        "Orquestación multi-agente en dos niveles",
+        "Model Context Protocol (MCP)",
+        "Prompt y skill engineering",
+        "Integración multiproveedor detrás de una interfaz común",
+        "Evals y determinismo de salida",
+        "Amazon Bedrock"
+      ],
+      "note": "Trabajo contra un RAG en producción y conozco su arquitectura en profundidad, pero el servicio de recuperación no es de mi autoría: lo mío son los agentes y las skills que lo consumen."
+    },
+    {
+      "category": "frontend",
+      "label": "Frontend",
+      "items": [
+        "React",
+        "Redux",
+        "Tailwind CSS",
+        "Bootstrap"
+      ]
+    },
+    {
+      "category": "databases",
+      "label": "Bases de datos y ORM",
+      "items": [
+        "PostgreSQL",
+        "SQL Server",
+        "Redis",
+        "TypeORM",
+        "Prisma"
+      ]
+    },
+    {
+      "category": "devops",
+      "label": "DevOps",
+      "items": [
+        "Docker",
+        "Nginx",
+        "Git",
+        "AWS (S3, Bedrock; fundamentos serverless)"
+      ]
+    },
+    {
+      "category": "practices",
+      "label": "Prácticas y testing",
+      "items": [
+        "SOLID",
+        "Clean Code",
+        "POO",
+        "Arquitectura modular",
+        "Optimización de performance",
+        "Jest",
+        "Scrum"
+      ]
+    }
+  ],
+  "testimonials": [
+    {
+      "author": "Ivan Palachuk",
+      "role": "Sr. Full Stack Developer",
+      "relation": "reported-to-santiago",
+      "quote": "Una de dos, lee mentes, o es un Lead que tiene en la cabeza todo el proyecto y los pasos que siguen. (…) El verdadero MVP.",
+      "url": "https://www.linkedin.com/in/ivan-palachuk-frontend/"
+    },
+    {
+      "author": "Nicolás Viruel",
+      "role": "Full Stack Developer, PHINX Lab",
+      "relation": "reported-to-santiago",
+      "quote": "Se destaca por su criterio técnico, su capacidad para analizar problemas y proponer soluciones claras. (…) Pude ver su crecimiento y su perfil para asumir mayores responsabilidades, especialmente en su paso hacia un rol de liderazgo técnico. No tengo dudas de que Santi puede aportar mucho valor en cualquier equipo.",
+      "url": "https://www.linkedin.com/in/nicolasviruel6776/"
+    },
+    {
+      "author": "Gabriel A. Franco Cabrera",
+      "role": "Full Stack Developer",
+      "relation": "santiagos-lead",
+      "quote": "Su capacidad de análisis y resolución de problemas es extremadamente alta y posee un nivel de conocimiento increíble: lenguajes, frameworks, buenas prácticas, arquitectura e infraestructura, inteligencia artificial. (…) Siempre dispuesto a enseñar y aprender constantemente.",
+      "url": "https://www.linkedin.com/in/gabrielfrancoc/"
+    }
+  ],
+  "hobbies": [
+    {
+      "name": "Robótica y electrónica",
+      "emphasis": "lead",
+      "detail": "Armé un rover autónomo evita-obstáculos: chasis impreso en 3D, sensor ultrasónico HC-SR04 como ojos, protoboard y Arduino. Es el ejemplo más literal de lo que me gusta: hardware, software e iteración hasta que deja de chocarse contra la pared."
+    },
+    {
+      "name": "Guitarra",
+      "emphasis": "compact",
+      "detail": "Autodidacta desde los doce. Toco segunda guitarra y canto — el instrumento del que acompaña, no del que se luce."
+    },
+    {
+      "name": "Lectura",
+      "emphasis": "compact",
+      "detail": "De Hemingway a García Lorca, con algo de Nietzsche en el medio. Y sí, fan declarado de Harry Potter."
+    },
+    {
+      "name": "Escritura",
+      "emphasis": "compact",
+      "detail": "Escribo poesía. Ordenar una idea hasta que se entienda simple es, en el fondo, el mismo trabajo que hacer buen software."
+    },
+    {
+      "name": "Coctelería",
+      "emphasis": "compact",
+      "detail": "Hice un curso de tragos en la adolescencia y desde los veintiuno invento los míos. Experimentar, iterar y equilibrar variables hasta dar con el punto."
+    }
+  ],
+  "education": [
+    {
+      "institution": "UTN, Facultad Regional Paraná",
+      "title": "Tecnicatura Superior en Programación",
+      "note": "Último año, en pausa"
+    },
+    {
+      "institution": "Henry",
+      "title": "Full Stack Web Developer",
+      "note": "Bootcamp, 700 h",
+      "year": "2023"
+    }
+  ],
+  "certifications": [
+    {
+      "issuer": "Anthropic",
+      "year": "2026",
+      "framing": "Formación estructurada en el ecosistema Claude: fundamentos, plataforma, MCP, subagentes y Bedrock.",
+      "items": [
+        "Claude 101",
+        "Claude Platform 101",
+        "Claude Code 101",
+        "Introduction to Claude Cowork",
+        "Introduction to MCP",
+        "MCP: Advanced Topics",
+        "Introduction to Subagents",
+        "AI Fluency: Frameworks & Foundations",
+        "Claude with Amazon Bedrock"
+      ]
+    },
+    {
+      "issuer": "AWS",
+      "year": "2026",
+      "items": [
+        "Getting into the Serverless Mindset"
+      ]
+    },
+    {
+      "issuer": "HackerRank",
+      "items": [
+        "SQL (Advanced)",
+        "Problem Solving"
+      ]
+    },
+    {
+      "issuer": "EF SET",
+      "items": [
+        "English C2 Proficient — 71/100"
+      ]
+    }
+  ],
+  "languages": [
+    {
+      "name": "Español",
+      "level": "Nativo"
+    },
+    {
+      "name": "Inglés",
+      "level": "C2 certificado — EF SET 71/100"
+    },
+    {
+      "name": "Italiano",
+      "level": "Avanzado"
+    }
+  ]
+}
