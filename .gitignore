@@ -1,0 +1,31 @@
+# dependencias
+/node_modules
+/.pnp
+.pnp.*
+
+# build
+/.next/
+/out/
+/build
+next-env.d.ts
+
+# entorno — NUNCA commitear valores reales
+.env
+.env.local
+.env.*.local
+!.env.example
+
+# testing
+/coverage
+
+# vercel
+.vercel
+
+# typescript
+*.tsbuildinfo
+
+# sistema
+.DS_Store
+Thumbs.db
+*.log
+npm-debug.log*

@@ -1,0 +1,8 @@
+# Indexación abierta: el objetivo del sitio es que lo encuentren.
+# /api/ se excluye por higiene, no por seguridad: un Disallow no protege nada.
+# La protección real del endpoint de chat es el rate limit por IP y el tope de gasto.
+User-agent: *
+Allow: /
+Disallow: /api/
+
+Sitemap: https://carrattinisn-dev.com/sitemap.xml
