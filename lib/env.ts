@@ -5,12 +5,17 @@ import { z } from 'zod';
 /**
  * Validación del entorno.
  *
- * Dos requisitos que se contradicen y hay que satisfacer a la vez:
+ * Tres requisitos que hay que satisfacer a la vez:
  *
  * 1. El repo es público: alguien tiene que poder clonarlo y correr `npm run build`
- *    sin ninguna credencial. Por eso NADA es obligatorio: todo tiene default vacío.
+ *    sin ninguna credencial. Por eso NADA es obligatorio: todo tiene default.
  * 2. Un valor presente pero malformado tiene que romper el build, no producir un
  *    `href` roto en producción. Por eso cada campo valida su forma cuando NO está vacío.
+ * 3. **Una variable definida pero vacía cuenta como ausente.** Esto no es cosmético:
+ *    los paneles de deploy (Vercel entre ellos) precargan las claves del `.env.example`
+ *    con valor vacío, y `process.env.FOO === ''` NO dispara el `.default()` de Zod —
+ *    que solo aplica a `undefined`. Sin este paso, un enum vacío rompe el build en el
+ *    primer deploy, que es exactamente cuando menos ganas hay de debuggear esto.
  *
  * La consecuencia visible es deliberada: si `CONTACT_PHONE_E164` está vacía, el botón
  * de WhatsApp no se renderiza y el sitio sigue funcionando con el CTA de email. Un
@@ -49,11 +54,29 @@ const envSchema = z.object({
   /** Rate limiting por IP. Sin esto configurado, el endpoint de chat debe negarse a servir. */
   KV_REST_API_TOKEN: z.string().default(''),
   KV_REST_API_URL: z.string().default(''),
-  /** URL canónica del sitio. Usada por metadata y sitemap. */
-  SITE_URL: z.string().default('https://carrattinisn-dev.com'),
+  /**
+   * URL canónica del sitio. Se valida como URL absoluta porque `metadataBase` la
+   * pasa por `new URL()`: un valor con forma inválida tiene que romper acá, con un
+   * mensaje claro, y no adentro del generador de metadata.
+   */
+  SITE_URL: z.string().url('SITE_URL debe ser una URL absoluta, p. ej. https://ejemplo.com')
+    .default('https://carrattinisn-dev.com'),
 });
 
-const parsed = envSchema.safeParse(process.env);
+/**
+ * Normaliza el entorno antes de validar: una clave definida como cadena vacía se
+ * trata como ausente, para que el `.default()` del esquema tenga oportunidad de correr.
+ */
+function withoutEmptyValues(source: NodeJS.ProcessEnv): Record<string, string | undefined> {
+  const normalized: Record<string, string | undefined> = {};
+  for (const key of Object.keys(envSchema.shape)) {
+    const value = source[key];
+    normalized[key] = value === undefined || value.trim() === '' ? undefined : value;
+  }
+  return normalized;
+}
+
+const parsed = envSchema.safeParse(withoutEmptyValues(process.env));
 
 if (!parsed.success) {
   // Falla en build, no en runtime. El mensaje enumera cada campo inválido.
