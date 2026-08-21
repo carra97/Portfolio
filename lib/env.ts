@@ -39,6 +39,21 @@ const emailOrEmpty = z
   .default('');
 
 const envSchema = z.object({
+  /**
+   * Fecha de nacimiento en `YYYY-MM-DD`. **No va en el contenido a propósito.**
+   *
+   * El repositorio es público y una fecha de nacimiento completa junto al nombre es el
+   * par que se usa para suplantar identidad; el historial de Git no se puede retirar.
+   * Mismo tratamiento que el teléfono: entra por entorno y lo que se publica es su
+   * derivado — la edad, calculada en `lib/age.ts`. La fecha nunca llega al corpus, así
+   * que el bot no puede decirla ni aunque se la pidan.
+   *
+   * Vacía es un estado válido: el bot simplemente no sabe la edad.
+   */
+  BIRTH_DATE: z
+    .string()
+    .regex(/^(\d{4}-\d{2}-\d{2})?$/, 'BIRTH_DATE debe ser YYYY-MM-DD, p. ej. 1997-02-09')
+    .default(''),
   /** Kill switch del chatbot. Con el chat apagado el sitio debe seguir 100% usable. */
   CHAT_ENABLED: z.enum(['true', 'false']).default('false'),
   CONTACT_EMAIL: emailOrEmpty,

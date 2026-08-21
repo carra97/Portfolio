@@ -1,5 +1,6 @@
 import 'server-only';
 
+import { parseBirthDate, yearsOld } from '@/lib/age';
 import { getCaseStudies } from '@/lib/content/case-studies';
 import { getProfile } from '@/lib/content/profile';
 import { env, whatsappDigits } from '@/lib/env';
@@ -74,6 +75,18 @@ function serialize(lang: SupportedLocale): string {
 
   section('Identidad y posicionamiento');
   line(`- Nombre: ${profile.hero.name}`);
+  /**
+   * La edad se CALCULA y la fecha de nacimiento no se serializa nunca.
+   *
+   * Es el único dato del corpus que depende del día de hoy, y por eso no puede vivir en
+   * el JSON: "29 años" se vuelve falso el 9 de febrero sin que nada avise. Se deriva de
+   * `BIRTH_DATE`, que vive en el entorno y no en el repositorio — ver `lib/age.ts`.
+   *
+   * Lo que entra acá es el número, no la fecha. El bot no puede decir un dato que no
+   * tiene.
+   */
+  const birthDate = env.BIRTH_DATE ? parseBirthDate(env.BIRTH_DATE) : null;
+  if (birthDate) line(`- Edad: ${yearsOld(birthDate)} años`);
   line(`- Titular: ${profile.hero.headline}`);
   line(`- Ubicación: ${profile.hero.location}`);
   line(`- Resumen: ${profile.hero.tagline}`);
@@ -113,6 +126,13 @@ function serialize(lang: SupportedLocale): string {
   line('- GitHub: https://github.com/carra97');
 
   section('Experiencia');
+  // Contar es un dato que los recruiters piden ("¿cuántos trabajos tuvo?") y que el
+  // modelo, si no se lo damos, resuelve contando — o sea infiriendo. Se deriva del mismo
+  // array que se serializa abajo, así que no puede desincronizarse.
+  line(
+    `Puestos formales en el perfil: ${profile.experience.length}. El detalle de cada uno va a continuación, del más reciente al más antiguo.`,
+  );
+  line('');
   for (const job of profile.experience) {
     line(`### ${job.role} — ${job.company} (${job.period}${job.current ? ', actual' : ''})`);
     line(`Ubicación: ${job.location}`);

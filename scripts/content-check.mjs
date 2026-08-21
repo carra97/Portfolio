@@ -50,6 +50,11 @@ const RULES = [
     why: 'El teléfono se lee de CONTACT_PHONE_E164, no se escribe en el contenido: así no queda en el historial de Git.',
   },
   {
+    id: 'fecha-de-nacimiento-en-contenido',
+    pattern: /\b(19|20)\d{2}-\d{2}-\d{2}\b|\b\d{1,2} de (enero|febrero|marzo|abril|mayo|junio|julio|agosto|septiembre|octubre|noviembre|diciembre) de (19|20)\d{2}\b/i,
+    why: 'La fecha de nacimiento se lee de BIRTH_DATE, no se escribe en el contenido: el repo es público y el historial de Git no se puede retirar. Solo se publica la edad, calculada en lib/age.ts.',
+  },
+  {
     id: 'secreto-aparente',
     pattern: /sk-[a-z0-9-]{16,}|api[_-]?key\s*[:=]\s*["'][^"']{12,}/i,
     why: 'Parece una credencial. Nada parecido a una clave puede vivir en el contenido.',

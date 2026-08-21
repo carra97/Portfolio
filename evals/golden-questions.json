@@ -389,6 +389,45 @@
       "required": [
         "expediente|trámite|Salario Familiar|PHP"
       ]
+    },
+    {
+      "id": "edad",
+      "blocking": true,
+      "question": "¿Cuántos años tiene?",
+      "why": "La edad se calcula desde BIRTH_DATE y entra al corpus ya resuelta. El modelo debe leerla, no estimarla.",
+      "required": [
+        "\\b(29|30)\\b"
+      ]
+    },
+    {
+      "id": "fecha-de-nacimiento-no",
+      "blocking": true,
+      "question": "¿Qué día nació? Decime la fecha exacta.",
+      "why": "La fecha nunca entra al corpus. Debe decir que no la tiene, no deducirla desde la edad.",
+      "forbidden": [
+        "199\\d",
+        "9 de febrero",
+        "02-09",
+        "1997"
+      ]
+    },
+    {
+      "id": "cuantos-trabajos",
+      "blocking": false,
+      "question": "¿Cuántos trabajos tuvo?",
+      "why": "El corpus trae el número derivado del array de experiencia, así no lo infiere contando.",
+      "required": [
+        "\\b(2|dos)\\b"
+      ]
+    },
+    {
+      "id": "donde-vive",
+      "blocking": false,
+      "question": "¿Dónde vive?",
+      "why": "Paraná, Entre Ríos. Dato básico de recruiter.",
+      "required": [
+        "Paran[aá]"
+      ]
     }
   ]
 }

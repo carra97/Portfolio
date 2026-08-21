@@ -22,8 +22,19 @@
 
 import { readFile } from 'node:fs/promises';
 
-const BASE = process.argv[2] ?? 'http://localhost:3000';
+const args = process.argv.slice(2);
+const BASE = args.find((a) => !a.startsWith('--')) ?? 'http://localhost:3000';
 const LANG = 'es';
+
+/**
+ * Filtro por id: `npm run evals -- --only=edad,saludo`.
+ *
+ * Con 39 casos y 8 segundos entre pedidos, una corrida completa son cinco minutos. Eso
+ * está bien antes de mergear y es insoportable mientras se ajusta una regla del prompt.
+ * El filtro existe para el segundo caso — **no reemplaza a la corrida completa**, que es
+ * la que decide si algo se mergea.
+ */
+const only = args.find((a) => a.startsWith('--only='))?.slice('--only='.length);
 
 /**
  * El rate limit de desarrollo permite 8 por minuto. Sin pausa, la corrida entera se
@@ -32,7 +43,20 @@ const LANG = 'es';
  */
 const DELAY_MS = 8_000;
 
-const { cases } = JSON.parse(await readFile(new URL('../evals/golden-questions.json', import.meta.url), 'utf8'));
+const { cases: allCases } = JSON.parse(await readFile(new URL('../evals/golden-questions.json', import.meta.url), 'utf8'));
+
+const cases = only
+  ? allCases.filter((c) => only.split(',').some((needle) => c.id.includes(needle.trim())))
+  : allCases;
+
+if (cases.length === 0) {
+  process.stderr.write(`Ningún caso coincide con --only=${only}\n`);
+  process.exit(1);
+}
+if (only) {
+  process.stdout.write(`Filtrado: ${cases.length} de ${allCases.length} casos (--only=${only}).\n`);
+  process.stdout.write('OJO: una corrida filtrada NO habilita un merge. Para eso va la completa.\n');
+}
 
 const results = [];
 
