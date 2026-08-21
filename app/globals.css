@@ -76,8 +76,9 @@
 
 html {
   scroll-behavior: smooth;
-  /* Compensa el header sticky al saltar a un ancla. */
-  scroll-padding-top: 5rem;
+  /* Compensa el header sticky al saltar a un ancla. 6rem y no 5: en pantallas chicas
+     la barra pasó a dos filas y mide 87px. */
+  scroll-padding-top: 6rem;
 }
 
 body {
@@ -170,6 +171,50 @@ b {
 }
 .prose-link:hover {
   color: var(--accent-hover);
+}
+
+/* ── Navegación ───────────────────────────────────────────────────────────── */
+
+/**
+ * Degradado en el borde derecho de la lista de destinos, solo donde la lista no entra.
+ * Una lista que se corta limpia se lee como completa; con el degradado se lee como
+ * "sigue". Se aplica sobre el contenido con `mask-image` en vez de superponer un
+ * rectángulo del color de fondo: así funciona igual en modo claro y oscuro, y no hay
+ * que hacer coincidir el color con el `backdrop-blur` del header.
+ */
+.nav-fade {
+  mask-image: linear-gradient(to right, #000 88%, transparent 100%);
+}
+
+@media (min-width: 48rem) {
+  .nav-fade {
+    mask-image: none;
+  }
+}
+
+/* ── Carrusel ─────────────────────────────────────────────────────────────── */
+
+/**
+ * La barra de scroll se oculta porque los puntos ya comunican la posición y una barra
+ * nativa sobre una tarjeta rompe el conjunto. El contenido sigue siendo desplazable
+ * con dedo, rueda y teclado: se oculta el indicador, no el mecanismo.
+ *
+ * `scroll-padding-inline` alinea el snap con el margen de página (24px), para que la
+ * tarjeta activa quede exactamente sobre la grilla del resto del sitio.
+ */
+.carousel-scroller {
+  scroll-padding-inline: 1.5rem;
+  scrollbar-width: none;
+}
+
+.carousel-scroller::-webkit-scrollbar {
+  display: none;
+}
+
+@media (min-width: 48rem) {
+  .carousel-scroller {
+    scroll-padding-inline: 0;
+  }
 }
 
 /* ── Movimiento — DISENO.md §5 ────────────────────────────────────────────── */

@@ -79,6 +79,67 @@
     ]
   },
   {
+    "slug": "tramites-expedientes",
+    "lang": "es",
+    "title": "Plataforma de Gestión de Trámites, Expedientes y Notas Internas",
+    "summary": "Un circuito administrativo que vivía en papel y en la memoria de la gente, convertido en un workflow explícito: máquina de estados, autorización propia y parametrización de lo que realmente cambiaba. Miles de expedientes, más de 10 áreas y alrededor de 60 personas, sobre PHP 7 y SQL Server, sin poder incorporar una sola librería externa.",
+    "context": "El Consejo General de Educación es el organismo rector del sistema educativo de la provincia de Entre Ríos. El sistema es interno del organismo y cubre prácticamente todos los expedientes que ingresan al Consejo vinculados a los procesos de liquidaciones.",
+    "problem": [
+      "Antes de la digitalización el circuito dependía del papel y del conocimiento informal de quienes participaban en cada proceso. Saber dónde estaba un expediente, quién lo tenía y qué había pasado con él exigía preguntar.",
+      "Las excepciones y los casos particulares no estaban escritos en ninguna parte: vivían en la cabeza de las personas que los habían visto antes. Cuando esa persona no estaba, el expediente se frenaba.",
+      "Los expedientes podían quedar en estados incorrectos o trabados, y controlar las responsabilidades entre áreas era difícil.",
+      "Las reglas, los contratos y los permisos cambiaban seguido, así que un circuito rígido se rompía apenas cambiaba la operación real."
+    ],
+    "constraints": [
+      "No había libertad para incorporar frameworks, librerías ni servicios externos. Lo que no viniera con PHP, SQL o JavaScript había que escribirlo.",
+      "Restricciones propias de la infraestructura del organismo y recursos limitados.",
+      "Se trabajaba sobre tecnología legacy y código existente, no sobre un proyecto nuevo.",
+      "SAGE, el sistema de gestión educativa provincial, ya tenía su propio esquema de roles y permisos generales, pero no alcanzaba para representar las reglas del módulo de liquidaciones."
+    ],
+    "decisions": [
+      {
+        "title": "Máquina de estados explícita en lugar de flags independientes",
+        "rationale": "El estado actual determina en qué etapa y en qué área está el expediente, y qué operaciones se pueden hacer sobre él. Varios flags booleanos sueltos permiten combinaciones que no existen en el circuito real, y son justamente esas combinaciones las que dejan expedientes trabados.",
+        "tradeoff": "Más complejidad inicial: hay que modelar con cuidado cada transición y cada excepción antes de escribir código. A cambio, el workflow queda consistente y controlado."
+      },
+      {
+        "title": "Sistema de roles y permisos propio del módulo, separado del de SAGE",
+        "rationale": "Los permisos generales de SAGE no distinguían lo que el circuito de liquidaciones necesitaba: que ciertos responsables y jefaturas pudieran consultar o modificar decisiones de otros usuarios, y que el resto tuviera un alcance más acotado. Como los roles cambiaban con frecuencia, la administración se hace desde un dashboard y no tocando la base de datos a mano.",
+        "tradeoff": "Una segunda capa de autorización que hay que mantener y mantener coherente con la primera. El beneficio es independencia respecto de SAGE y poder adaptar los permisos del módulo al ritmo al que cambian de verdad."
+      },
+      {
+        "title": "Parametrizar lo que cambia, dejar en código lo que no",
+        "rationale": "Las áreas, las responsabilidades y los permisos cambiaban con la operación, y cada cambio no podía significar un despliegue. La parametrización apunta a eso: áreas, roles y permisos, y comportamiento del circuito.",
+        "tradeoff": "Más esfuerzo inicial y más validaciones que escribir. El riesgo del otro extremo —parametrizar todo— es terminar con lógica dinámica difícil de leer y de mantener, así que la línea se trazó en lo que efectivamente cambiaba."
+      }
+    ],
+    "architecture": "El expediente es la entidad central y su estado gobierna el circuito: en qué etapa está, en qué área, y qué operaciones habilita. Sobre eso corren dos capas de autorización —la general de SAGE y la propia del módulo de liquidaciones, administrable desde un dashboard— y una capa de parametrización de áreas, roles y comportamiento del circuito. Backend en PHP 7 sobre Apache, acceso a SQL Server vía PDO/ODBC, y frontend en JavaScript con jQuery y AJAX sobre Bootstrap.",
+    "outcome": [
+      "El circuito dejó de ser papel y conocimiento informal para pasar a ser un flujo explícito, con estados, responsables, permisos y seguimiento.",
+      "Cubre prácticamente todos los expedientes que ingresan al Consejo vinculados a liquidaciones: miles de expedientes, más de 10 áreas y alrededor de 60 personas con distintas responsabilidades dentro del circuito.",
+      "Buena parte del trabajo no fue agregar funcionalidad sino diagnosticar y corregir lo que ya estaba roto: estados que se trababan, inconsistencias del workflow, duplicaciones por JOINs mal armados, problemas N+1 y consultas costosas."
+    ],
+    "retrospective": [
+      "Mantendría las dos decisiones de fondo: la máquina de estados y la separación entre autorización general y permisos específicos del dominio. Respondían bien al problema. Lo que cambiaría es la implementación.",
+      "Arquitectura más modular, con workflow, autorización, persistencia y presentación separados, y un modelo de dominio más explícito.",
+      "Tests automatizados sobre transiciones y autorización. Son las dos partes donde un error no se ve hasta que un expediente queda donde no debe.",
+      "Control explícito de concurrencia y transacciones. El sistema tuvo problemas de concurrencia reales y esa es la respuesta que faltaba.",
+      "Auditoría estructurada de cada transición: quién, cuándo, estado anterior y estado nuevo. No un log genérico de movimientos.",
+      "Observabilidad desde el primer día, para detectar consultas lentas, errores de workflow y degradaciones sin esperar a que alguien las reporte.",
+      "Una línea más clara entre las reglas que son configurables y las que pertenecen al código: el objetivo es conservar la flexibilidad sin convertir el sistema en lógica dinámica difícil de mantener."
+    ],
+    "tech": [
+      "PHP 7",
+      "Apache",
+      "SQL Server",
+      "PDO/ODBC",
+      "JavaScript",
+      "jQuery",
+      "AJAX",
+      "Bootstrap"
+    ]
+  },
+  {
     "slug": "portfolio-chatbot",
     "lang": "es",
     "title": "Este portfolio y su chatbot",

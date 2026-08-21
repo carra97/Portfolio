@@ -15,7 +15,7 @@ export function JsonLd({ profile }: { profile: Profile }) {
     '@type': 'Person',
     name: profile.hero.name,
     jobTitle: profile.hero.headline,
-    description: profile.meta.description,
+    description: profile.pages.home.description,
     url: env.SITE_URL,
     address: {
       '@type': 'PostalAddress',

@@ -4,7 +4,7 @@ import type { Metadata, Viewport } from 'next';
 import { notFound } from 'next/navigation';
 import type { ReactNode } from 'react';
 
-import { getProfile } from '@/lib/content';
+import { getProfile } from '@/lib/content/profile';
 import { env } from '@/lib/env';
 import { LOCALES, isSupportedLocale } from '@/lib/i18n';
 
@@ -25,34 +25,16 @@ export const viewport: Viewport = {
   ],
 };
 
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<{ lang: string }>;
-}): Promise<Metadata> {
-  const { lang } = await params;
-  if (!isSupportedLocale(lang)) return {};
-
-  const { meta } = getProfile(lang);
-
-  return {
-    title: meta.title,
-    description: meta.description,
-    metadataBase: new URL(env.SITE_URL),
-    alternates: {
-      canonical: `/${lang}`,
-      languages: Object.fromEntries(LOCALES.map((l) => [l, `/${l}`])),
-    },
-    openGraph: {
-      type: 'profile',
-      locale: lang,
-      title: meta.title,
-      description: meta.description,
-      url: `/${lang}`,
-    },
-    robots: { index: true, follow: true },
-  };
-}
+/**
+ * Solo lo que comparten TODAS las rutas del idioma. Título, descripción y canonical
+ * los define cada página: con dos rutas públicas y los case studies, dejarlos acá
+ * significaba que una página que se olvidara de sobrescribirlos heredaba el canonical
+ * del hub — el tipo de error de SEO que nadie ve hasta que Google deduplica.
+ */
+export const metadata: Metadata = {
+  metadataBase: new URL(env.SITE_URL),
+  robots: { index: true, follow: true },
+};
 
 /**
  * Se aplica el tema guardado ANTES del primer paint. Si esto corriera en un efecto,
@@ -81,7 +63,7 @@ export default async function LangLayout({
       <body>
         <a
           className="sr-only rounded-md bg-accent px-4 py-2 text-accent-on focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50"
-          href="#contenido"
+          href="#content"
         >
           {ui.skipToContent}
         </a>
