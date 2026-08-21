@@ -80,7 +80,7 @@ export function PageShell({
         {after}
       </main>
 
-      <Footer lang={lang} name={profile.hero.name} ui={profile.ui} />
+      <Footer lang={lang} profile={profile} />
     </>
   );
 }

@@ -1,76 +1,112 @@
 import { env } from '@/lib/env';
-import type { SupportedLocale } from '@/lib/i18n';
-import { routes } from '@/lib/routes';
 import type { Profile } from '@/types/profile';
 
+const GITHUB_PROFILE = 'https://github.com/carra97';
+const LINKEDIN_PROFILE = 'https://www.linkedin.com/in/santiago-nicolas-carrattini';
+const REPOSITORY = 'https://github.com/carra97/Portfolio';
+
 /**
- * Footer.
+ * Footer — bloque de metadata.
  *
- * Lleva los enlaces de contacto directos —email, LinkedIn, GitHub— en todas las
- * páginas, no solo en `/contact`. El razonamiento: quien evalúa un perfil decide
- * escribir en el momento en que se convence, y ese momento puede ser leyendo un case
- * study. Obligarlo a navegar a otra página para encontrar el mail agrega un paso justo
- * donde menos conviene.
+ * Dos versiones anteriores fallaron por motivos opuestos y vale registrar los dos:
  *
- * El email sale de `lib/env` (server-only): si la variable falta, el enlace no se
- * renderiza. Nunca se emite un `mailto:` vacío.
+ * - La primera era una fila de cuatro enlaces subrayados, todos del mismo peso. Sin
+ *   jerarquía, y no decía nada que no estuviera ya en la página.
+ * - La segunda agregaba un CTA de cierre y un mapa del sitio. El mapa **duplicaba el
+ *   nav** —las siete rutas ya están arriba en todas las páginas— y el CTA duplicaba el
+ *   del hero. 610px de alto para repetir cosas.
+ *
+ * Esta versión sigue una sola regla: **acá va únicamente lo que no está en otro lado de
+ * la página.** Los destinos ya los cubre la barra superior; el botón de contacto, el nav
+ * y el hero. Lo que no aparece en ningún lado es cómo llegarle por fuera del sitio
+ * (email, LinkedIn, GitHub), qué se puede llevar (CV, código) y bajo qué condiciones
+ * trabaja.
+ *
+ * El tratamiento es el mismo lenguaje de "metadata del documento" que usa el resto del
+ * sitio: eyebrow en mono con tracking abierto, hairlines, tipografía apagada. Un footer
+ * tiene que terminar la página, no disputarla.
  */
-export function Footer({
-  lang,
-  name,
-  ui,
-}: {
-  lang: SupportedLocale;
-  name: string;
-  ui: Profile['ui'];
-}) {
+export function Footer({ lang: _lang, profile }: { lang: string; profile: Profile }) {
+  const { hero, ui } = profile;
   const hasEmail = env.CONTACT_EMAIL !== '';
 
   return (
     <footer className="border-t border-line">
-      <div className="mx-auto max-w-[1120px] px-6 py-12 md:px-10">
-        <ul className="flex flex-wrap gap-x-8 gap-y-3">
-          {hasEmail && (
-            <li>
-              <a className="prose-link font-mono text-sm" href={`mailto:${env.CONTACT_EMAIL}`}>
-                {env.CONTACT_EMAIL}
-              </a>
-            </li>
-          )}
-          <li>
-            <a
-              className="prose-link font-mono text-sm"
-              href="https://www.linkedin.com/in/santiago-nicolas-carrattini"
-              rel="noopener noreferrer"
-              target="_blank"
-            >
-              LinkedIn
-            </a>
-          </li>
-          <li>
-            <a
-              className="prose-link font-mono text-sm"
-              href="https://github.com/carra97"
-              rel="noopener noreferrer"
-              target="_blank"
-            >
-              GitHub
-            </a>
-          </li>
-          <li>
-            <a className="prose-link font-mono text-sm" href={routes.contact(lang)}>
-              {ui.footerContactLink}
-            </a>
-          </li>
-        </ul>
+      <div className="mx-auto max-w-[1120px] px-6 md:px-10">
+        {/* `divide-*` en vez de `gap` + bordes a mano: la línea vertical entre columnas
+            la dibuja el contenedor, así ninguna columna necesita saber si es la primera. */}
+        <div className="grid divide-y divide-line py-10 md:grid-cols-3 md:divide-x md:divide-y-0 md:py-12">
+          <div className="pb-8 md:pb-0 md:pr-10">
+            <p className="eyebrow">{ui.footerContactLabel}</p>
+            <ul className="mt-4 space-y-2.5">
+              {/* El email sale de `lib/env` (server-only): si la variable falta, el enlace
+                  no se renderiza. Nunca se emite un `mailto:` vacío. */}
+              {hasEmail && (
+                <li>
+                  <a className="footer-link" href={`mailto:${env.CONTACT_EMAIL}`}>
+                    {env.CONTACT_EMAIL}
+                  </a>
+                </li>
+              )}
+              <li>
+                <a
+                  className="footer-link"
+                  href={LINKEDIN_PROFILE}
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
+                  LinkedIn
+                </a>
+              </li>
+              <li>
+                <a
+                  className="footer-link"
+                  href={GITHUB_PROFILE}
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
+                  GitHub
+                </a>
+              </li>
+            </ul>
+          </div>
 
-        <div className="mt-8 flex flex-wrap items-center justify-between gap-4 border-t border-line pt-8">
-          <p className="small">
-            © {new Date().getFullYear()} {name}
+          <div className="py-8 md:px-10 md:py-0">
+            <p className="eyebrow">{ui.footerDownloadLabel}</p>
+            <ul className="mt-4 space-y-2.5">
+              {/* Sin archivo de CV no hay enlace, igual que el botón del hero. */}
+              {hero.resumeUrl && (
+                <li>
+                  <a className="footer-link" download href={hero.resumeUrl}>
+                    {ui.footerCvLink}
+                  </a>
+                </li>
+              )}
+              <li>
+                <a
+                  className="footer-link"
+                  href={REPOSITORY}
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
+                  {ui.footerRepoLink}
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          <div className="pt-8 md:pl-10 md:pt-0">
+            <p className="eyebrow">{ui.footerAvailabilityLabel}</p>
+            <p className="mt-4 text-pretty text-sm text-quiet">{hero.availability}</p>
+          </div>
+        </div>
+
+        <div className="flex flex-wrap items-center justify-between gap-3 border-t border-line py-6 font-mono text-xs uppercase tracking-[0.12em] text-muted">
+          <p>
+            © {new Date().getFullYear()} {hero.name}
           </p>
-          <p className="font-mono text-xs tracking-[0.12em] text-muted">
-            Next.js · TypeScript · Tailwind
-          </p>
+          {/* El stack no se traduce: son nombres propios. */}
+          <p>Next.js · TypeScript · Tailwind</p>
         </div>
       </div>
     </footer>
