@@ -2,6 +2,7 @@ import 'server-only';
 
 import { createAnthropicProvider } from '@/lib/chat/providers/anthropic';
 import { createFakeProvider } from '@/lib/chat/providers/fake';
+import { createGeminiProvider, type GeminiThinkingConfig } from '@/lib/chat/providers/gemini';
 import type { LlmProvider } from '@/lib/chat/types';
 import { env } from '@/lib/env';
 
@@ -31,6 +32,28 @@ import { env } from '@/lib/env';
 /** Modelo por defecto de Anthropic. Vive acá y no en el proveedor: es configuración. */
 const ANTHROPIC_MODEL = 'claude-haiku-4-5';
 
+/**
+ * Pareo modelo ↔ configuración de razonamiento para Gemini.
+ *
+ * La familia 3.x acepta `thinkingLevel` y la 2.5 acepta `thinkingBudget`; mandar el
+ * campo de la otra familia devuelve 400. Es una tabla y no un `if` por prefijo de
+ * nombre porque el nombre no es contrato: `gemini-3.5-flash-lite` y `gemini-2.5-flash`
+ * se parecen lo suficiente como para que una heurística sobre el string funcione hasta
+ * el día que no.
+ *
+ * **Un modelo que no está en la tabla se usa sin `thinkingConfig`.** Omitir el campo
+ * siempre es válido; adivinarlo, no. Así, poner en `GEMINI_MODEL` un modelo que salió
+ * ayer degrada a "razona por defecto" en vez de romper el chat con un 400.
+ */
+const GEMINI_THINKING: Readonly<Record<string, GeminiThinkingConfig>> = {
+  // Recuperación de hechos sobre un corpus fijo: es el caso que la documentación de
+  // Google señala para razonamiento mínimo. Lo que se gana no es costo —el plan
+  // gratuito no cobra— sino latencia y tokens de salida que no se comen el tope.
+  'gemini-2.5-flash': { thinkingBudget: 0 },
+  'gemini-3.5-flash': { thinkingLevel: 'minimal' },
+  'gemini-3.5-flash-lite': { thinkingLevel: 'minimal' },
+};
+
 export function createLlmProvider(): LlmProvider {
   switch (env.LLM_PROVIDER) {
     case 'anthropic':
@@ -38,11 +61,19 @@ export function createLlmProvider(): LlmProvider {
         ? createAnthropicProvider({ apiKey: env.ANTHROPIC_API_KEY, model: ANTHROPIC_MODEL })
         : createFakeProvider();
 
-    // `gemini` y `openai` están en el enum de `lib/env.ts` desde antes que existiera el
-    // chat. No se implementan hasta que haga falta: un adaptador escrito "por si acaso"
-    // envejece sin que nadie lo ejecute, y el día que se necesite hay que reescribirlo
-    // igual contra la API vigente. El fallback los deja andando en desarrollo.
     case 'gemini':
+      return env.GEMINI_API_KEY
+        ? createGeminiProvider({
+            apiKey: env.GEMINI_API_KEY,
+            model: env.GEMINI_MODEL,
+            thinking: GEMINI_THINKING[env.GEMINI_MODEL],
+          })
+        : createFakeProvider();
+
+    // `openai` está en el enum de `lib/env.ts` desde antes que existiera el chat. No se
+    // implementa hasta que haga falta: un adaptador escrito "por si acaso" envejece sin
+    // que nadie lo ejecute, y el día que se necesite hay que reescribirlo igual contra
+    // la API vigente. El fallback lo deja andando en desarrollo.
     case 'openai':
       return createFakeProvider();
   }

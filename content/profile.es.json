@@ -307,7 +307,7 @@
   },
   "pages": {
     "about": {
-      "description": "Cómo llegué a la programación, cómo pienso el trabajo y qué hago cuando no estoy frente al editor.",
+      "description": "Cómo llegué a la programación, cómo pienso el trabajo y qué me fue formando el criterio.",
       "heading": "Sobre mí",
       "navLabel": "Sobre mí",
       "title": "Sobre mí — Santiago Carrattini"
@@ -325,7 +325,7 @@
       "title": "Formación y certificaciones — Santiago Carrattini"
     },
     "experience": {
-      "description": "Dónde trabajé, qué construí en cada lugar, con qué herramientas y qué formación lo respalda.",
+      "description": "Dónde trabajé, qué construí en cada lugar y con qué herramientas.",
       "heading": "Experiencia",
       "navLabel": "Experiencia",
       "title": "Experiencia — Santiago Carrattini"
@@ -562,16 +562,17 @@
     "certificateOpen": "Ver certificado",
     "certificateVerify": "Verificar con el emisor",
     "chatClose": "Cerrar",
-    "chatDisclaimer": "Responde solo sobre el perfil de Santiago.",
+    "chatDisclaimer": "Responde solo sobre el perfil de Santiago. Las consultas se procesan con un modelo de un tercero.",
     "chatError": "No pude responder. Puede ser un problema momentáneo.",
-    "chatIntro": "Preguntá sobre la experiencia, los proyectos o el stack de Santiago.",
-    "chatLauncher": "Preguntar sobre el perfil",
+    "chatGreeting": "Hola, soy Raukar: el asistente de este portfolio, una versión en miniatura de Santiago. Conozco su experiencia, sus proyectos, su stack y su formación. Preguntame lo que quieras, o decime qué sección estás buscando y te llevo.",
+    "chatLauncher": "Hablar con Raukar",
+    "chatNudge": "¡Hola! Soy Raukar, el mini Santiago que atiende este portfolio. Puedo contarte sobre su experiencia o llevarte directo a la sección que busques.",
     "chatPlaceholder": "Escribí tu pregunta",
     "chatReady": "Respuesta lista",
     "chatRetry": "Reintentar",
     "chatSend": "Enviar",
     "chatThinking": "Respondiendo…",
-    "chatTitle": "Asistente del perfil",
+    "chatTitle": "Raukar",
     "contactEmail": "Escribirme por email",
     "contactIntro": "Disponible full-time en modalidad remota. Con disposición a viajar a Buenos Aires para instancias presenciales puntuales, hasta una vez cada quince días. Escribime por donde te quede más cómodo.",
     "contactWhatsApp": "Escribirme por WhatsApp",

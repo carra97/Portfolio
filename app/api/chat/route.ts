@@ -66,13 +66,36 @@ export async function POST(request: Request): Promise<Response> {
   const provider = createLlmProvider();
   const system = buildSystemPrompt(parsed.data.lang);
 
-  let iterator: AsyncIterable<string>;
-  try {
-    iterator = provider.stream({
+  /**
+   * **El primer fragmento se pide ANTES de responder, y no es un detalle de estilo.**
+   *
+   * `provider.stream()` es un generador asíncrono: invocarlo no ejecuta ni una línea del
+   * cuerpo, solo construye el generador. El `try/catch` que antes lo envolvía por lo
+   * tanto no podía atrapar nada — ni una clave inválida, ni un 429 del proveedor, ni un
+   * modelo inexistente. Todos esos errores aparecían recién en el primer `next()`, o sea
+   * dentro del stream, cuando el 200 ya estaba enviado y el status ya no se podía
+   * cambiar. El síntoma era el peor de los posibles: 200 con cuerpo vacío, sin error
+   * visible para el visitante y sin status útil para monitorear.
+   *
+   * Adelantando el primer `next()`, todo lo que falle antes del primer token se convierte
+   * en el status HTTP que corresponde (503 configuración, 502 el resto). Lo que falle
+   * después sigue siendo irrecuperable por definición, y se maneja abajo.
+   *
+   * Lo que cuesta: las cabeceras salen recién cuando el modelo produjo su primer token,
+   * no al aceptar el pedido. Es un costo nominal — no había nada útil para mostrar antes
+   * de ese token y el widget ya estaba en estado de carga.
+   */
+  const iterator = provider
+    .stream({
       maxOutputTokens: MAX_OUTPUT_TOKENS,
       messages: parsed.data.messages,
       system,
-    });
+    })
+    [Symbol.asyncIterator]();
+
+  let first: IteratorResult<string>;
+  try {
+    first = await iterator.next();
   } catch (error) {
     return providerFailure(error);
   }
@@ -87,8 +110,12 @@ export async function POST(request: Request): Promise<Response> {
   const stream = new ReadableStream<Uint8Array>({
     async start(controller) {
       try {
-        for await (const chunk of iterator) {
-          controller.enqueue(encoder.encode(chunk));
+        if (!first.done) controller.enqueue(encoder.encode(first.value));
+
+        while (true) {
+          const next = await iterator.next();
+          if (next.done) break;
+          controller.enqueue(encoder.encode(next.value));
         }
       } catch (error) {
         // El stream ya empezó: el status 200 se envió y no se puede cambiar. Lo único
@@ -98,6 +125,16 @@ export async function POST(request: Request): Promise<Response> {
       } finally {
         controller.close();
       }
+    },
+
+    /**
+     * Si el visitante cierra el widget o navega, hay que cortar del lado del proveedor.
+     * Sin esto, dejar de leer no cancela nada: el generador queda suspendido en su
+     * `await` con la conexión al proveedor abierta y el `reader` sin liberar. `return()`
+     * dispara su bloque `finally`, que es donde vive esa limpieza.
+     */
+    async cancel() {
+      await iterator.return?.();
     },
   });
 
