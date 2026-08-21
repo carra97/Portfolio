@@ -6,7 +6,15 @@ import type { Profile } from '@/types/profile';
  * único destacado —es la señal más fuerte del set: hardware + software + iteración— y
  * es el único con foto.
  */
-export function Hobbies({ items }: { items: Profile['hobbies'] }) {
+export function Hobbies({
+  items,
+  roverAlt,
+  roverCaption,
+}: {
+  items: Profile['hobbies'];
+  roverAlt: string;
+  roverCaption: string;
+}) {
   const lead = items.find((hobby) => hobby.emphasis === 'lead');
   const rest = items.filter((hobby) => hobby.emphasis !== 'lead');
 
@@ -34,15 +42,15 @@ export function Hobbies({ items }: { items: Profile['hobbies'] }) {
 
       <figure className="md:self-start">
         <img
-          alt="Rover de dos ruedas con chasis impreso en 3D, placa Arduino, protoboard y sensor ultrasónico HC-SR04"
+          alt={roverAlt}
           className="w-full rounded-xl border border-line"
+          decoding="async"
           height={1200}
+          loading="lazy"
           src="/rover-arduino.jpg"
           width={900}
         />
-        <figcaption className="small mt-3">
-          Rover evita-obstáculos: Arduino, HC-SR04 y chasis impreso.
-        </figcaption>
+        <figcaption className="small mt-3">{roverCaption}</figcaption>
       </figure>
     </div>
   );

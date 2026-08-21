@@ -1,3 +1,4 @@
+import { CertificateList } from '@/components/ui/CertificateDialog';
 import type { Profile } from '@/types/profile';
 
 /**
@@ -10,15 +11,22 @@ import type { Profile } from '@/types/profile';
  *
  * Sin logos de terceros y sin íconos de check: en esta paleta un logo a color rompe el
  * conjunto, y en un repo público son marcas ajenas. El nombre en texto alcanza.
+ *
+ * Cada certificado es comprobable: los que tienen página de verificación del emisor
+ * enlazan ahí —prueba de un tercero, que es la que vale— y los que no, abren el
+ * certificado escaneado en un diálogo modal. Una certificación que no se puede mirar es
+ * una afirmación, y un revisor escéptico la descuenta.
  */
 export function Credentials({
   certifications,
   education,
   languages,
+  ui,
 }: {
   certifications: Profile['certifications'];
   education: Profile['education'];
   languages: Profile['languages'];
+  ui: Profile['ui'];
 }) {
   return (
     <div className="space-y-14">
@@ -48,11 +56,17 @@ export function Credentials({
             </dt>
             <dd>
               {group.framing && <p className="measure text-pretty text-quiet">{group.framing}</p>}
-              <ul className={group.framing ? 'mt-3 space-y-1' : 'space-y-1'}>
-                {group.items.map((item) => (
-                  <li key={item}>{item}</li>
-                ))}
-              </ul>
+              <div className={group.framing ? 'mt-3' : ''}>
+                <CertificateList
+                  certifications={group.items}
+                  labels={{
+                    close: ui.certificateClose,
+                    fullSize: ui.certificateFullSize,
+                    open: ui.certificateOpen,
+                    verify: ui.certificateVerify,
+                  }}
+                />
+              </div>
             </dd>
           </div>
         ))}

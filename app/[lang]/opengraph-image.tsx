@@ -1,6 +1,6 @@
 import { ImageResponse } from 'next/og';
 
-import { getProfile } from '@/lib/content';
+import { getProfile } from '@/lib/content/profile';
 import { LOCALES, isSupportedLocale } from '@/lib/i18n';
 
 /**
