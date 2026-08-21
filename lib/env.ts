@@ -95,10 +95,34 @@ export const whatsappDigits = env.CONTACT_PHONE_E164.replace(/^\+/, '');
  * El chat solo se considera operativo si está encendido, hay clave del proveedor
  * seleccionado y hay backend de rate limit. Cualquier pieza faltante lo deja apagado:
  * es preferible un sitio sin chat que un endpoint de LLM sin límite de gasto.
+ *
+ * **Se evalúa en build, no en cada request.** Las páginas se prerenderizan, así que el
+ * widget se incluye o no en el HTML estático según el valor que tenía `CHAT_ENABLED` al
+ * compilar. La consecuencia hay que tenerla presente: **cambiar la variable exige un
+ * redeploy**, no alcanza con tocarla en el panel. A cambio, con el chat apagado no se
+ * envía ni un byte de JavaScript del widget — un kill switch en runtime tendría que
+ * mandar el componente igual para poder decidir.
  */
+/**
+ * El backend de rate limit es obligatorio **en producción**. En desarrollo se acepta el
+ * limitador en memoria de `lib/chat/rate-limit.ts`.
+ *
+ * Sin esta distinción el limitador en memoria era código muerto: nunca podía ejecutarse,
+ * porque la condición de abajo exigía Redis para habilitar el chat en cualquier entorno.
+ * Y la consecuencia práctica era peor que la teórica — para tocar el widget en local
+ * había que levantar un Redis, así que en la práctica se tocaba sin rate limit o no se
+ * tocaba.
+ *
+ * Lo que se protege sigue protegido: en producción, sin `KV_REST_API_*`, el chat queda
+ * apagado y el sitio se sirve completo.
+ */
+const rateLimitBackendReady =
+  Boolean(env.KV_REST_API_URL && env.KV_REST_API_TOKEN) ||
+  process.env.NODE_ENV === 'development';
+
 export const chatEnabled: boolean =
   env.CHAT_ENABLED === 'true' &&
-  Boolean(env.KV_REST_API_URL && env.KV_REST_API_TOKEN) &&
+  rateLimitBackendReady &&
   Boolean(
     env.LLM_PROVIDER === 'anthropic'
       ? env.ANTHROPIC_API_KEY

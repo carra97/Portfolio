@@ -1,11 +1,13 @@
 import type { ReactNode } from 'react';
 
+import { Chat } from '@/components/chat/Chat';
 import { Footer } from '@/components/layout/Footer';
 import { Nav } from '@/components/layout/Nav';
 import { Section } from '@/components/layout/Section';
 import type { SupportedLocale } from '@/lib/i18n';
 import { buildNav } from '@/lib/pages/nav';
 import { getPage, type PageId } from '@/lib/pages/registry';
+import { chatEnabled } from '@/lib/env';
 import { resolveSections } from '@/lib/sections/registry';
 import type { Profile } from '@/types/profile';
 
@@ -81,6 +83,30 @@ export function PageShell({
       </main>
 
       <Footer lang={lang} profile={profile} />
+
+      {/* El chat se monta solo si está operativo. `chatEnabled` exige a la vez el kill
+          switch encendido, la clave del proveedor y el backend de rate limit: sin las
+          tres, no se envía ni un byte de JavaScript del widget y el sitio se sirve
+          completo. Es la regla "el sitio tiene que funcionar con el chatbot caído",
+          aplicada en el punto donde se decide si existe. */}
+      {chatEnabled && (
+        <Chat
+          labels={{
+            close: profile.ui.chatClose,
+            disclaimer: profile.ui.chatDisclaimer,
+            error: profile.ui.chatError,
+            intro: profile.ui.chatIntro,
+            launcher: profile.ui.chatLauncher,
+            placeholder: profile.ui.chatPlaceholder,
+            ready: profile.ui.chatReady,
+            retry: profile.ui.chatRetry,
+            send: profile.ui.chatSend,
+            thinking: profile.ui.chatThinking,
+            title: profile.ui.chatTitle,
+          }}
+          lang={lang}
+        />
+      )}
     </>
   );
 }
