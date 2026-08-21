@@ -51,9 +51,20 @@ recomendación de un par no dice, y esa etiqueta es la mitad del valor del testi
 En cambio, `stack` y `tech` quedan como `string[]`: son listas abiertas, cambian seguido y
 no gobiernan ninguna decisión de render. Cerrarlas sería burocracia sin beneficio.
 
-### 3. Sin RAG en el chatbot — a propósito
+### 3. El corpus del chatbot se DERIVA del sitio, y por eso no hay RAG
 
-El corpus completo del perfil entra holgadamente en la ventana de contexto del modelo.
+`lib/chat/corpus.ts` arma el corpus desde `content/*.json` — los mismos archivos que
+renderizan las páginas. No hay un documento de corpus mantenido aparte.
+
+**Por qué importa más de lo que parece:** dos copias de la misma verdad se desincronizan,
+y en este proyecto ya pasó dos veces con el CV y el dossier. Un corpus a mano habría
+producido un bot afirmando "6 áreas" tres semanas después de que el sitio pasara a "más
+de 10". Derivarlo da tres garantías **estructurales**, no de disciplina: no puede
+desincronizarse, no puede afirmar nada que el sitio no publique —así la lista negra de
+privacidad se cumple por construcción y no por una regla del prompt que el modelo podría
+ignorar— y cambiar contenido actualiza el bot sin un segundo paso.
+
+El corpus completo entra holgadamente en la ventana de contexto del modelo.
 
 **Por qué no:** un retrieval agregaría un índice, un modelo de embeddings, un pipeline de
 ingesta y un modo de falla nuevo —recuperar el chunk equivocado— a cambio de nada. La
@@ -63,16 +74,42 @@ regla es que RAG se justifica cuando el corpus **no** entra en la ventana. Este 
 llamada, o si el costo por request lo volviera relevante. Ninguna de las dos condiciones
 se cumple hoy, y sostengo la decisión hasta que se cumpla alguna.
 
-### 4. Proveedor de LLM detrás de una interfaz
+### 4. Proveedor de LLM detrás de una factory — y por qué acá sí
 
-`LLM_PROVIDER` selecciona la implementación; el resto del código no sabe cuál está activa.
-Default: `anthropic`.
+`lib/chat/provider-factory.ts` elige la implementación; el resto del código pide un
+`LlmProvider` y no sabe cuál está activa. Default: `anthropic`.
 
-**Por qué:** el proveedor es la dependencia con más probabilidad de cambiar —por precio,
-por disponibilidad o por calidad— y es la más fácil de aislar. La fachada cuesta una
-interfaz y un registry; migrar sin ella cuesta tocar el endpoint entero. Es el único punto
-donde acepto indirección por adelantado, y lo acepto porque el eje de cambio está
-identificado, no supuesto.
+**Por qué acá sí y en la presentación no.** Los registros del sitio
+(`lib/pages/registry.ts`, `lib/sections/registry.tsx`) enumeran conjuntos fijos, conocidos
+en compilación: meterles una factory habría sido indirección que no absorbe ninguna
+variabilidad. Acá pasa lo contrario — hay que **elegir entre implementaciones
+intercambiables**, la elección depende de configuración que solo existe en runtime, y el
+eje de cambio está identificado y no supuesto: el proveedor es la dependencia con más
+probabilidad de cambiar, por precio, disponibilidad o calidad.
+
+**Sin SDK.** El proveedor de Anthropic habla la Messages API con `fetch` y un parser de
+SSE de treinta líneas. Se usa un endpoint, un modo y un tipo de evento; el SDK resuelve
+mucho más que eso y ninguna de esas cosas entra en un chatbot de alcance cerrado. El
+trade-off asumido: los reintentos quedan de nuestro lado y hoy no hay ninguno — ante un
+error del proveedor se responde error, en vez de reintentar solo y multiplicar el gasto
+durante un incidente.
+
+**`FakeProvider` no es decoración.** Permite desarrollar el widget sin ninguna clave,
+testear el endpoint sin gastar, y —lo importante— es la segunda implementación de la
+interfaz: una abstracción con un solo implementador no está probada.
+
+### 4.b El input del usuario nunca toca el prompt de sistema
+
+`buildSystemPrompt(lang)` no recibe nada del cliente: toma un locale validado contra un
+enum y devuelve un string. El mensaje de quien escribe viaja siempre como turno `user`.
+
+La regla la hace cumplir el tipo, no la memoria: `ChatRole` es `'assistant' | 'user'` y
+**no incluye `'system'`**, así que un turno con ese rol no se puede ni expresar. El schema
+Zod además usa `.strict()` y rechaza campos desconocidos.
+
+Eso no vuelve al bot inmune a que le pidan ignorar sus instrucciones —ningún prompt lo
+es— pero elimina la clase de ataque en la que el atacante *reescribe* las reglas en lugar
+de discutirlas.
 
 ### 5. El sitio tiene que funcionar con el chatbot caído
 
@@ -155,11 +192,6 @@ habría que recalcularla por página y por build. La alternativa correcta, un no
 request generado en el proxy, vuelve dinámicas todas las páginas: se pagaría un servidor
 por request para mitigar XSS en un sitio sin entrada de usuario ni contenido de terceros.
 
-En desarrollo la política agrega `'unsafe-eval'` y `ws:`: React en modo dev usa `eval()`
-para reconstruir stack traces y Turbopack necesita el websocket de hot-reload. La distinción
-la hace `process.env.NODE_ENV`, que fija Next — no una variable que alguien tenga que
-acordarse de setear, así que la relajación no puede filtrarse a producción por olvido.
-
 Lo que la política **sí** garantiza es donde está el valor real acá: ningún origen externo
 puede cargar nada —script, fuente, imagen o conexión—. Si alguna vez se cuela un
 `<script src>` ajeno, el navegador lo bloquea. `connect-src` se revisa cuando exista el
@@ -222,7 +254,23 @@ de más —loop, autoplay, drag con inercia— es justamente lo que no queremos.
 declaran posición ("Recomendación 2 de 3"), los puntos tienen área táctil de 24px (WCAG
 2.2 · 2.5.8) y la relación de quien recomienda se muestra siempre.
 
-### 15. Redirects permanentes de las URLs viejas
+### 15. Guardarraíl de contenido en el build
+
+`npm run content:check` recorre todos los strings de `content/*.json` y falla si aparece
+algo que las reglas de publicación prohíben: el monto exacto de ahorro en LLM, "4+ años",
+un cargo futuro presentado como actual, el teléfono escrito a mano, algo con forma de
+credencial, o RAG reclamado como logro propio. Corre como `prebuild`.
+
+**Por qué en el build y no en el prompt:** una regla escrita solo en el prompt de sistema
+es una regla que el modelo *podría* ignorar; una que rompe el build se cumple. Y como el
+corpus del bot se deriva de esos mismos archivos, el chequeo cubre las dos superficies —
+lo que muestra el sitio y lo que el bot puede afirmar— con un solo control.
+
+No reemplaza al criterio humano: no detecta una inferencia mal encuadrada. Cierra la clase
+de error que ya pasó dos veces, que es un dato saliendo porque alguien editó un JSON sin
+releer las reglas.
+
+### 16. Redirects permanentes de las URLs viejas
 
 `/:lang/proyectos/:slug` → `/:lang/projects/:slug`, 308. El sitio ya estaba publicado
 cuando se unificaron los segmentos en inglés, así que esas URLs pueden estar indexadas o

@@ -278,6 +278,18 @@ export const uiStringsSchema = z
     certificateFullSize: text,
     /** Enlace a la página de verificación del emisor. */
     certificateVerify: text,
+    /** Strings del widget de chat. Se renderizan solo si `chatEnabled`. */
+    chatClose: text,
+    chatDisclaimer: text,
+    chatError: text,
+    chatIntro: text,
+    chatLauncher: text,
+    chatPlaceholder: text,
+    chatReady: text,
+    chatRetry: text,
+    chatSend: text,
+    chatThinking: text,
+    chatTitle: text,
     caseStudyContactCta: text,
     caseStudyLink: text,
     contactEmail: text,

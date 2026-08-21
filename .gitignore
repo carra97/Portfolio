@@ -29,3 +29,4 @@ next-env.d.ts
 Thumbs.db
 *.log
 npm-debug.log*
+_to_delete/
