@@ -192,7 +192,7 @@ export default async function CaseStudyPage({
         </div>
       </div>
 
-      <Footer lang={lang} name={profile.hero.name} ui={profile.ui} />
+      <Footer lang={lang} profile={profile} />
     </>
   );
 }

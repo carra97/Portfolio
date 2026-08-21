@@ -192,6 +192,18 @@ b {
   }
 }
 
+/* Enlaces del footer: apagados y sin subrayado, como los del nav. Cinco enlaces en
+   acento subrayado convierten el pie en una sopa; el subrayado solo es obligatorio para
+   enlaces embebidos en texto corrido (WCAG 1.4.1), no para listas de enlaces. */
+.footer-link {
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  transition: color var(--dur-fast) var(--ease);
+}
+.footer-link:hover {
+  color: var(--text-heading);
+}
+
 /* ── Carrusel ─────────────────────────────────────────────────────────────── */
 
 /**

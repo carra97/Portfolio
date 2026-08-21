@@ -227,12 +227,11 @@
     }
   ],
   "hero": {
-    "eyebrow": "Paraná, Entre Ríos · Argentina",
-    "name": "Santiago Carrattini",
-    "headline": "Team Leader & Senior Full Stack Developer",
-    "tagline": "Backend en Node.js y TypeScript, con especialización en IA aplicada: apps con LLMs, agentes y Model Context Protocol. Lidero un equipo de 3 desarrolladores sin dejar de estar hands-on.",
-    "location": "Paraná, Entre Ríos, Argentina",
     "availability": "Full-time · Remoto · Disponible para viajar a Buenos Aires hasta cada 15 días",
+    "eyebrow": "Paraná, Entre Ríos · Argentina",
+    "headline": "Team Leader & Senior Full Stack Developer",
+    "location": "Paraná, Entre Ríos, Argentina",
+    "name": "Santiago Carrattini",
     "quickFacts": [
       {
         "label": "Rol actual",
@@ -258,7 +257,9 @@
         "label": "Idiomas",
         "value": "Español nativo · Inglés C2 (EF SET 71/100) · Italiano avanzado"
       }
-    ]
+    ],
+    "resumeUrl": "/cv/santiago-carrattini-cv-es.pdf",
+    "tagline": "Backend en Node.js y TypeScript, con especialización en IA aplicada: apps con LLMs, agentes y Model Context Protocol. Lidero un equipo de 3 desarrolladores sin dejar de estar hands-on."
   },
   "hobbies": [
     {
@@ -564,7 +565,11 @@
     "contactIntro": "Disponible full-time en modalidad remota. Con disposición a viajar a Buenos Aires para instancias presenciales puntuales, hasta una vez cada quince días. Escribime por donde te quede más cómodo.",
     "contactWhatsApp": "Escribirme por WhatsApp",
     "currentBadge": "Actual",
-    "footerContactLink": "Contacto",
+    "footerAvailabilityLabel": "Disponibilidad",
+    "footerContactLabel": "Contacto",
+    "footerCvLink": "CV en PDF",
+    "footerDownloadLabel": "Descargar",
+    "footerRepoLink": "Código de este sitio",
     "heroContactCta": "Hablemos",
     "navLabel": "Navegación principal",
     "photoAlt": "Retrato en blanco y negro de Santiago Carrattini",
