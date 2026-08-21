@@ -63,6 +63,16 @@ for (const [index, testCase] of cases.entries()) {
     if (!new RegExp(pattern, 'i').test(answer)) failures.push(`requerido ausente: /${pattern}/`);
   }
 
+  /**
+   * Tope de largo. Se agregó porque la verbosidad resultó ser un modo de falla
+   * recurrente que ninguna expresión regular detecta: el bot contestaba un saludo con
+   * un párrafo de currículum, y todos los chequeos daban verde. "Responder de más" es
+   * una falla de comportamiento como cualquier otra, y ahora se mide.
+   */
+  if (testCase.maxChars && answer.length > testCase.maxChars) {
+    failures.push(`demasiado largo: ${answer.length} caracteres, tope ${testCase.maxChars}`);
+  }
+
   if (failures.length > 0) {
     process.stdout.write(`✗ FALLA\n  ${failures.join('\n  ')}\n`);
     results.push({ id: testCase.id, blocking: testCase.blocking, status: 'FALLA', detail: failures.join('; ') });

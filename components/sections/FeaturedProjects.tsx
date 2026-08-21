@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { Carousel } from '@/components/ui/Carousel';
 import { interpolate } from '@/lib/format';
 import type { SupportedLocale } from '@/lib/i18n';
@@ -75,9 +76,9 @@ export function FeaturedProjects({
                 se comprueba en vez de afirmarlo con `!`. */}
             {project.slug && (
               <p className="mt-6 pt-2">
-                <a className="prose-link" href={routes.caseStudy(lang, project.slug)}>
+                <Link className="prose-link" href={routes.caseStudy(lang, project.slug)}>
                   {ui.caseStudyLink} →
-                </a>
+                </Link>
               </p>
             )}
           </li>
@@ -85,9 +86,9 @@ export function FeaturedProjects({
       </Carousel>
 
       <p className="mt-8">
-        <a className="prose-link" href={routes.projects(lang)}>
+        <Link className="prose-link" href={routes.projects(lang)}>
           {ui.viewProjects} →
-        </a>
+        </Link>
       </p>
     </div>
   );

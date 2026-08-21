@@ -44,16 +44,42 @@ const envSchema = z.object({
   CONTACT_EMAIL: emailOrEmpty,
   CONTACT_PHONE_E164: phoneE164,
   /**
-   * Proveedor de LLM. El default es anthropic; la implementación vive detrás de una
-   * interfaz común para que cambiar de proveedor no toque el resto del código.
+   * Proveedor de LLM. La implementación vive detrás de una interfaz común para que
+   * cambiar de proveedor no toque nada fuera de `lib/chat/providers/`.
+   *
+   * El default es `gemini` porque su nivel gratuito hace cumplir el tope de gasto del
+   * lado del proveedor: sin medio de pago en la cuenta, el peor caso del sitio es
+   * quedarse sin responder, nunca una factura. Eso es justo lo que el limitador de
+   * `lib/chat/rate-limit.ts` NO puede garantizar solo, porque falla abierto.
    */
-  LLM_PROVIDER: z.enum(['anthropic', 'gemini', 'openai']).default('anthropic'),
+  LLM_PROVIDER: z.enum(['anthropic', 'gemini', 'openai']).default('gemini'),
   ANTHROPIC_API_KEY: z.string().default(''),
   GEMINI_API_KEY: z.string().default(''),
+  /**
+   * Modelo de Gemini. Configurable por entorno y no fijo en el código, a diferencia del
+   * de Anthropic, por una razón concreta: **los modelos del nivel gratuito rotan según
+   * el calendario de Google, no el nuestro**. El endpoint corre en Node, así que este
+   * valor se lee por invocación: cambiarlo en el panel de deploy toma efecto sin
+   * recompilar. Cambiar de modelo obliga a volver a correr `npm run evals`.
+   */
+  GEMINI_MODEL: z.string().default('gemini-3.5-flash-lite'),
   OPENAI_API_KEY: z.string().default(''),
-  /** Rate limiting por IP. Sin esto configurado, el endpoint de chat debe negarse a servir. */
-  KV_REST_API_TOKEN: z.string().default(''),
-  KV_REST_API_URL: z.string().default(''),
+  /**
+   * Rate limiting por IP. Sin esto configurado, el endpoint de chat debe negarse a
+   * servir.
+   *
+   * Los nombres canónicos son los que **entrega Upstash tal cual**, para que copiar y
+   * pegar desde su consola no requiera renombrar nada. `KV_REST_API_*` se sigue
+   * aceptando como alias en `withoutEmptyValues`: es lo que inyectaba el viejo Vercel KV
+   * y lo que ya está cargado en deploys previos.
+   *
+   * El alias no es comodidad. Sin él, cargar las variables con el nombre equivocado no
+   * produce ningún error: `chatEnabled` queda en `false`, el widget no se renderiza y el
+   * sitio se sirve perfecto. **Un fallo silencioso e indistinguible del estado normal**
+   * es justo el que más cuesta diagnosticar, y acá se elimina aceptando los dos nombres.
+   */
+  UPSTASH_REDIS_REST_TOKEN: z.string().default(''),
+  UPSTASH_REDIS_REST_URL: z.string().default(''),
   /**
    * URL canónica del sitio. Se valida como URL absoluta porque `metadataBase` la
    * pasa por `new URL()`: un valor con forma inválida tiene que romper acá, con un
@@ -64,15 +90,33 @@ const envSchema = z.object({
 });
 
 /**
- * Normaliza el entorno antes de validar: una clave definida como cadena vacía se
- * trata como ausente, para que el `.default()` del esquema tenga oportunidad de correr.
+ * Nombres alternativos aceptados para una misma variable, en orden de preferencia.
+ * El canónico siempre gana; el alias solo se mira si el canónico está ausente o vacío.
+ */
+const ALIASES: Readonly<Record<string, readonly string[]>> = {
+  UPSTASH_REDIS_REST_TOKEN: ['KV_REST_API_TOKEN'],
+  UPSTASH_REDIS_REST_URL: ['KV_REST_API_URL'],
+};
+
+/**
+ * Normaliza el entorno antes de validar. Hace dos cosas:
+ *
+ * 1. Una clave definida como cadena vacía se trata como ausente, para que el
+ *    `.default()` del esquema tenga oportunidad de correr.
+ * 2. Si el nombre canónico no está, se prueba con los alias de `ALIASES`.
  */
 function withoutEmptyValues(source: NodeJS.ProcessEnv): Record<string, string | undefined> {
   const normalized: Record<string, string | undefined> = {};
+
   for (const key of Object.keys(envSchema.shape)) {
-    const value = source[key];
-    normalized[key] = value === undefined || value.trim() === '' ? undefined : value;
+    const candidates = [key, ...(ALIASES[key] ?? [])];
+    const found = candidates
+      .map((name) => source[name])
+      .find((value) => value !== undefined && value.trim() !== '');
+
+    normalized[key] = found;
   }
+
   return normalized;
 }
 
@@ -113,20 +157,33 @@ export const whatsappDigits = env.CONTACT_PHONE_E164.replace(/^\+/, '');
  * había que levantar un Redis, así que en la práctica se tocaba sin rate limit o no se
  * tocaba.
  *
- * Lo que se protege sigue protegido: en producción, sin `KV_REST_API_*`, el chat queda
- * apagado y el sitio se sirve completo.
+ * Lo que se protege sigue protegido: en producción, sin las credenciales de Upstash, el
+ * chat queda apagado y el sitio se sirve completo.
  */
 const rateLimitBackendReady =
-  Boolean(env.KV_REST_API_URL && env.KV_REST_API_TOKEN) ||
+  Boolean(env.UPSTASH_REDIS_REST_URL && env.UPSTASH_REDIS_REST_TOKEN) ||
   process.env.NODE_ENV === 'development';
 
+const providerKey =
+  env.LLM_PROVIDER === 'anthropic'
+    ? env.ANTHROPIC_API_KEY
+    : env.LLM_PROVIDER === 'gemini'
+      ? env.GEMINI_API_KEY
+      : env.OPENAI_API_KEY;
+
+/**
+ * En desarrollo se acepta que no haya clave: la factory devuelve el proveedor simulado.
+ *
+ * Sin esta excepción el proveedor simulado era **inalcanzable** —el mismo error que ya
+ * tuvimos con el limitador en memoria—: la condición de abajo exigía clave real en
+ * cualquier entorno, así que el `createFakeProvider()` de la factory nunca se ejecutaba
+ * y el flujo que documenta el README ("levantá el widget sin ninguna credencial") no
+ * funcionaba. Una abstracción con un solo implementador ejecutado no está probada.
+ *
+ * En producción no cambia nada: sin clave el chat queda apagado y el sitio se sirve
+ * completo. Lo que NO se quiere es un sitio público respondiendo con texto de mentira.
+ */
+const providerReady = Boolean(providerKey) || process.env.NODE_ENV === 'development';
+
 export const chatEnabled: boolean =
-  env.CHAT_ENABLED === 'true' &&
-  rateLimitBackendReady &&
-  Boolean(
-    env.LLM_PROVIDER === 'anthropic'
-      ? env.ANTHROPIC_API_KEY
-      : env.LLM_PROVIDER === 'gemini'
-        ? env.GEMINI_API_KEY
-        : env.OPENAI_API_KEY,
-  );
+  env.CHAT_ENABLED === 'true' && rateLimitBackendReady && providerReady;

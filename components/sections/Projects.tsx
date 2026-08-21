@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import type { SupportedLocale } from '@/lib/i18n';
 import { routes } from '@/lib/routes';
 import type { Profile } from '@/types/profile';
@@ -100,9 +101,9 @@ export function Projects({
 
             {project.slug && (
               <p className="mt-6">
-                <a className="prose-link" href={routes.caseStudy(lang, project.slug)}>
+                <Link className="prose-link" href={routes.caseStudy(lang, project.slug)}>
                   {ui.caseStudyLink} →
-                </a>
+                </Link>
               </p>
             )}
 

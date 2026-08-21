@@ -4,6 +4,7 @@ import { getCaseStudies } from '@/lib/content/case-studies';
 import { getProfile } from '@/lib/content/profile';
 import { env, whatsappDigits } from '@/lib/env';
 import type { SupportedLocale } from '@/lib/i18n';
+import { getPages, pageHref } from '@/lib/pages/registry';
 
 /**
  * Corpus del chatbot.
@@ -78,6 +79,32 @@ function serialize(lang: SupportedLocale): string {
   line(`- Resumen: ${profile.hero.tagline}`);
   line(`- Disponibilidad: ${profile.hero.availability}`);
   for (const fact of profile.hero.quickFacts) line(`- ${fact.label}: ${fact.value}`);
+
+  /**
+   * Mapa del sitio, derivado del registro de páginas — no escrito a mano.
+   *
+   * Es el mismo registro que arma la navegación (`lib/pages/nav.ts`), los canonicals y el
+   * sitemap. Por lo tanto **no puede existir acá una ruta que el sitio no sirva**: si una
+   * página se renombra o se elimina, esta sección se actualiza sola y el bot no puede
+   * mandar a nadie a un 404. Una lista de rutas a mano habría sido la cuarta copia de la
+   * misma verdad.
+   */
+  section('Mapa del sitio — para orientar a quien pregunta');
+  line(
+    'Estas son las rutas reales del sitio. Cuando la respuesta esté desarrollada en una sección, citá su ruta exacta tal como figura acá para que la persona pueda ir.',
+  );
+  for (const page of getPages()) {
+    const meta = profile.pages[page.id];
+    line(`- ${meta.navLabel} (${pageHref(page.id, lang)}): ${meta.description}`);
+  }
+  for (const study of caseStudies) {
+    line(`- Caso de estudio "${study.title}" (/${lang}/projects/${study.slug}): ${study.summary}`);
+  }
+  if (profile.hero.resumeUrl) {
+    line(
+      `- CV en PDF, descarga directa (${profile.hero.resumeUrl}): el currículum completo. Ofrecelo cuando pidan el CV, el currículum o "un resumen para pasarle a alguien".`,
+    );
+  }
 
   section('Contacto');
   if (env.CONTACT_EMAIL) line(`- Email: ${env.CONTACT_EMAIL}`);

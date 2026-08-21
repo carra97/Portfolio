@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { routes } from '@/lib/routes';
 import type { SupportedLocale } from '@/lib/i18n';
 import type { Profile } from '@/types/profile';
@@ -56,9 +57,9 @@ export function CurrentRole({
       </ul>
 
       <p className="mt-8">
-        <a className="prose-link" href={routes.experience(lang)}>
+        <Link className="prose-link" href={routes.experience(lang)}>
           {ui.viewExperience} →
-        </a>
+        </Link>
       </p>
     </div>
   );

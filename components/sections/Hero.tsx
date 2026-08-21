@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { QuickFacts } from '@/components/sections/QuickFacts';
 import type { SupportedLocale } from '@/lib/i18n';
 import { routes } from '@/lib/routes';
@@ -62,12 +63,12 @@ export function Hero({
         className="rise mt-8 flex flex-wrap items-center gap-3"
         style={{ animationDelay: '240ms' }}
       >
-        <a
+        <Link
           className="rounded-md bg-accent px-5 py-2.5 font-medium text-accent-on transition-colors duration-150 hover:bg-accent-hover"
           href={routes.contact(lang)}
         >
           {ui.heroContactCta}
-        </a>
+        </Link>
 
         {/* Sin archivo de CV no hay botón. Un enlace de descarga roto es peor que la
             ausencia del botón, porque parece que funciona. Mismo criterio que `lib/env.ts`. */}

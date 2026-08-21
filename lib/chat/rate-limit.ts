@@ -66,7 +66,7 @@ let limiter: RateLimiter | null = null;
 export function createRateLimiter(): RateLimiter {
   if (limiter) return limiter;
 
-  const hasBackend = Boolean(env.KV_REST_API_URL && env.KV_REST_API_TOKEN);
+  const hasBackend = Boolean(env.UPSTASH_REDIS_REST_URL && env.UPSTASH_REDIS_REST_TOKEN);
   limiter = hasBackend ? createUpstashRateLimiter() : createMemoryRateLimiter();
   return limiter;
 }
@@ -112,10 +112,10 @@ function createUpstashRateLimiter(): RateLimiter {
 }
 
 async function incrementWithExpiry(key: string, seconds: number): Promise<number> {
-  const response = await fetch(`${env.KV_REST_API_URL}/pipeline`, {
+  const response = await fetch(`${env.UPSTASH_REDIS_REST_URL}/pipeline`, {
     method: 'POST',
     headers: {
-      authorization: `Bearer ${env.KV_REST_API_TOKEN}`,
+      authorization: `Bearer ${env.UPSTASH_REDIS_REST_TOKEN}`,
       'content-type': 'application/json',
     },
     body: JSON.stringify([
@@ -148,7 +148,7 @@ async function incrementWithExpiry(key: string, seconds: number): Promise<number
  *
  * Que exista igual tiene sentido: permite desarrollar y testear el camino de 429 sin
  * levantar un Redis. Que no llegue a producción lo garantiza `chatEnabled`, que exige
- * `KV_REST_API_URL` y `KV_REST_API_TOKEN` para habilitar el chat.
+ * `UPSTASH_REDIS_REST_URL` y `UPSTASH_REDIS_REST_TOKEN` para habilitar el chat.
  */
 function createMemoryRateLimiter(): RateLimiter {
   const counters = new Map<string, { count: number; expiresAt: number }>();
