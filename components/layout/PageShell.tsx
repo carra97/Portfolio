@@ -81,6 +81,7 @@ export function PageShell({
       </main>
 
       <Footer lang={lang} profile={profile} />
+
     </>
   );
 }

@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { routes } from '@/lib/routes';
 import type { SupportedLocale } from '@/lib/i18n';
 import type { Profile } from '@/types/profile';
@@ -29,9 +30,9 @@ export function AboutTeaser({
           {about.principle}
         </blockquote>
         <p className="mt-8">
-          <a className="prose-link" href={routes.about(lang)}>
+          <Link className="prose-link" href={routes.about(lang)}>
             {ui.aboutCta} →
-          </a>
+          </Link>
         </p>
       </div>
     </section>

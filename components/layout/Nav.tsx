@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { ThemeToggle } from '@/components/layout/ThemeToggle';
 import type { SupportedLocale } from '@/lib/i18n';
 import type { Navigation } from '@/lib/pages/nav';
@@ -45,17 +46,17 @@ export function Nav({
         aria-label={label}
         className="mx-auto flex max-w-[1120px] flex-wrap items-center gap-x-4 gap-y-1 px-6 py-2.5 md:flex-nowrap md:gap-6 md:px-10 md:py-3"
       >
-        <a
+        <Link
           className="mr-auto font-mono text-sm tracking-[0.12em] text-heading transition-colors duration-150 hover:text-accent md:mr-0"
           href={routes.home(lang)}
         >
           SC
-        </a>
+        </Link>
 
         <ul className="nav-fade order-last flex w-full gap-5 overflow-x-auto whitespace-nowrap [scrollbar-width:none] md:order-none md:w-auto md:flex-1 [&::-webkit-scrollbar]:hidden">
           {navigation.destinations.map((item) => (
             <li key={item.href}>
-              <a
+              <Link
                 aria-current={item.current ? 'page' : undefined}
                 className={`block py-2 font-mono text-xs uppercase tracking-[0.12em] transition-colors duration-150 hover:text-heading ${
                   item.current ? 'text-accent' : 'text-muted'
@@ -63,13 +64,13 @@ export function Nav({
                 href={item.href}
               >
                 {item.label}
-              </a>
+              </Link>
             </li>
           ))}
         </ul>
 
         {navigation.cta && (
-          <a
+          <Link
             aria-current={navigation.cta.current ? 'page' : undefined}
             className={`shrink-0 rounded-md border px-3 py-1.5 font-mono text-xs uppercase tracking-[0.12em] transition-colors duration-150 ${
               navigation.cta.current
@@ -79,7 +80,7 @@ export function Nav({
             href={navigation.cta.href}
           >
             {navigation.cta.label}
-          </a>
+          </Link>
         )}
 
         <ThemeToggle label={themeLabel} />

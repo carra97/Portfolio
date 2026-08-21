@@ -257,6 +257,177 @@ b {
   }
 }
 
+/* ── Avatar de Raukar ─────────────────────────────────────────────────────────
+   Todo en CSS y sobre `transform`/`opacity`: corre en el compositor, no dispara
+   layout y pesa cero JavaScript. El bloque de `prefers-reduced-motion` de más
+   abajo ya lo apaga junto con el resto del movimiento del sitio — por eso no hay
+   una regla propia acá. */
+
+/* Reposo: respira. Amplitud deliberadamente chica; un avatar que se mueve mucho
+   en una esquina compite con la lectura de la página. */
+@keyframes raukar-idle {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-2px);
+  }
+}
+
+/* Pensando: se inclina de un lado al otro, más rápido. */
+@keyframes raukar-thinking {
+  0%,
+  100% {
+    transform: translateY(0) rotate(-4deg);
+  }
+  50% {
+    transform: translateY(-3px) rotate(4deg);
+  }
+}
+
+/* Anillo que late mientras llega la respuesta: refuerza el estado sin texto. */
+@keyframes raukar-ring {
+  0% {
+    opacity: 0.5;
+    transform: scale(1);
+  }
+  70%,
+  100% {
+    opacity: 0;
+    transform: scale(1.6);
+  }
+}
+
+/* Saludo: se ejecuta UNA vez, al aparecer. Un saludo en bucle deja de ser un
+   saludo y pasa a ser un tic. */
+@keyframes raukar-wave {
+  0% {
+    transform: rotate(0deg) translateY(0);
+  }
+  15% {
+    transform: rotate(-9deg) translateY(-4px);
+  }
+  30% {
+    transform: rotate(9deg) translateY(-4px);
+  }
+  45% {
+    transform: rotate(-8deg) translateY(-3px);
+  }
+  60% {
+    transform: rotate(8deg) translateY(-3px);
+  }
+  75% {
+    transform: rotate(-5deg) translateY(-1px);
+  }
+  100% {
+    transform: rotate(0deg) translateY(0);
+  }
+}
+
+/* Indicador de "está pensando": tres puntos con rebote escalonado.
+   Es el lenguaje que ya entiende cualquiera que haya usado un chat, y a
+   diferencia de una línea de texto se ve sin leer. */
+@keyframes raukar-dot {
+  0%,
+  60%,
+  100% {
+    opacity: 0.35;
+    transform: translateY(0);
+  }
+  30% {
+    opacity: 1;
+    transform: translateY(-3px);
+  }
+}
+
+.raukar-dot {
+  animation: raukar-dot 1.2s var(--ease) infinite;
+}
+
+/* Saludo por cuadros — la mano se mueve, no el cuerpo.
+   Seis dibujos en una sola imagen, recorridos con `step-end` para que salten
+   en seco en vez de deslizarse: es animación de cuadros, no una transición.
+   El orden no es 1-2-3-4-5-6 sino el de la secuencia del gesto (reposo, sube,
+   arriba, abajo, arriba, abajo, arriba, baja, reposo), medido por la posición
+   real de la mano en cada dibujo. Termina en reposo, así que cuando la
+   animación se apaga por `prefers-reduced-motion` queda parado y quieto. */
+@keyframes raukar-wave-frames {
+  0% {
+    background-position-x: 0%;
+  }
+  12.5% {
+    background-position-x: 60%;
+  }
+  25% {
+    background-position-x: 20%;
+  }
+  37.5% {
+    background-position-x: 80%;
+  }
+  50% {
+    background-position-x: 20%;
+  }
+  62.5% {
+    background-position-x: 80%;
+  }
+  75% {
+    background-position-x: 20%;
+  }
+  87.5% {
+    background-position-x: 60%;
+  }
+  100% {
+    background-position-x: 0%;
+  }
+}
+
+.raukar-wave-frames {
+  aspect-ratio: 382 / 724;
+  background-repeat: no-repeat;
+  background-size: 600% 100%;
+  animation: raukar-wave-frames 1.15s step-end 1 both;
+}
+
+/* Alterna el cuadro con el brazo levantado, si ese archivo existe. `steps(1)` es
+   lo que hace que sea un cambio de cuadro y no un fundido: la animación de dos
+   dibujos de toda la vida. */
+@keyframes raukar-frame-swap {
+  0%,
+  49% {
+    opacity: 1;
+  }
+  50%,
+  100% {
+    opacity: 0;
+  }
+}
+
+.raukar-idle {
+  animation: raukar-idle 4.5s var(--ease) infinite;
+}
+
+.raukar-thinking {
+  animation: raukar-thinking 1.1s var(--ease) infinite;
+}
+
+.raukar-wave {
+  animation: raukar-wave 1.6s var(--ease) 1 both;
+}
+
+.raukar-ring::after {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border-radius: 9999px;
+  border: 1px solid var(--accent);
+  animation: raukar-ring 1.5s var(--ease) infinite;
+}
+
+.raukar-frame-wave {
+  animation: raukar-frame-swap 0.4s steps(1) 4 reverse both;
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;

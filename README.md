@@ -51,9 +51,20 @@ recomendación de un par no dice, y esa etiqueta es la mitad del valor del testi
 En cambio, `stack` y `tech` quedan como `string[]`: son listas abiertas, cambian seguido y
 no gobiernan ninguna decisión de render. Cerrarlas sería burocracia sin beneficio.
 
-### 3. Sin RAG en el chatbot — a propósito
+### 3. El corpus del chatbot se DERIVA del sitio, y por eso no hay RAG
 
-El corpus completo del perfil entra holgadamente en la ventana de contexto del modelo.
+`lib/chat/corpus.ts` arma el corpus desde `content/*.json` — los mismos archivos que
+renderizan las páginas. No hay un documento de corpus mantenido aparte.
+
+**Por qué importa más de lo que parece:** dos copias de la misma verdad se desincronizan,
+y en este proyecto ya pasó dos veces con el CV y el dossier. Un corpus a mano habría
+producido un bot afirmando "6 áreas" tres semanas después de que el sitio pasara a "más
+de 10". Derivarlo da tres garantías **estructurales**, no de disciplina: no puede
+desincronizarse, no puede afirmar nada que el sitio no publique —así la lista negra de
+privacidad se cumple por construcción y no por una regla del prompt que el modelo podría
+ignorar— y cambiar contenido actualiza el bot sin un segundo paso.
+
+El corpus completo entra holgadamente en la ventana de contexto del modelo.
 
 **Por qué no:** un retrieval agregaría un índice, un modelo de embeddings, un pipeline de
 ingesta y un modo de falla nuevo —recuperar el chunk equivocado— a cambio de nada. La
@@ -63,16 +74,89 @@ regla es que RAG se justifica cuando el corpus **no** entra en la ventana. Este 
 llamada, o si el costo por request lo volviera relevante. Ninguna de las dos condiciones
 se cumple hoy, y sostengo la decisión hasta que se cumpla alguna.
 
-### 4. Proveedor de LLM detrás de una interfaz
+### 4. Proveedor de LLM detrás de una factory — y por qué acá sí
 
-`LLM_PROVIDER` selecciona la implementación; el resto del código no sabe cuál está activa.
-Default: `anthropic`.
+`lib/chat/provider-factory.ts` elige la implementación; el resto del código pide un
+`LlmProvider` y no sabe cuál está activa. Default: `gemini`.
 
-**Por qué:** el proveedor es la dependencia con más probabilidad de cambiar —por precio,
-por disponibilidad o por calidad— y es la más fácil de aislar. La fachada cuesta una
-interfaz y un registry; migrar sin ella cuesta tocar el endpoint entero. Es el único punto
-donde acepto indirección por adelantado, y lo acepto porque el eje de cambio está
-identificado, no supuesto.
+**Por qué acá sí y en la presentación no.** Los registros del sitio
+(`lib/pages/registry.ts`, `lib/sections/registry.tsx`) enumeran conjuntos fijos, conocidos
+en compilación: meterles una factory habría sido indirección que no absorbe ninguna
+variabilidad. Acá pasa lo contrario — hay que **elegir entre implementaciones
+intercambiables**, la elección depende de configuración que solo existe en runtime, y el
+eje de cambio está identificado y no supuesto: el proveedor es la dependencia con más
+probabilidad de cambiar, por precio, disponibilidad o calidad.
+
+**Por qué el default es Gemini, y qué garantiza que el código no puede garantizar.**
+El limitador de `lib/chat/rate-limit.ts` falla abierto a propósito (ver §5), así que por
+sí solo no acota el gasto: si Redis se cae, deja pasar. La otra mitad del control tiene
+que vivir en la cuenta del proveedor, y ahí el nivel gratuito de Gemini hace algo que un
+tope configurado a mano no hace — **no se puede olvidar de configurar**. Sin facturación
+habilitada en el proyecto de Google, agotada la cuota diaria la API devuelve 429 y el chat
+deja de responder. El peor caso del sitio pasa a ser una degradación, nunca una factura.
+
+El precio se paga en tres monedas y ninguna se esconde:
+
+1. **Privacidad.** En el nivel gratuito Google usa los pedidos y respuestas para mejorar
+   sus productos; en el pago, no. El corpus es material ya publicado, pero las preguntas
+   que escribe un visitante salen del sitio. Por eso el widget lo dice: *"Las consultas se
+   procesan con un modelo de un tercero."*
+2. **Disponibilidad.** La cuota diaria del nivel gratuito es un techo real. Es el modo de
+   falla elegido, no uno tolerado.
+3. **API legacy.** Se usa `generateContent` y no la Interactions API, que Google
+   recomienda para desarrollo nuevo. El motivo está en `lib/chat/providers/gemini.ts`:
+   Interactions es con estado por defecto y su modo sin estado exige reenviar estructuras
+   propias del proveedor, que es justo el acoplamiento que la interfaz evita. Google
+   documenta `generateContent` como "completamente soportada" y no anunció fecha de baja.
+
+Habilitar facturación en ese proyecto de Google elimina la garantía del punto de arriba.
+Si algún día se hace, el tope de gasto vuelve a ser un paso manual obligatorio.
+
+**Sin SDK.** Los dos proveedores hablan HTTP con `fetch` y un parser de SSE de treinta
+líneas. Se usa un endpoint, un modo y un tipo de evento; el SDK resuelve
+mucho más que eso y ninguna de esas cosas entra en un chatbot de alcance cerrado. El
+trade-off asumido: los reintentos quedan de nuestro lado y hoy no hay ninguno — ante un
+error del proveedor se responde error, en vez de reintentar solo y multiplicar el gasto
+durante un incidente.
+
+**`FakeProvider` no es decoración.** Permite desarrollar el widget sin ninguna clave,
+testear el endpoint sin gastar, y —lo importante— es la segunda implementación de la
+interfaz: una abstracción con un solo implementador no está probada.
+
+Durante un tiempo fue, sin embargo, **inalcanzable**: `chatEnabled` exigía clave real en
+todos los entornos, así que la rama del `FakeProvider` no se ejecutaba nunca y el flujo
+documentado acá —levantar el widget sin credenciales— no funcionaba. Es el mismo error
+que había con el limitador en memoria, y se corrigió igual: la clave es obligatoria en
+producción y opcional en desarrollo. Vale registrarlo porque el patrón se repite — una
+condición de habilitación pensada para producción vuelve inejecutable el camino de
+desarrollo, y nadie se entera hasta que lo prueba.
+
+### 4.c Raukar también guía el sitio
+
+El chat no es solo un respondedor: el corpus incluye un **mapa de rutas derivado del
+registro de páginas** (el mismo que arma la navegación y el sitemap), así que el bot puede
+mandar a la sección donde el tema está desarrollado en vez de empujar el contacto en cada
+respuesta. Como el mapa se deriva, no puede contener una ruta que el sitio no sirva.
+
+Del lado del cliente, las rutas que aparecen en una respuesta se convierten en links
+**contra una lista blanca**, no detectando texto con forma de URL. La diferencia importa:
+el modelo puede *nombrar* una ruta, pero solo se vuelve navegable si el registro la
+declara. Si alucina `/es/blog`, queda como texto plano y se nota — que es exactamente el
+comportamiento deseado. Enlazar la salida cruda de un modelo sería confiarle al modelo
+adónde manda a los visitantes.
+
+### 4.b El input del usuario nunca toca el prompt de sistema
+
+`buildSystemPrompt(lang)` no recibe nada del cliente: toma un locale validado contra un
+enum y devuelve un string. El mensaje de quien escribe viaja siempre como turno `user`.
+
+La regla la hace cumplir el tipo, no la memoria: `ChatRole` es `'assistant' | 'user'` y
+**no incluye `'system'`**, así que un turno con ese rol no se puede ni expresar. El schema
+Zod además usa `.strict()` y rechaza campos desconocidos.
+
+Eso no vuelve al bot inmune a que le pidan ignorar sus instrucciones —ningún prompt lo
+es— pero elimina la clase de ataque en la que el atacante *reescribe* las reglas en lugar
+de discutirlas.
 
 ### 5. El sitio tiene que funcionar con el chatbot caído
 
@@ -83,6 +167,17 @@ Si falta cualquiera, el chat no se habilita y el sitio se sirve completo.
 **Por qué el rate limit es condición de arranque y no una mejora:** un endpoint de LLM
 sin límite de gasto es una factura abierta a cualquiera que descubra la URL. Es preferible
 un portfolio sin chat que un chat que se pueda usar como cómputo gratuito.
+
+**Un error del proveedor tiene que ser un status, no un cuerpo vacío.** El handler pide el
+primer fragmento *antes* de responder. Sin eso, el `try/catch` alrededor de
+`provider.stream()` no atrapaba nada: invocar un generador asíncrono no ejecuta su cuerpo,
+así que una clave inválida o un 429 del proveedor aparecían recién dentro del stream, con
+el 200 ya enviado. El visitante veía una burbuja en blanco y el monitoreo veía una
+respuesta exitosa. Ahora todo lo que falle antes del primer token sale como 503
+(configuración: credenciales o cuota) o 502 (el resto); lo que falle después cierra el
+stream dejando visible el texto parcial, que es lo único honesto una vez enviadas las
+cabeceras. El costo es que las cabeceras salen con el primer token y no antes — nominal,
+porque no había nada que mostrar en el medio.
 
 ### 6. Validación de entorno con Zod, fallando en build
 
@@ -155,11 +250,6 @@ habría que recalcularla por página y por build. La alternativa correcta, un no
 request generado en el proxy, vuelve dinámicas todas las páginas: se pagaría un servidor
 por request para mitigar XSS en un sitio sin entrada de usuario ni contenido de terceros.
 
-En desarrollo la política agrega `'unsafe-eval'` y `ws:`: React en modo dev usa `eval()`
-para reconstruir stack traces y Turbopack necesita el websocket de hot-reload. La distinción
-la hace `process.env.NODE_ENV`, que fija Next — no una variable que alguien tenga que
-acordarse de setear, así que la relajación no puede filtrarse a producción por olvido.
-
 Lo que la política **sí** garantiza es donde está el valor real acá: ningún origen externo
 puede cargar nada —script, fuente, imagen o conexión—. Si alguna vez se cuela un
 `<script src>` ajeno, el navegador lo bloquea. `connect-src` se revisa cuando exista el
@@ -222,7 +312,23 @@ de más —loop, autoplay, drag con inercia— es justamente lo que no queremos.
 declaran posición ("Recomendación 2 de 3"), los puntos tienen área táctil de 24px (WCAG
 2.2 · 2.5.8) y la relación de quien recomienda se muestra siempre.
 
-### 15. Redirects permanentes de las URLs viejas
+### 15. Guardarraíl de contenido en el build
+
+`npm run content:check` recorre todos los strings de `content/*.json` y falla si aparece
+algo que las reglas de publicación prohíben: el monto exacto de ahorro en LLM, "4+ años",
+un cargo futuro presentado como actual, el teléfono escrito a mano, algo con forma de
+credencial, o RAG reclamado como logro propio. Corre como `prebuild`.
+
+**Por qué en el build y no en el prompt:** una regla escrita solo en el prompt de sistema
+es una regla que el modelo *podría* ignorar; una que rompe el build se cumple. Y como el
+corpus del bot se deriva de esos mismos archivos, el chequeo cubre las dos superficies —
+lo que muestra el sitio y lo que el bot puede afirmar— con un solo control.
+
+No reemplaza al criterio humano: no detecta una inferencia mal encuadrada. Cierra la clase
+de error que ya pasó dos veces, que es un dato saliendo porque alguien editó un JSON sin
+releer las reglas.
+
+### 16. Redirects permanentes de las URLs viejas
 
 `/:lang/proyectos/:slug` → `/:lang/projects/:slug`, 308. El sitio ya estaba publicado
 cuando se unificaron los segmentos en inglés, así que esas URLs pueden estar indexadas o
@@ -263,8 +369,35 @@ npm run dev
 | Script | Qué hace |
 |---|---|
 | `npm run dev` | Servidor de desarrollo |
-| `npm run build` | Build de producción |
+| `npm run build` | Build de producción (corre `content:check` antes) |
 | `npm run typecheck` | `tsc --noEmit` |
+| `npm run content:check` | Guardarraíl de publicación sobre `content/*.json` |
+| `npm run evals` | Set dorado contra `/api/chat` — requiere el servidor levantado |
+
+### Correr el set dorado
+
+`npm run evals` es la única verificación del comportamiento del bot. **Ningún cambio al
+prompt de sistema, al corpus ni al modelo se mergea sin correrlo**, porque los tres pueden
+romper una regla sin romper un tipo.
+
+```bash
+# terminal 1 — con CHAT_ENABLED=true y la clave del proveedor en .env.local
+npm run dev
+
+# terminal 2
+npm run evals                          # por defecto http://localhost:3000
+npm run evals -- https://otro-host     # o contra un preview deployado
+```
+
+Golpea el endpoint real, no al proveedor directo: la validación y el rate limit son parte
+de lo que se testea. Por eso espacia los pedidos 8 segundos — sin la pausa, la corrida se
+comería su propia cuota y los fallos dirían más del limitador que del prompt. Con 20 casos
+tarda unos tres minutos.
+
+Sale con código 1 si falla **cualquier caso `blocking`**, que es lo que lo hace apto para
+CI. Los casos marcados `⚑` imprimen la respuesta completa y qué mirar: son los de matiz
+—declinar y reencauzar, no hacerse pasar por Santiago— donde fingir que un regex los valida
+daría una luz verde falsa, peor que no tener el test.
 
 ## Deploy
 
@@ -274,6 +407,31 @@ trabajo, no producto.
 
 Variables a configurar en Vercel: las de `.env.example`. Ninguna es obligatoria para que el
 build pase; su ausencia degrada funcionalidad de forma prevista.
+
+### Antes de encender el chat
+
+`CHAT_ENABLED` se evalúa en **build**, no por request: encenderlo exige un redeploy, no
+alcanza con tocarlo en el panel. Y solo tiene efecto si además están las dos credenciales.
+
+1. **Clave de Gemini** — [aistudio.google.com](https://aistudio.google.com) → *Get API key*
+   → crear en un proyecto de Google Cloud **sin facturación habilitada**. Esa ausencia no es
+   un descuido: es lo que hace cumplir el tope de gasto (ver §4). Va en `GEMINI_API_KEY`.
+2. **Redis de Upstash** — [console.upstash.com](https://console.upstash.com) → crear una
+   base Redis en la región más cercana al deploy. `UPSTASH_REDIS_REST_URL` y
+   `UPSTASH_REDIS_REST_TOKEN` se copian y pegan con el nombre que ya traen. Se aceptan
+   `KV_REST_API_URL` / `KV_REST_API_TOKEN` como alias, porque es lo que inyectaba el viejo
+   Vercel KV y lo que puede estar cargado en deploys previos. El plan gratuito no pide
+   tarjeta. El chat gasta 4 comandos por mensaje (`INCR` + `EXPIRE` × 2 ventanas), así que
+   los 500K mensuales dan para unos 125.000 mensajes.
+
+   El alias existe por un motivo de diagnóstico, no de comodidad: con el nombre
+   equivocado no hay ningún error — `chatEnabled` queda en `false`, el widget no se
+   renderiza y el sitio se sirve perfecto. Un fallo silencioso e indistinguible del
+   estado normal es el más caro de encontrar.
+3. **Verificar** con `npm run evals` contra un preview antes de tocar producción.
+
+Sin el paso 1 o el 2, `chatEnabled` queda en `false`, el widget no se renderiza y el sitio
+se sirve completo. Es el estado por defecto y es un estado válido para publicar.
 
 ## Licencia
 

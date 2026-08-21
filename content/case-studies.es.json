@@ -164,7 +164,7 @@
       },
       {
         "title": "El proveedor de LLM detrás de una interfaz",
-        "rationale": "El proveedor es la dependencia con más probabilidad de cambiar —por precio, disponibilidad o calidad— y la más fácil de aislar. Una variable de entorno selecciona la implementación y el resto del código no sabe cuál está activa.",
+        "rationale": "El proveedor es la dependencia con más probabilidad de cambiar —por precio, disponibilidad o calidad— y la más fácil de aislar. Una variable de entorno selecciona la implementación y el resto del código no sabe cuál está activa. La abstracción se puso a prueba antes de lo previsto: cambiar de proveedor fue agregar un archivo y un caso en la fábrica, sin tocar el endpoint, el widget ni el corpus.",
         "tradeoff": "Una capa de indirección por adelantado, que normalmente evito. La acepto acá porque el eje de cambio está identificado, no supuesto."
       },
       {
@@ -183,16 +183,18 @@
         "tradeoff": "Más configuración antes del primer deploy del endpoint. Prefiero un portfolio sin chat que un chat usable como cómputo gratuito."
       }
     ],
-    "architecture": "Next.js con App Router y TypeScript. El sitio es enteramente Server Components y se prerenderiza estático: no envía JavaScript de cliente, salvo el selector de tema. El contenido vive en JSON tipado que se valida contra el esquema en tiempo de compilación, así que un dato que no cumple el contrato rompe el build en lugar de la página. El chatbot es un Route Handler que inyecta el corpus completo como contexto, con el proveedor detrás de una interfaz intercambiable, reglas duras en el prompt, rate limit por IP y kill switch. La entrada del usuario siempre viaja en su propio turno, nunca concatenada al prompt de sistema.",
+    "architecture": "Next.js con App Router y TypeScript. El sitio se prerenderiza estático y es Server Components por defecto: el JavaScript de cliente está acotado a lo que realmente necesita interacción —el selector de tema, el carrusel de recomendaciones, el visor de certificados y el chat—, y con el chat apagado ni el del widget se envía. El contenido vive en JSON tipado que se valida contra el esquema en tiempo de compilación, así que un dato que no cumple el contrato rompe el build en lugar de la página. El chatbot es un Route Handler que inyecta el corpus completo como contexto, con el proveedor detrás de una interfaz intercambiable, reglas duras en el prompt, rate limit por IP y kill switch. La entrada del usuario siempre viaja en su propio turno, nunca concatenada al prompt de sistema.",
     "outcome": [
       "Repositorio público y auditable, con un README que funciona como registro de decisiones.",
       "Infraestructura de costo cero.",
-      "El sitio funciona completo con el chatbot apagado, que era el requisito de diseño principal."
+      "El sitio funciona completo con el chatbot apagado, que era el requisito de diseño principal.",
+      "Un guardarraíl de contenido corre antes de cada build y rompe la compilación si aparece un dato que decidí no publicar: la regla se hace cumplir sola en vez de depender de que la recuerde.",
+      "Un conjunto de preguntas de referencia verifica el comportamiento del bot contra el endpoint real —validación y límites incluidos— antes de tocar el prompt de sistema."
     ],
     "retrospective": [
       "El chatbot todavía no está deployado: primero va el sitio estático. Es una secuencia que me impuse a propósito, porque la tentación de mostrar el bot antes de que el resto esté sólido es fuerte.",
-      "Falta el conjunto de preguntas de referencia corriendo en cada cambio del prompt de sistema. Sin eso, cualquier ajuste al prompt es a ciegas — es el mismo argumento que uso para los evals en mi trabajo.",
-      "La política de Content-Security-Policy está pendiente a propósito: definirla antes de conocer los orígenes reales del endpoint de chat lleva a una política laxa que después nadie ajusta."
+      "El conjunto de preguntas de referencia existe y corre contra el endpoint real, pero todavía lo disparo a mano. Falta que lo ejecute la integración continua en cada cambio del prompt de sistema: mientras dependa de que me acuerde, no es una garantía.",
+      "El limitador de peticiones falla abierto a propósito: si el contador no responde, deja pasar. Eso sólo es defendible porque el nivel gratuito del proveedor impone el techo de gasto por afuera del código. El día que la cuenta tenga facturación habilitada, la decisión hay que revisarla — y es el tipo de supuesto que envejece en silencio."
     ],
     "tech": [
       "Next.js",

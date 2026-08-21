@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
+import Link from 'next/link';
 import { Footer } from '@/components/layout/Footer';
 import { getCaseStudies, getCaseStudy } from '@/lib/content/case-studies';
 import { getProfile } from '@/lib/content/profile';
@@ -77,12 +78,12 @@ export default async function CaseStudyPage({
       <div className="mx-auto max-w-[1120px] px-6 md:px-10">
         <div className="max-w-[68ch]">
           <nav aria-label={profile.ui.breadcrumbLabel} className="py-8">
-            <a
+            <Link
               className="prose-link font-mono text-xs uppercase tracking-[0.12em]"
               href={routes.projects(lang)}
             >
               ← {profile.sections.projects}
-            </a>
+            </Link>
           </nav>
 
           <header className="pb-12">
@@ -182,12 +183,12 @@ export default async function CaseStudyPage({
           </Block>
 
           <div className="border-t border-line py-12">
-            <a
+            <Link
               className="rounded-md bg-accent px-5 py-2.5 font-medium text-accent-on transition-colors duration-150 hover:bg-accent-hover"
               href={routes.contact(lang)}
             >
               {profile.ui.caseStudyContactCta}
-            </a>
+            </Link>
           </div>
         </div>
       </div>
