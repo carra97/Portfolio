@@ -489,9 +489,10 @@ b {
   position: absolute;
   top: -4px;
   left: -6px;
-  border: 4px solid transparent;
-  border-right: 6px solid var(--border-strong);
-  border-left: 0;
+  width: 6px;
+  height: 8px;
+  background: var(--border-strong);
+  clip-path: polygon(0 50%, 100% 0, 100% 100%);
 }
 
 .flow-loop-label {
