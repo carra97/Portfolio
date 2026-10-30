@@ -43,7 +43,7 @@ export function QuickFacts({
       <dl className="mt-6 grid gap-x-12 gap-y-6 sm:grid-cols-2 lg:grid-cols-3">
         {facts.map((fact) => (
           <div key={fact.label} className="border-t border-line pt-4">
-            <dt className="font-mono text-xs uppercase tracking-[0.12em] text-muted">
+            <dt className="label">
               {fact.label}
             </dt>
             <dd className="mt-1.5 text-pretty text-heading">{fact.value}</dd>

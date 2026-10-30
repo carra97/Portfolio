@@ -29,7 +29,7 @@ export function Contact({
       <div className="mt-8 flex flex-wrap gap-3">
         {hasWhatsApp && (
           <a
-            className="rounded-md bg-accent px-5 py-2.5 font-medium text-accent-on transition-colors duration-150 hover:bg-accent-hover"
+            className="btn-primary"
             href={`https://wa.me/${whatsappDigits}`}
             rel="noopener noreferrer"
             target="_blank"
@@ -39,7 +39,7 @@ export function Contact({
         )}
         {hasEmail && (
           <a
-            className="rounded-md border border-line px-5 py-2.5 transition-colors duration-150 hover:border-line-strong hover:text-heading"
+            className="btn-secondary"
             href={`mailto:${env.CONTACT_EMAIL}?subject=${encodeURIComponent(subject)}`}
           >
             {emailLabel}

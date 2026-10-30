@@ -29,7 +29,7 @@ export function Section({
 
   return (
     <section aria-labelledby={headingId} className="border-t border-line" id={id}>
-      <div className="reveal mx-auto max-w-[1120px] px-6 py-16 md:px-10 md:py-24">
+      <div className="reveal page py-16 md:py-24">
         <h2 className={titleHidden ? 'sr-only' : 'h2 mb-10'} id={headingId}>
           {title}
         </h2>

@@ -11,12 +11,12 @@ export function Experience({
     <ol className="space-y-16">
       {items.map((job) => (
         <li key={`${job.company}-${job.period}`}>
-          <p className="font-mono text-xs uppercase tracking-[0.12em] text-muted">{job.period}</p>
+          <p className="data">{job.period}</p>
 
           <div className="mt-2 flex flex-wrap items-baseline gap-x-3 gap-y-1">
             <h3 className="h3">{job.role}</h3>
             {job.current && (
-              <span className="rounded-md bg-accent-bg px-2 py-0.5 font-mono text-xs uppercase tracking-[0.12em] text-accent">
+              <span className="badge">
                 {currentBadge}
               </span>
             )}
@@ -41,7 +41,7 @@ export function Experience({
             {job.stack.map((tech) => (
               <li
                 key={tech}
-                className="rounded-md border border-line px-2.5 py-1 font-mono text-xs text-muted"
+                className="tag"
               >
                 {tech}
               </li>

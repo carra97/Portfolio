@@ -31,7 +31,7 @@ export function Hobbies({
         <dl className="space-y-6 border-t border-line pt-8">
           {rest.map((hobby) => (
             <div key={hobby.name}>
-              <dt className="font-mono text-xs uppercase tracking-[0.12em] text-muted">
+              <dt className="label">
                 {hobby.name}
               </dt>
               <dd className="measure mt-1.5 text-pretty">{hobby.detail}</dd>

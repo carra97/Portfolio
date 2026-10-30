@@ -72,6 +72,102 @@
   --font-mono: var(--font-geist-mono), ui-monospace, monospace;
 }
 
+/* Tokens de layout y tipografía que no cambian con el tema. `--container-page` genera
+   `max-w-page` y `--tracking-label`, `tracking-label`: dejan de existir como valores
+   arbitrarios repetidos a mano en cada componente. */
+@theme {
+  --container-page: 70rem; /* 1120px — DISENO.md §4 */
+  --tracking-label: 0.12em;
+}
+
+/* ── Primitivos ───────────────────────────────────────────────────────────────
+   Utilidades y no componentes de React: no hay comportamiento que encapsular, solo
+   un tratamiento visual que se repetía copiado como string de clases. Cambiar cómo se
+   ve una etiqueta de dato es editar una regla, no veinte archivos. */
+
+/* Ancho de contenido y margen lateral (24px mobile / 40px desktop). */
+@utility page {
+  margin-inline: auto;
+  max-width: var(--container-page);
+  padding-inline: 1.5rem;
+
+  @media (width >= 48rem) {
+    padding-inline: 2.5rem;
+  }
+}
+
+/* Fechas, períodos y años: dato, no prosa. */
+@utility data {
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: 0.75rem;
+  line-height: 1.4;
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+/* Término de una lista clave-valor: "Experiencia", "Backend", el emisor de un certificado. */
+@utility label {
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: 0.75rem;
+  line-height: 1.4;
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+/* Estado destacado: "Actual", "Verificable". */
+@utility badge {
+  border-radius: 6px;
+  background-color: var(--accent-bg);
+  padding: 0.125rem 0.5rem;
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: 0.75rem;
+  line-height: 1.4;
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+/* Tecnología de un stack. */
+@utility tag {
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 0.25rem 0.625rem;
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: 0.75rem;
+  line-height: 1.4;
+  color: var(--text-muted);
+}
+
+/* CTA primario: el momento de marca. Relleno de acento en los dos modos. */
+@utility btn-primary {
+  border-radius: 6px;
+  background-color: var(--accent);
+  padding: 0.625rem 1.25rem;
+  font-weight: 500;
+  color: var(--accent-on);
+  transition: background-color var(--dur-fast) var(--ease);
+
+  &:hover {
+    background-color: var(--accent-hover);
+  }
+}
+
+@utility btn-secondary {
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 0.625rem 1.25rem;
+  transition:
+    border-color var(--dur-fast) var(--ease),
+    color var(--dur-fast) var(--ease);
+
+  &:hover {
+    border-color: var(--border-strong);
+    color: var(--text-heading);
+  }
+}
+
 /* ── Base ─────────────────────────────────────────────────────────────────── */
 
 html {
@@ -124,6 +220,23 @@ b {
   line-height: 1.05;
   font-weight: 400;
   letter-spacing: -0.02em;
+  color: var(--text-heading);
+}
+
+/* Escalón de display para páginas internas y case studies: antes se forzaba con
+   `!text-[clamp(...)]` encima de `.display`. */
+.display-sm {
+  font-size: clamp(2rem, 4.5vw, 2.75rem);
+  line-height: 1.1;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  color: var(--text-heading);
+}
+
+/* Cita destacada: 22px, entre el h3 (20) y el h2 (32). */
+.lead {
+  font-size: 1.375rem;
+  line-height: 1.45;
   color: var(--text-heading);
 }
 

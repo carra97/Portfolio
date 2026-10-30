@@ -33,7 +33,7 @@ export function Credentials({
       <ul className="space-y-5">
         {education.map((item) => (
           <li key={item.title} className="grid gap-1 md:grid-cols-[200px_1fr] md:gap-8">
-            <p className="font-mono text-xs uppercase tracking-[0.12em] text-muted md:pt-1">
+            <p className="data md:pt-1">
               {item.year ?? '—'}
             </p>
             <div>
@@ -50,7 +50,7 @@ export function Credentials({
       <dl className="space-y-8 border-t border-line pt-10">
         {certifications.map((group) => (
           <div key={group.issuer} className="grid gap-2 md:grid-cols-[200px_1fr] md:gap-8">
-            <dt className="font-mono text-xs uppercase tracking-[0.12em] text-muted md:pt-1">
+            <dt className="label md:pt-1">
               {group.issuer}
               {group.year ? ` · ${group.year}` : ''}
             </dt>

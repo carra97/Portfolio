@@ -10,7 +10,7 @@ import type { Profile } from '@/types/profile';
  */
 export function PageHeader({ meta }: { meta: Profile['pages'][keyof Profile['pages']] }) {
   return (
-    <header className="mx-auto max-w-[1120px] px-6 pb-10 pt-16 md:px-10 md:pb-14 md:pt-24">
+    <header className="page pb-10 pt-16 md:pb-14 md:pt-24">
       <p className="eyebrow rise">{meta.navLabel}</p>
       <h1 className="display rise mt-4" style={{ animationDelay: '60ms' }}>
         {meta.heading}

@@ -32,11 +32,11 @@ export function CurrentRole({
 
   return (
     <div>
-      <p className="font-mono text-xs uppercase tracking-[0.12em] text-muted">{job.period}</p>
+      <p className="data">{job.period}</p>
 
       <div className="mt-2 flex flex-wrap items-baseline gap-x-3 gap-y-1">
         <h3 className="h3">{job.role}</h3>
-        <span className="rounded-md bg-accent-bg px-2 py-0.5 font-mono text-xs uppercase tracking-[0.12em] text-accent">
+        <span className="badge">
           {ui.currentBadge}
         </span>
       </div>

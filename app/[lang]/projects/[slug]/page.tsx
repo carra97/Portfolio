@@ -87,7 +87,7 @@ export default async function CaseStudyPage({
         themeLabel={profile.ui.themeToggle}
       />
 
-      <main className="mx-auto max-w-[1120px] px-6 md:px-10" id="content">
+      <main className="page" id="content">
         <div className="max-w-[68ch]">
           <nav aria-label={profile.ui.breadcrumbLabel} className="py-8">
             <Link
@@ -102,13 +102,13 @@ export default async function CaseStudyPage({
             {/* Es un párrafo, no una etiqueta: en mayúsculas mono de 12px se leía lento
                 y era lo primero que encontraba quien entraba al case study. */}
             <p className="small measure text-pretty">{study.context}</p>
-            <h1 className="display mt-6 !text-[clamp(2rem,4.5vw,2.75rem)]">{study.title}</h1>
+            <h1 className="display-sm mt-6">{study.title}</h1>
             <p className="mt-6 text-pretty text-heading">{study.summary}</p>
             <ul className="mt-8 flex flex-wrap gap-2">
               {study.tech.map((tech) => (
                 <li
                   key={tech}
-                  className="rounded-md border border-line px-2.5 py-1 font-mono text-xs text-muted"
+                  className="tag"
                 >
                   {tech}
                 </li>
@@ -198,7 +198,7 @@ export default async function CaseStudyPage({
 
           <div className="border-t border-line py-12">
             <Link
-              className="rounded-md bg-accent px-5 py-2.5 font-medium text-accent-on transition-colors duration-150 hover:bg-accent-hover"
+              className="btn-primary"
               href={routes.contact(lang)}
             >
               {profile.ui.caseStudyContactCta}

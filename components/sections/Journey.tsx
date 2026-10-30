@@ -12,7 +12,7 @@ export function Journey({ timeline }: { timeline: Profile['about']['timeline'] }
               index === timeline.length - 1 ? 'bg-accent' : 'bg-line-strong'
             }`}
           />
-          <p className="font-mono text-xs uppercase tracking-[0.12em] text-muted">{milestone.at}</p>
+          <p className="data">{milestone.at}</p>
           <h3 className="mt-1 text-heading">{milestone.title}</h3>
           <p className="measure mt-2 text-pretty">{milestone.body}</p>
         </li>

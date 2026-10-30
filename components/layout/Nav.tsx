@@ -44,7 +44,7 @@ export function Nav({
     <div className="sticky top-0 z-40 border-b border-line bg-page/85 backdrop-blur-md">
       <nav
         aria-label={label}
-        className="mx-auto flex max-w-[1120px] flex-wrap items-center gap-x-4 gap-y-1 px-6 py-2.5 md:flex-nowrap md:gap-6 md:px-10 md:py-3"
+        className="page flex flex-wrap items-center gap-x-4 gap-y-1 py-2.5 md:flex-nowrap md:gap-6 md:py-3"
       >
         <Link
           className="mr-auto font-mono text-sm tracking-[0.12em] text-heading transition-colors duration-150 hover:text-accent md:mr-0"

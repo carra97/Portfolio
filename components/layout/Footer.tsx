@@ -32,7 +32,7 @@ export function Footer({ lang: _lang, profile }: { lang: string; profile: Profil
 
   return (
     <footer className="border-t border-line">
-      <div className="mx-auto max-w-[1120px] px-6 md:px-10">
+      <div className="page">
         {/* `divide-*` en vez de `gap` + bordes a mano: la línea vertical entre columnas
             la dibuja el contenedor, así ninguna columna necesita saber si es la primera. */}
         <div className="grid divide-y divide-line py-10 md:grid-cols-3 md:divide-x md:divide-y-0 md:py-12">

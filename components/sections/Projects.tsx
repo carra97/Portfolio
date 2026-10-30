@@ -31,7 +31,7 @@ export function Projects({
 
         return (
           <li key={project.name}>
-            <p className="font-mono text-xs uppercase tracking-[0.12em] text-muted">
+            <p className="data">
               {project.period}
             </p>
 
@@ -51,7 +51,7 @@ export function Projects({
                 )}
               </h3>
               {project.status === 'verifiable' && (
-                <span className="rounded-md bg-accent-bg px-2 py-0.5 font-mono text-xs uppercase tracking-[0.12em] text-accent">
+                <span className="badge">
                   {ui.verifiableBadge}
                 </span>
               )}
@@ -111,7 +111,7 @@ export function Projects({
               {project.tech.map((tech) => (
                 <li
                   key={tech}
-                  className="rounded-md border border-line px-2.5 py-1 font-mono text-xs text-muted"
+                  className="tag"
                 >
                   {tech}
                 </li>

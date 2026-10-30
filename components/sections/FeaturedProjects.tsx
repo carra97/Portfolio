@@ -49,7 +49,7 @@ export function FeaturedProjects({
             className="flex w-[85%] shrink-0 snap-center flex-col justify-between rounded-xl border border-line bg-surface p-6 md:w-auto md:shrink"
             role="group"
           >
-            <p className="font-mono text-xs uppercase tracking-[0.12em] text-muted">
+            <p className="data">
               {project.period}
             </p>
             <h3 className="h3 mt-2 text-pretty">{project.name}</h3>
@@ -65,7 +65,7 @@ export function FeaturedProjects({
               {project.tech.slice(0, 5).map((tech) => (
                 <li
                   key={tech}
-                  className="rounded-md border border-line px-2.5 py-1 font-mono text-xs text-muted"
+                  className="tag"
                 >
                   {tech}
                 </li>

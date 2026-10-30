@@ -37,7 +37,7 @@ export function Hero({
 }) {
   return (
     <header
-      className="mx-auto max-w-[1120px] px-6 pb-14 pt-12 md:px-10 md:pb-20 md:pt-20"
+      className="page pb-14 pt-12 md:pb-20 md:pt-20"
       id="top"
     >
       <p className="eyebrow rise" style={{ animationDelay: '0ms' }}>
@@ -64,7 +64,7 @@ export function Hero({
         style={{ animationDelay: '240ms' }}
       >
         <Link
-          className="rounded-md bg-accent px-5 py-2.5 font-medium text-accent-on transition-colors duration-150 hover:bg-accent-hover"
+          className="btn-primary"
           href={routes.contact(lang)}
         >
           {ui.heroContactCta}
@@ -74,7 +74,7 @@ export function Hero({
             ausencia del botón, porque parece que funciona. Mismo criterio que `lib/env.ts`. */}
         {hero.resumeUrl && (
           <a
-            className="rounded-md border border-line px-5 py-2.5 transition-colors duration-150 hover:border-line-strong hover:text-heading"
+            className="btn-secondary"
             download
             href={hero.resumeUrl}
           >

@@ -5,7 +5,7 @@ export function Skills({ groups }: { groups: Profile['skills'] }) {
     <dl className="space-y-10">
       {groups.map((group) => (
         <div key={group.category} className="grid gap-3 md:grid-cols-[200px_1fr] md:gap-8">
-          <dt className="font-mono text-xs uppercase tracking-[0.12em] text-muted md:pt-1.5">
+          <dt className="label md:pt-1.5">
             {group.label}
           </dt>
           <dd>
