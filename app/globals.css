@@ -734,110 +734,95 @@ b {
   animation: stamp-drop 420ms cubic-bezier(0.22, 1, 0.36, 1) 150ms both;
 }
 
-/* Línea de tiempo de "Sobre mí" (`Journey.tsx`), atada al scroll.
-   El amarillo es el presente: un punto que baja por la línea mientras se lee. Cada hito
-   se enciende cuando el punto llega y queda gris —pasado— cuando sigue; el texto aparece
-   a medida que el punto se acerca, no de golpe.
+/* Línea de tiempo de "Sobre mí" (`Journey.tsx` + `TimelineProgress.tsx`).
+   El scroll dispara cada paso; no lo arrastra. Cuando un hito cruza el 70% de la
+   pantalla recibe `data-reached` y el punto amarillo —el presente— viaja en un tiempo
+   fijo desde el hito anterior hasta él. El que deja atrás queda gris: pasado. Lo que
+   todavía no se alcanzó se ve hueco y atenuado, no invisible: en blanco parecía vacío.
 
-   Cada hito tiene su propia línea de tiempo de vista, con el área de vista reducida a
-   una línea al 70% de la pantalla (`view-timeline-inset`): el progreso 0 es cuando el
-   borde de arriba del hito cruza esa línea, el 1 cuando la cruza el de abajo.
+   Todo cuelga de `data-armed`, que pone el componente al hidratar y solo sin movimiento
+   reducido. Sin eso, la línea queda estática, como siempre. */
+.journey[data-armed] {
+  --journey-step: 700ms;
 
-   Fuera de `@supports` y de `no-preference` no se declara nada: la línea queda estática,
-   que es como se veía siempre. */
-@supports (view-timeline: --journey) {
-  @media (prefers-reduced-motion: no-preference) {
-    .journey-item {
-      view-timeline: --journey block;
-      view-timeline-inset: 70% 30%;
-      /* Del centro del punto de un hito al del siguiente, además del alto del tramo:
-         en un teléfono la fecha va arriba del texto y suma su renglón. */
-      --journey-next: 0.5625rem;
-
-      @media (width < 48rem) {
-        --journey-next: 2.15rem;
-      }
-    }
-
-    .journey-text {
-      animation: journey-text linear both;
-      animation-timeline: --journey;
-      animation-range: cover 0% cover 45%;
-    }
-
-    /* Sin alcanzar: hueco. Al llegar el punto: amarillo. Al irse: gris. */
-    .journey-node {
-      background-color: transparent;
-      box-shadow: inset 0 0 0 1px var(--border-strong);
-      animation: journey-node linear forwards;
-      animation-timeline: --journey;
-      animation-range: cover 0% cover 55%;
-    }
-
-    .journey-node-final {
-      animation-name: journey-node-final;
-      animation-range: cover 0% cover 25%;
-    }
-
-    /* El punto que viaja: sale del hito cuando su texto ya se leyó y llega al siguiente
-       justo cuando ese hito empieza su recorrido. */
-    .journey-segment::after {
-      content: '';
-      position: absolute;
-      left: -0.3125rem;
-      width: 0.625rem;
-      height: 0.625rem;
-      border-radius: 9999px;
-      background-color: var(--accent);
-      opacity: 0;
-      animation: journey-marker linear;
-      animation-timeline: --journey;
-      animation-range: cover 30% cover 100%;
-    }
-  }
-}
-
-/* Lo que todavía no se alcanzó se lee atenuado, no invisible: una sección en blanco
-   hasta que llega el punto parecía vacía, no por venir. */
-@keyframes journey-text {
-  from {
+  & .journey-text {
     opacity: 0.3;
     transform: translateY(8px);
+    transition:
+      opacity 500ms ease-out,
+      transform 500ms cubic-bezier(0.22, 1, 0.36, 1);
   }
-}
 
-@keyframes journey-node {
-  0%,
-  55% {
+  & li[data-reached] .journey-text {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* Hueco → amarillo cuando llega el punto (por eso espera el viaje) → gris al irse. */
+  & .journey-node {
+    background-color: transparent;
+    box-shadow: inset 0 0 0 1px var(--border-strong);
+    transition:
+      background-color 200ms ease-out,
+      box-shadow 200ms ease-out,
+      transform 200ms ease-out;
+  }
+
+  & li[data-reached] .journey-node {
     background-color: var(--accent);
     box-shadow: inset 0 0 0 1px var(--accent);
     transform: scale(1.4);
+    transition-delay: calc(var(--journey-step) - 100ms);
   }
-  100% {
+
+  & li[data-reached]:first-child .journey-node {
+    transition-delay: 0ms;
+  }
+
+  & li[data-reached]:has(+ li[data-reached]) .journey-node {
     background-color: var(--border-strong);
     box-shadow: inset 0 0 0 1px var(--border-strong);
     transform: none;
+    transition-delay: 0ms;
   }
-}
 
-@keyframes journey-node-final {
-  from {
-    transform: scale(1.4);
-  }
-  to {
-    background-color: var(--accent);
-    box-shadow: inset 0 0 0 1px var(--accent);
-  }
-}
+  /* El punto que viaja: aparece en el hito que se deja, baja hasta el siguiente y se
+     apaga al llegar, cuando ese hito ya se encendió. */
+  & .journey-segment {
+    /* Del centro de un punto al del siguiente, además del alto del tramo: en un
+       teléfono la fecha va arriba del texto y suma su renglón. */
+    --journey-next: 0.5625rem;
 
-@keyframes journey-marker {
-  from {
+    @media (width < 48rem) {
+      --journey-next: 2.15rem;
+    }
+  }
+
+  & .journey-segment::after {
+    content: '';
+    position: absolute;
     top: 0.5625rem;
+    left: -0.3125rem;
+    width: 0.625rem;
+    height: 0.625rem;
+    border-radius: 9999px;
+    background-color: var(--accent);
+    opacity: 0;
+  }
+
+  & li:has(+ li[data-reached]) .journey-segment::after {
+    animation: journey-step var(--journey-step) cubic-bezier(0.65, 0, 0.35, 1) forwards;
+  }
+}
+
+@keyframes journey-step {
+  0%,
+  99% {
     opacity: 1;
   }
   to {
     top: calc(100% + var(--journey-next));
-    opacity: 1;
+    opacity: 0;
   }
 }
 

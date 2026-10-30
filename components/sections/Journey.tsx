@@ -1,3 +1,4 @@
+import { TimelineProgress } from '@/components/ui/TimelineProgress';
 import type { Profile } from '@/types/profile';
 
 /**
@@ -5,22 +6,20 @@ import type { Profile } from '@/types/profile';
  * y los puntos en la columna de lectura. El hito activo —el último— en acento; los
  * demás, apagados.
  *
- * **Se recorre con el scroll** (Rev. 6, pedido de Santiago): un punto en acento baja por
- * la línea al ritmo del scroll; cada hito se enciende cuando el punto llega y queda
- * oscuro cuando sigue de largo, y su texto aparece a medida que el punto se acerca. Es
- * el mismo gesto que el recorrido del home —un estado después del otro—.
- *
- * Todo es CSS (`view-timeline` en `globals.css`): sin JavaScript y reversible al subir.
- * Donde no hay soporte, o con movimiento reducido, la línea queda estática como siempre.
+ * **El scroll dispara cada paso** (Rev. 6, pedido de Santiago): cuando un hito llega a
+ * cierta altura de la pantalla, el punto amarillo viaja hasta él en un tiempo fijo; el
+ * anterior queda gris y el texto se enciende. Es el mismo gesto que el recorrido del
+ * home —un estado después del otro—. Cuándo se dispara lo decide `TimelineProgress`;
+ * cómo se ve, `globals.css`. Sin JavaScript o con movimiento reducido, queda estática.
  */
 export function Journey({ timeline }: { timeline: Profile['about']['timeline'] }) {
   return (
-    <ol>
+    <TimelineProgress>
       {timeline.map((milestone, index) => {
         const active = index === timeline.length - 1;
 
         return (
-          <li key={milestone.title} className="journey-item doc-row">
+          <li key={milestone.title} className="doc-row">
             <p className="journey-text data md:pt-1">{milestone.at}</p>
             <div
               className={`relative border-l border-line pl-8 ${active ? '' : 'journey-segment pb-10'}`}
@@ -28,7 +27,7 @@ export function Journey({ timeline }: { timeline: Profile['about']['timeline'] }
               <span
                 aria-hidden="true"
                 className={`journey-node absolute -left-1 top-2.5 h-2 w-2 rounded-full ${
-                  active ? 'journey-node-final bg-accent' : 'bg-line-strong'
+                  active ? 'bg-accent' : 'bg-line-strong'
                 }`}
               />
               <div className="journey-text">
@@ -39,6 +38,6 @@ export function Journey({ timeline }: { timeline: Profile['about']['timeline'] }
           </li>
         );
       })}
-    </ol>
+    </TimelineProgress>
   );
 }
