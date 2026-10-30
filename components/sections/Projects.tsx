@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { ProjectEvidence } from '@/components/sections/ProjectEvidence';
 import type { SupportedLocale } from '@/lib/i18n';
 import { routes } from '@/lib/routes';
 import type { Profile } from '@/types/profile';
@@ -9,8 +10,8 @@ import type { Profile } from '@/types/profile';
  * Dos reglas del proyecto se hacen cumplir acá:
  * - `status: 'archived'` ⇒ el proyecto NO se enlaza. Está en el esquema, no en la memoria.
  * - La nota de prensa vive DENTRO de su proyecto (DISENO.md §7.4): una sola nota no
- *   justifica una sección propia, y aislada parece que se estira el material. Se cita
- *   solo la frase que refiere a Santiago; nunca funcionarios ni declaraciones de terceros.
+ *   justifica una sección propia, y aislada parece que se estira el material
+ *   (`ProjectEvidence`).
  *
  * Recibe `ui` entero en vez de cinco props de string sueltas. Con dos labels la lista
  * explícita documenta la dependencia; con cinco, solo agrega ruido en el registro.
@@ -62,40 +63,7 @@ export function Projects({
               {project.status === 'archived' && <p className="small mt-3">{ui.projectArchived}</p>}
               {project.status === 'internal' && <p className="small mt-3">{ui.projectInternal}</p>}
 
-              {project.image && (
-                <figure className="mt-8">
-                  <img
-                    alt={project.image.alt}
-                    className="w-full rounded-xl border border-line"
-                    decoding="async"
-                    height={520}
-                    loading="lazy"
-                    src={project.image.src}
-                    width={800}
-                  />
-                  <figcaption className="small mt-3">{project.image.caption}</figcaption>
-                </figure>
-              )}
-
-              {project.press && (
-                <div className="mt-8 rounded-xl border border-line bg-surface p-6">
-                  <p className="eyebrow">{ui.pressEyebrow}</p>
-                  <p className="measure mt-3 text-pretty">
-                    {ui.pressIntro} <em className="text-heading">“{project.press.quote}”</em>.
-                  </p>
-                  <a
-                    className="prose-link mt-3 inline-block text-pretty"
-                    href={project.press.url}
-                    rel="noopener noreferrer"
-                    target="_blank"
-                  >
-                    {project.press.title}
-                  </a>
-                  <p className="small mt-2">
-                    {project.press.outlet} · {project.press.date}
-                  </p>
-                </div>
-              )}
+              <ProjectEvidence project={project} ui={ui} />
 
               {project.slug && (
                 <p className="mt-6">

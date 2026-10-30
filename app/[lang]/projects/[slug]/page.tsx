@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { Footer } from '@/components/layout/Footer';
 import { Nav } from '@/components/layout/Nav';
+import { ProjectEvidence } from '@/components/sections/ProjectEvidence';
 import { getCaseStudies, getCaseStudy } from '@/lib/content/case-studies';
 import { getProfile } from '@/lib/content/profile';
 import { env } from '@/lib/env';
@@ -78,6 +79,7 @@ export default async function CaseStudyPage({
   if (!study) notFound();
 
   const profile = getProfile(lang);
+  const project = profile.projects.find((item) => item.slug === slug);
   const labels = profile.caseStudyLabels;
 
   return (
@@ -118,6 +120,13 @@ export default async function CaseStudyPage({
         </div>
 
         <div>
+          {/* La prueba antes que el relato: la foto y la nota van arriba de las métricas. */}
+          {project && (project.image || project.press) && (
+            <div className="doc-offset max-w-[calc(68ch+15.5rem)] pb-12">
+              <ProjectEvidence project={project} ui={profile.ui} />
+            </div>
+          )}
+
           {study.metrics && (
             <dl className="doc-offset grid gap-6 border-t border-line py-10 sm:grid-cols-3">
               {study.metrics.map((metric) => (
