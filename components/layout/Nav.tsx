@@ -5,9 +5,9 @@ import type { Navigation } from '@/lib/pages/nav';
 import { routes } from '@/lib/routes';
 
 /**
- * Navegación sticky. Los labels van en mono con tracking abierto — el mismo tratamiento
- * que los eyebrows de sección (DISENO.md §6), así la navegación lee como metadata del
- * documento y no como una barra de aplicación.
+ * Navegación sticky. Sans de 14px en minúscula inicial, apagada: la navegación es
+ * índice del documento, no una barra de aplicación. La página actual va en el color de
+ * títulos y subrayada —no en el acento, que queda para el CTA y los links del texto—.
  *
  * Los `href` ya vienen resueltos desde `lib/pages/nav.ts`: este componente no sabe en
  * qué página está ni le hace falta. Solo pinta.
@@ -47,7 +47,7 @@ export function Nav({
         className="page flex flex-wrap items-center gap-x-4 gap-y-1 py-2.5 md:flex-nowrap md:gap-6 md:py-3"
       >
         <Link
-          className="mr-auto font-mono text-sm tracking-[0.12em] text-heading transition-colors duration-150 hover:text-accent md:mr-0"
+          className="mr-auto font-medium text-heading transition-colors duration-150 hover:text-accent md:mr-0"
           href={routes.home(lang)}
         >
           SC
@@ -58,8 +58,10 @@ export function Nav({
             <li key={item.href}>
               <Link
                 aria-current={item.current ? 'page' : undefined}
-                className={`block py-2 font-mono text-xs uppercase tracking-[0.12em] transition-colors duration-150 hover:text-heading ${
-                  item.current ? 'text-accent' : 'text-muted'
+                className={`block py-2 text-sm transition-colors duration-150 hover:text-heading ${
+                  item.current
+                    ? 'text-heading underline decoration-line-strong underline-offset-[6px]'
+                    : 'text-muted'
                 }`}
                 href={item.href}
               >
@@ -72,7 +74,7 @@ export function Nav({
         {navigation.cta && (
           <Link
             aria-current={navigation.cta.current ? 'page' : undefined}
-            className={`shrink-0 rounded-md border px-3 py-1.5 font-mono text-xs uppercase tracking-[0.12em] transition-colors duration-150 ${
+            className={`shrink-0 rounded-md border px-3 py-1.5 text-sm transition-colors duration-150 ${
               navigation.cta.current
                 ? 'border-accent text-accent'
                 : 'border-line text-heading hover:border-line-strong hover:text-accent'

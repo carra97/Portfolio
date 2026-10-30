@@ -30,12 +30,16 @@ export function Projects({
         const linkable = project.status !== 'archived' && Boolean(project.url);
 
         return (
-          <li key={project.name}>
-            <p className="data">
-              {project.period}
-            </p>
+          <li key={project.name} className="doc-row">
+            {/* Al margen: cuándo y en qué estado está la evidencia. */}
+            <div className="space-y-1 md:pt-1">
+              <p className="data">{project.period}</p>
+              {project.status === 'verifiable' && (
+                <p className="badge">{ui.verifiableBadge}</p>
+              )}
+            </div>
 
-            <div className="mt-2 flex flex-wrap items-baseline gap-x-3 gap-y-1">
+            <div>
               <h3 className="h3">
                 {linkable ? (
                   <a
@@ -50,73 +54,68 @@ export function Projects({
                   project.name
                 )}
               </h3>
-              {project.status === 'verifiable' && (
-                <span className="badge">
-                  {ui.verifiableBadge}
-                </span>
+
+              <p className="measure mt-4 text-pretty">{project.description}</p>
+              {project.result && (
+                <p className="measure mt-3 text-pretty text-heading">{project.result}</p>
               )}
+              {project.status === 'archived' && <p className="small mt-3">{ui.projectArchived}</p>}
+              {project.status === 'internal' && <p className="small mt-3">{ui.projectInternal}</p>}
+
+              {project.image && (
+                <figure className="mt-8">
+                  <img
+                    alt={project.image.alt}
+                    className="w-full rounded-xl border border-line"
+                    decoding="async"
+                    height={520}
+                    loading="lazy"
+                    src={project.image.src}
+                    width={800}
+                  />
+                  <figcaption className="small mt-3">{project.image.caption}</figcaption>
+                </figure>
+              )}
+
+              {project.press && (
+                <div className="mt-8 rounded-xl border border-line bg-surface p-6">
+                  <p className="eyebrow">{ui.pressEyebrow}</p>
+                  <p className="measure mt-3 text-pretty">
+                    {ui.pressIntro} <em className="text-heading">“{project.press.quote}”</em>.
+                  </p>
+                  <a
+                    className="prose-link mt-3 inline-block text-pretty"
+                    href={project.press.url}
+                    rel="noopener noreferrer"
+                    target="_blank"
+                  >
+                    {project.press.title}
+                  </a>
+                  <p className="small mt-2">
+                    {project.press.outlet} · {project.press.date}
+                  </p>
+                </div>
+              )}
+
+              {project.slug && (
+                <p className="mt-6">
+                  <Link className="prose-link" href={routes.caseStudy(lang, project.slug)}>
+                    {ui.caseStudyLink}
+                  </Link>
+                </p>
+              )}
+
+              <ul className="mt-7 flex flex-wrap gap-2">
+                {project.tech.map((tech) => (
+                  <li
+                    key={tech}
+                    className="tag"
+                  >
+                    {tech}
+                  </li>
+                ))}
+              </ul>
             </div>
-
-            <p className="measure mt-4 text-pretty">{project.description}</p>
-            {project.result && (
-              <p className="measure mt-3 text-pretty text-heading">{project.result}</p>
-            )}
-            {project.status === 'archived' && <p className="small mt-3">{ui.projectArchived}</p>}
-            {project.status === 'internal' && <p className="small mt-3">{ui.projectInternal}</p>}
-
-            {project.image && (
-              <figure className="mt-8">
-                <img
-                  alt={project.image.alt}
-                  className="w-full rounded-xl border border-line"
-                  decoding="async"
-                  height={520}
-                  loading="lazy"
-                  src={project.image.src}
-                  width={800}
-                />
-                <figcaption className="small mt-3">{project.image.caption}</figcaption>
-              </figure>
-            )}
-
-            {project.press && (
-              <div className="mt-8 rounded-xl border border-line bg-surface p-6">
-                <p className="eyebrow">{ui.pressEyebrow}</p>
-                <p className="measure mt-3 text-pretty">
-                  {ui.pressIntro} <em className="text-heading">“{project.press.quote}”</em>.
-                </p>
-                <a
-                  className="prose-link mt-3 inline-block text-pretty"
-                  href={project.press.url}
-                  rel="noopener noreferrer"
-                  target="_blank"
-                >
-                  {project.press.title}
-                </a>
-                <p className="small mt-2">
-                  {project.press.outlet} · {project.press.date}
-                </p>
-              </div>
-            )}
-
-            {project.slug && (
-              <p className="mt-6">
-                <Link className="prose-link" href={routes.caseStudy(lang, project.slug)}>
-                  {ui.caseStudyLink} →
-                </Link>
-              </p>
-            )}
-
-            <ul className="mt-7 flex flex-wrap gap-2">
-              {project.tech.map((tech) => (
-                <li
-                  key={tech}
-                  className="tag"
-                >
-                  {tech}
-                </li>
-              ))}
-            </ul>
           </li>
         );
       })}

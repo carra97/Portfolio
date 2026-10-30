@@ -23,7 +23,7 @@ const REPOSITORY = 'https://github.com/carra97/Portfolio';
  * trabaja.
  *
  * El tratamiento es el mismo lenguaje de "metadata del documento" que usa el resto del
- * sitio: eyebrow en mono con tracking abierto, hairlines, tipografía apagada. Un footer
+ * sitio: rótulos apagados en minúscula inicial, hairlines, tipografía chica. Un footer
  * tiene que terminar la página, no disputarla.
  */
 export function Footer({ lang: _lang, profile }: { lang: string; profile: Profile }) {
@@ -101,7 +101,7 @@ export function Footer({ lang: _lang, profile }: { lang: string; profile: Profil
           </div>
         </div>
 
-        <div className="flex flex-wrap items-center justify-between gap-3 border-t border-line py-6 font-mono text-xs uppercase tracking-[0.12em] text-muted">
+        <div className="small flex flex-wrap items-center justify-between gap-3 border-t border-line py-6">
           <p>
             © {new Date().getFullYear()} {hero.name}
           </p>

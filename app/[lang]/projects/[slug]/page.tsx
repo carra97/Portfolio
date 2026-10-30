@@ -52,11 +52,16 @@ export async function generateMetadata({
   };
 }
 
+/**
+ * Un bloque del case study como fila de expediente: el título al margen, el contenido en
+ * la columna de lectura. El `<h2>` sigue siendo un encabezado real —el árbol de
+ * documento no cambia—; solo cambia dónde se dibuja.
+ */
 function Block({ children, title }: { children: React.ReactNode; title: string }) {
   return (
-    <section className="border-t border-line py-12">
-      <h2 className="eyebrow mb-6">{title}</h2>
-      {children}
+    <section className="doc-row border-t border-line py-12">
+      <h2 className="text-sm md:pt-1">{title}</h2>
+      <div className="max-w-[68ch]">{children}</div>
     </section>
   );
 }
@@ -88,39 +93,36 @@ export default async function CaseStudyPage({
       />
 
       <main className="page" id="content">
-        <div className="max-w-[68ch]">
-          <nav aria-label={profile.ui.breadcrumbLabel} className="py-8">
-            <Link
-              className="prose-link font-mono text-xs uppercase tracking-[0.12em]"
-              href={routes.projects(lang)}
-            >
+        <div className="doc-row pb-12 pt-8 md:pt-16">
+          {/* Al margen, la miga de pan: de qué expediente cuelga este. */}
+          <nav aria-label={profile.ui.breadcrumbLabel} className="md:pt-2">
+            <Link className="prose-link text-sm" href={routes.projects(lang)}>
               ← {profile.sections.projects}
             </Link>
           </nav>
 
-          <header className="pb-12">
+          <header className="max-w-[68ch]">
+            <h1 className="display-sm">{study.title}</h1>
+            <p className="mt-6 text-pretty text-heading">{study.summary}</p>
             {/* Es un párrafo, no una etiqueta: en mayúsculas mono de 12px se leía lento
                 y era lo primero que encontraba quien entraba al case study. */}
-            <p className="small measure text-pretty">{study.context}</p>
-            <h1 className="display-sm mt-6">{study.title}</h1>
-            <p className="mt-6 text-pretty text-heading">{study.summary}</p>
+            <p className="small measure mt-4 text-pretty">{study.context}</p>
             <ul className="mt-8 flex flex-wrap gap-2">
               {study.tech.map((tech) => (
-                <li
-                  key={tech}
-                  className="tag"
-                >
+                <li key={tech} className="tag">
                   {tech}
                 </li>
               ))}
             </ul>
           </header>
+        </div>
 
+        <div>
           {study.metrics && (
-            <dl className="grid gap-6 border-t border-line py-10 sm:grid-cols-3">
+            <dl className="doc-offset grid gap-6 border-t border-line py-10 sm:grid-cols-3">
               {study.metrics.map((metric) => (
                 <div key={metric.label}>
-                  <dt className="eyebrow">{metric.label}</dt>
+                  <dt className="label">{metric.label}</dt>
                   <dd className="mt-2 text-2xl text-heading">{metric.value}</dd>
                   {metric.note && <p className="small mt-1">{metric.note}</p>}
                 </div>
@@ -153,17 +155,13 @@ export default async function CaseStudyPage({
               Sin el trade-off explícito esto sería una lista de tecnologías. */}
           <Block title={labels.decisions}>
             <ol className="space-y-10">
-              {study.decisions.map((decision, index) => (
+              {/* Sin numeración: las decisiones no son pasos de una secuencia. */}
+              {study.decisions.map((decision) => (
                 <li key={decision.title}>
-                  <p className="font-mono text-xs text-muted">
-                    {String(index + 1).padStart(2, '0')}
-                  </p>
-                  <h3 className="h3 mt-1">{decision.title}</h3>
+                  <h3 className="h3">{decision.title}</h3>
                   <p className="mt-3 text-pretty">{decision.rationale}</p>
                   <p className="mt-3 border-l-2 border-accent-dim pl-4 text-pretty text-muted">
-                    <span className="font-mono text-xs uppercase tracking-[0.12em] text-accent">
-                      {labels.tradeoff}:{' '}
-                    </span>
+                    <span className="font-medium text-heading">{labels.tradeoff}: </span>
                     {decision.tradeoff}
                   </p>
                 </li>
@@ -179,7 +177,7 @@ export default async function CaseStudyPage({
             <ul className="space-y-3">
               {study.outcome.map((o) => (
                 <li key={o.slice(0, 40)} className="flex gap-4 text-pretty">
-                  <span aria-hidden="true" className="mt-3.5 h-px w-4 shrink-0 bg-accent" />
+                  <span aria-hidden="true" className="mt-3.5 h-px w-4 shrink-0 bg-accent-dim" />
                   <span>{o}</span>
                 </li>
               ))}
@@ -196,11 +194,8 @@ export default async function CaseStudyPage({
             </ul>
           </Block>
 
-          <div className="border-t border-line py-12">
-            <Link
-              className="btn-primary"
-              href={routes.contact(lang)}
-            >
+          <div className="doc-offset border-t border-line py-12">
+            <Link className="btn-primary" href={routes.contact(lang)}>
               {profile.ui.caseStudyContactCta}
             </Link>
           </div>

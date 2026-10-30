@@ -10,10 +10,8 @@ import type { Profile } from '@/types/profile';
  * visual que se distingue del texto corrido, y no un párrafo más.
  *
  * **Una banda horizontal, no una columna lateral.** La ficha ocupa el ancho completo
- * debajo del texto del hero. En pantallas anchas eso la acomoda en tres columnas por dos
- * filas, que es como se lee una lista de pares clave-valor; como columna lateral angosta,
- * cada valor se partía en dos o tres renglones y además obligaba a rellenar el hueco que
- * quedaba al lado del texto. Apilada en un teléfono, es exactamente la misma tarjeta.
+ * debajo del texto del hero, con una fila por dato: como columna lateral angosta, cada
+ * valor se partía en dos o tres renglones. Apilada en un teléfono, es la misma tarjeta.
  *
  * `<dl>` y no una grilla de tarjetas: es una lista de pares clave-valor y ese es el
  * elemento que existe para eso. Un lector de pantalla anuncia la relación término →
@@ -33,20 +31,19 @@ export function QuickFacts({
   return (
     <section
       aria-labelledby="quick-facts-title"
-      className="rise mt-12 rounded-xl border border-line bg-surface p-6 md:mt-14 md:p-8"
-      style={{ animationDelay: '300ms' }}
+      className="mt-12 rounded-xl border border-line bg-surface p-6 md:mt-14 md:p-8"
     >
       <h2 className="eyebrow" id="quick-facts-title">
         {label}
       </h2>
 
-      <dl className="mt-6 grid gap-x-12 gap-y-6 sm:grid-cols-2 lg:grid-cols-3">
+      {/* Carátula del expediente: el término al margen y el valor en la columna de
+          lectura, una fila por dato. Es la misma grilla que el resto del sitio. */}
+      <dl className="mt-4 divide-y divide-line">
         {facts.map((fact) => (
-          <div key={fact.label} className="border-t border-line pt-4">
-            <dt className="label">
-              {fact.label}
-            </dt>
-            <dd className="mt-1.5 text-pretty text-heading">{fact.value}</dd>
+          <div key={fact.label} className="doc-row py-3.5 last:pb-0">
+            <dt className="label md:pt-px">{fact.label}</dt>
+            <dd className="text-pretty text-heading">{fact.value}</dd>
           </div>
         ))}
       </dl>

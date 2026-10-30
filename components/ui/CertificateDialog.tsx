@@ -92,7 +92,7 @@ export function CertificateList({
               certification.name
             )}
             {certification.year && (
-              <span className="font-mono text-xs tracking-[0.12em] text-muted">
+              <span className="data">
                 {certification.year}
               </span>
             )}
@@ -149,7 +149,7 @@ export function CertificateList({
                   rel="noopener noreferrer"
                   target="_blank"
                 >
-                  {labels.verify} →
+                  {labels.verify}
                 </a>
               )}
               {active.image && (
@@ -159,7 +159,7 @@ export function CertificateList({
                   rel="noopener noreferrer"
                   target="_blank"
                 >
-                  {labels.fullSize} →
+                  {labels.fullSize}
                 </a>
               )}
             </div>

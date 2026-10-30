@@ -60,7 +60,7 @@ export function Testimonials({
               )}
             </p>
             <p className="small mt-0.5">{testimonial.role}</p>
-            <p className="mt-2 font-mono text-xs uppercase tracking-[0.12em] text-accent">
+            <p className="label mt-2">
               {labels[testimonial.relation]}
             </p>
           </figcaption>

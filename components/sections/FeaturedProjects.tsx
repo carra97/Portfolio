@@ -77,7 +77,7 @@ export function FeaturedProjects({
             {project.slug && (
               <p className="mt-6 pt-2">
                 <Link className="prose-link" href={routes.caseStudy(lang, project.slug)}>
-                  {ui.caseStudyLink} →
+                  {ui.caseStudyLink}
                 </Link>
               </p>
             )}
@@ -87,7 +87,7 @@ export function FeaturedProjects({
 
       <p className="mt-8">
         <Link className="prose-link" href={routes.projects(lang)}>
-          {ui.viewProjects} →
+          {ui.viewProjects}
         </Link>
       </p>
     </div>

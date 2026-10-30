@@ -1,5 +1,5 @@
 import { GeistMono } from 'geist/font/mono';
-import { GeistSans } from 'geist/font/sans';
+import { Schibsted_Grotesk } from 'next/font/google';
 import type { Metadata, Viewport } from 'next';
 import { notFound } from 'next/navigation';
 import type { ReactNode } from 'react';
@@ -13,6 +13,17 @@ import { LOCALES, isSupportedLocale } from '@/lib/i18n';
 import { getPages, pageHref } from '@/lib/pages/registry';
 
 import '../globals.css';
+
+/**
+ * Schibsted Grotesk para todo el texto; Geist Mono queda para estados, fechas y código
+ * (DISENO.md §3, Rev. 5). `next/font` la sirve desde el propio dominio, así que la CSP
+ * (`font-src 'self'`) no cambia.
+ */
+const schibsted = Schibsted_Grotesk({
+  display: 'swap',
+  subsets: ['latin', 'latin-ext'],
+  variable: '--font-schibsted',
+});
 
 export function generateStaticParams() {
   return LOCALES.map((lang) => ({ lang }));
@@ -107,7 +118,7 @@ export default async function LangLayout({
      * así que cualquier otra desincronización del árbol sigue avisando.
      */
     <html
-      className={`${GeistSans.variable} ${GeistMono.variable}`}
+      className={`${schibsted.variable} ${GeistMono.variable}`}
       lang={lang}
       suppressHydrationWarning
     >

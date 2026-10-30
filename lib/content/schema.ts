@@ -358,6 +358,25 @@ export const profileSchema = z
       .object({
         availability: text,
         eyebrow: text,
+        /**
+         * Diagrama de estados del home: el recorrido real de un trámite de un sistema
+         * con case study. Los estados los confirmó Santiago; no se completan a ojo.
+         * Fuera del corpus del bot a propósito: es presentación, no un dato nuevo.
+         */
+        flow: z
+          .object({
+            caption: text,
+            /**
+             * El desvío: desde el último estado intermedio el trámite vuelve al
+             * primero (en Salario Familiar, Liquidaciones rechaza y vuelve a carga).
+             */
+            loop: text,
+            /** Case study del sistema que se dibuja. */
+            slug: text,
+            /** Estados en orden. El último es el final y es el único en acento. */
+            steps: z.array(text).min(3).readonly(),
+          })
+          .readonly(),
         headline: text,
         location: text,
         name: text,

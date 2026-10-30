@@ -1,0 +1,64 @@
+import Link from 'next/link';
+import type { CSSProperties } from 'react';
+
+import type { SupportedLocale } from '@/lib/i18n';
+import { routes } from '@/lib/routes';
+import type { Profile } from '@/types/profile';
+
+/**
+ * Diagrama de estados del home: el momento firma del sitio.
+ *
+ * Lo que Santiago construye, en cada trabajo, es trabajo que avanza de un estado al
+ * siguiente. En vez de decirlo en un bullet, se dibuja con un trámite real: los estados
+ * y el desvío salen del contenido y los confirmó él (`hero.flow`).
+ *
+ * **Es una lista ordenada, no un SVG.** Un lector de pantalla lee los estados en orden y
+ * después el desvío; el dibujo —la línea, los puntos, el corchete— es CSS sobre esa
+ * lista. Sin JavaScript y sin librería de diagramas.
+ *
+ * Muestra el flujo de **un sistema**, nunca una línea de carrera: así no hay forma de que
+ * se lea como "años de experiencia".
+ */
+export function StateFlow({
+  flow,
+  lang,
+  linkLabel,
+}: {
+  flow: Profile['hero']['flow'];
+  lang: SupportedLocale;
+  linkLabel: string;
+}) {
+  const last = flow.steps.length - 1;
+
+  return (
+    <figure className="flow" style={{ '--flow-last': last } as CSSProperties}>
+      <figcaption className="label">{flow.caption}</figcaption>
+
+      <div className="relative mt-5 w-fit">
+        <ol className="flow-list data text-[0.9375rem]">
+          {flow.steps.map((step, index) => (
+            <li
+              key={step}
+              className={index === last ? 'flow-step flow-step-final' : 'flow-step'}
+              style={{ '--step': index } as CSSProperties}
+            >
+              {step}
+            </li>
+          ))}
+        </ol>
+
+        {/* El desvío va después de la lista en el árbol de accesibilidad: se lee como
+            una nota sobre el recorrido, que es lo que es. */}
+        <p className="flow-loop">
+          <span className="flow-loop-label data">{flow.loop}</span>
+        </p>
+      </div>
+
+      <p className="mt-6">
+        <Link className="prose-link text-sm" href={routes.caseStudy(lang, flow.slug)}>
+          {linkLabel}
+        </Link>
+      </p>
+    </figure>
+  );
+}

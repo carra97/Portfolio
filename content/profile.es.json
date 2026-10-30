@@ -237,6 +237,12 @@
     "headline": "Team Leader & Senior Full Stack Developer",
     "location": "Paraná, Entre Ríos, Argentina",
     "name": "Santiago Carrattini",
+    "flow": {
+      "caption": "Salario Familiar: el recorrido de un trámite",
+      "loop": "Rechazado: vuelve a carga",
+      "slug": "salario-familiar",
+      "steps": ["Carga", "Validación 1", "Validación 2", "Liquidaciones", "Aprobado"]
+    },
     "quickFacts": [
       {
         "label": "Experiencia",

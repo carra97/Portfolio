@@ -48,7 +48,7 @@ export function AboutNarrative({
           src="/santiago-carrattini.jpg"
           width={400}
         />
-        <figcaption className="mt-3 px-1 pb-1 font-mono text-xs tracking-[0.12em] text-muted">
+        <figcaption className="small mt-3 px-1 pb-1">
           {caption}
         </figcaption>
       </figure>

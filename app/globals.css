@@ -68,7 +68,7 @@
   --color-accent-dim: var(--accent-dim);
   --color-accent-bg: var(--accent-bg);
   --color-accent-on: var(--accent-on);
-  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-schibsted), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, monospace;
 }
 
@@ -77,13 +77,43 @@
    arbitrarios repetidos a mano en cada componente. */
 @theme {
   --container-page: 70rem; /* 1120px — DISENO.md §4 */
-  --tracking-label: 0.12em;
+  --tracking-label: 0.02em;
+  /* Columna de margen del expediente: fechas, estado, emisor. */
+  --spacing-margin: 12.5rem;
 }
 
 /* ── Primitivos ───────────────────────────────────────────────────────────────
    Utilidades y no componentes de React: no hay comportamiento que encapsular, solo
    un tratamiento visual que se repetía copiado como string de clases. Cambiar cómo se
-   ve una etiqueta de dato es editar una regla, no veinte archivos. */
+   ve una etiqueta de dato es editar una regla, no veinte archivos.
+
+   Dirección "Expediente" (DISENO.md Rev. 5): la metadata de un documento va al margen,
+   en minúscula inicial y en la misma sans que el texto. El mono queda para lo que es
+   dato de máquina —fechas, estados, nombres de tecnología—. Ninguna etiqueta en
+   mayúsculas y ningún texto por debajo de 13px. */
+
+/**
+ * Fila de expediente: metadata al margen, contenido a la derecha.
+ *
+ * Es el patrón que ya usaban Skills y Credentials, generalizado a todo el sitio. En
+ * mobile no hay margen que ocupar: la metadata pasa arriba, en línea.
+ */
+@utility doc-row {
+  display: grid;
+  row-gap: 0.375rem;
+
+  @media (width >= 48rem) {
+    grid-template-columns: var(--spacing-margin) minmax(0, 1fr);
+    column-gap: 3rem;
+  }
+}
+
+/* Contenido que va en la columna de lectura sin metadata a la izquierda. */
+@utility doc-offset {
+  @media (width >= 48rem) {
+    padding-left: calc(var(--spacing-margin) + 3rem);
+  }
+}
 
 /* Ancho de contenido y margen lateral (24px mobile / 40px desktop). */
 @utility page {
@@ -96,36 +126,47 @@
   }
 }
 
-/* Fechas, períodos y años: dato, no prosa. */
+/* Fechas, períodos y años: dato, no prosa. Mono, sin mayúsculas. */
 @utility data {
   font-family: var(--font-geist-mono), ui-monospace, monospace;
-  font-size: 0.75rem;
-  line-height: 1.4;
+  font-size: 0.8125rem;
+  line-height: 1.5;
   letter-spacing: var(--tracking-label);
-  text-transform: uppercase;
   color: var(--text-muted);
 }
 
 /* Término de una lista clave-valor: "Experiencia", "Backend", el emisor de un certificado. */
 @utility label {
-  font-family: var(--font-geist-mono), ui-monospace, monospace;
-  font-size: 0.75rem;
-  line-height: 1.4;
-  letter-spacing: var(--tracking-label);
-  text-transform: uppercase;
+  font-size: 0.875rem;
+  line-height: 1.5;
   color: var(--text-muted);
 }
 
-/* Estado destacado: "Actual", "Verificable". */
+/**
+ * Estado del expediente: "Actual", "Verificable". Un punto y la palabra, como en un
+ * tablero de seguimiento; no una píldora de color. Neutro por defecto: el acento queda
+ * para el estado vigente (`badge-current`), que es su único trabajo fuera del CTA y los links.
+ */
 @utility badge {
-  border-radius: 6px;
-  background-color: var(--accent-bg);
-  padding: 0.125rem 0.5rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
   font-family: var(--font-geist-mono), ui-monospace, monospace;
-  font-size: 0.75rem;
-  line-height: 1.4;
+  font-size: 0.8125rem;
+  line-height: 1.5;
   letter-spacing: var(--tracking-label);
-  text-transform: uppercase;
+  color: var(--beige-quiet);
+
+  &::before {
+    content: '';
+    width: 0.375rem;
+    height: 0.375rem;
+    border-radius: 9999px;
+    background-color: currentColor;
+  }
+}
+
+@utility badge-current {
   color: var(--accent);
 }
 
@@ -133,10 +174,10 @@
 @utility tag {
   border: 1px solid var(--border);
   border-radius: 6px;
-  padding: 0.25rem 0.625rem;
+  padding: 0.125rem 0.5rem;
   font-family: var(--font-geist-mono), ui-monospace, monospace;
-  font-size: 0.75rem;
-  line-height: 1.4;
+  font-size: 0.8125rem;
+  line-height: 1.5;
   color: var(--text-muted);
 }
 
@@ -180,7 +221,7 @@ html {
 body {
   background-color: var(--bg-page);
   color: var(--text-body);
-  font-family: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  font-family: var(--font-schibsted), ui-sans-serif, system-ui, sans-serif;
   /* Body 17px / 1.7 — DISENO.md §3. 17 y no 16: el sitio se lee, no se escanea. */
   font-size: 17px;
   line-height: 1.7;
@@ -252,13 +293,12 @@ b {
   font-weight: 500;
 }
 
+/* Rótulo de un bloque. Antes: mono de 12px en mayúsculas con tracking abierto, el
+   rasgo más reconocible de las páginas generadas. Ahora: sans, minúscula inicial, apagado. */
 .eyebrow {
-  font-family: var(--font-geist-mono), ui-monospace, monospace;
-  font-size: 0.75rem;
-  line-height: 1.4;
-  letter-spacing: 0.12em;
+  font-size: 0.875rem;
+  line-height: 1.5;
   color: var(--text-muted);
-  text-transform: uppercase;
 }
 
 .small {
@@ -344,7 +384,8 @@ b {
 
 /* ── Movimiento — DISENO.md §5 ────────────────────────────────────────────── */
 
-/* Único momento protagonista: la entrada del hero. Se ejecuta una vez. */
+/* Entrada del encabezado en las páginas internas: su único momento. En el home el
+   momento es el diagrama de estados, y el hero queda quieto. Se ejecuta una vez. */
 @keyframes rise {
   from {
     opacity: 0;
@@ -360,13 +401,155 @@ b {
   animation: rise var(--dur-slow) var(--ease) both;
 }
 
-/* Revelado de secciones con animation-timeline: CSS puro, 0 KB, corre en el
-   compositor. Sin IntersectionObserver ni librería. */
-@supports (animation-timeline: view()) {
-  .reveal {
-    animation: rise var(--dur-base) var(--ease) both;
-    animation-timeline: view();
-    animation-range: entry 0% entry 40%;
+/* Sin revelado por sección. Existió (fundido y desplazamiento al entrar en vista en
+   cada sección) y es el patrón más reconocible de las páginas generadas: diluía el
+   único momento de movimiento en doce momentos iguales. */
+
+/* ── Diagrama de estados del home (`components/sections/StateFlow.tsx`) ───────
+   El momento firma del sitio: el recorrido de un trámite real, de la carga a la
+   aprobación, con el desvío del rechazo. Se recorre una vez, de arriba abajo, y se
+   detiene en el estado final, que es el único elemento en acento.
+
+   Cada paso tiene `--step` (0..n) en línea: el retardo sale de ahí, sin una clase
+   por paso. La línea que une los puntos se dibuja en el mismo tiempo total. */
+
+.flow {
+  --flow-row: 2.25rem;
+  --flow-step-delay: 220ms;
+  --flow-start: 250ms;
+}
+
+.flow-list {
+  position: relative;
+  width: fit-content;
+}
+
+/* La línea vertical que une los estados. */
+.flow-list::before {
+  content: '';
+  position: absolute;
+  left: 0.21875rem;
+  top: calc(var(--flow-row) / 2);
+  bottom: calc(var(--flow-row) / 2);
+  width: 1px;
+  background-color: var(--border-strong);
+  transform-origin: top;
+  animation: flow-draw calc(var(--flow-step-delay) * var(--flow-last)) linear var(--flow-start)
+    both;
+}
+
+.flow-step {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  height: var(--flow-row);
+  color: var(--text-muted);
+  animation: flow-visit var(--dur-base) var(--ease) both;
+  animation-delay: calc(var(--flow-start) + var(--step) * var(--flow-step-delay));
+}
+
+.flow-step::before {
+  content: '';
+  position: relative;
+  width: 0.4375rem;
+  height: 0.4375rem;
+  flex-shrink: 0;
+  border-radius: 9999px;
+  border: 1px solid var(--border-strong);
+  background-color: var(--bg-page);
+  animation: flow-dot var(--dur-base) var(--ease) both;
+  animation-delay: inherit;
+}
+
+.flow-step-final {
+  animation-name: flow-arrive;
+}
+
+.flow-step-final::before {
+  animation-name: flow-dot-final;
+}
+
+/* El desvío: Liquidaciones rechaza y el trámite vuelve a carga. Un corchete punteado a
+   la derecha de la lista, del último estado intermedio al primero. */
+.flow-loop {
+  position: absolute;
+  top: calc(var(--flow-row) / 2);
+  height: calc(var(--flow-row) * (var(--flow-last) - 1));
+  left: calc(100% + 1rem);
+  width: 1.25rem;
+  border: 1px dashed var(--border-strong);
+  border-left: 0;
+  border-radius: 0 6px 6px 0;
+}
+
+/* Punta de flecha hacia Carga. */
+.flow-loop::before {
+  content: '';
+  position: absolute;
+  top: -4px;
+  left: -6px;
+  border: 4px solid transparent;
+  border-right: 6px solid var(--border-strong);
+  border-left: 0;
+}
+
+.flow-loop-label {
+  position: absolute;
+  top: 50%;
+  left: calc(100% + 0.75rem);
+  transform: translateY(-50%);
+  /* Dos renglones y no uno: en un teléfono de 375px una sola línea desbordaba el
+     ancho de la página. */
+  width: 7.5rem;
+}
+
+@keyframes flow-draw {
+  from {
+    transform: scaleY(0);
+  }
+  to {
+    transform: scaleY(1);
+  }
+}
+
+@keyframes flow-visit {
+  from {
+    color: var(--text-muted);
+  }
+  to {
+    color: var(--text-body);
+  }
+}
+
+@keyframes flow-arrive {
+  from {
+    color: var(--text-muted);
+  }
+  to {
+    color: var(--accent);
+  }
+}
+
+@keyframes flow-dot {
+  from {
+    background-color: var(--bg-page);
+    border-color: var(--border-strong);
+  }
+  to {
+    background-color: var(--text-muted);
+    border-color: var(--text-muted);
+  }
+}
+
+@keyframes flow-dot-final {
+  from {
+    background-color: var(--bg-page);
+    border-color: var(--border-strong);
+  }
+  to {
+    background-color: var(--accent);
+    border-color: var(--accent);
   }
 }
 
@@ -444,6 +627,9 @@ b {
   *::before,
   *::after {
     animation-duration: 0.01ms !important;
+    /* Sin esto, los pasos escalonados quedaban en su estado inicial hasta que vencía
+       su retardo: el movimiento se apagaba pero la espera no. */
+    animation-delay: 0ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }

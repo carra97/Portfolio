@@ -24,14 +24,14 @@ export function AboutTeaser({
 }) {
   return (
     <section aria-label={ui.aboutTeaserEyebrow} className="border-t border-line">
-      <div className="reveal page py-20 md:py-28">
+      <div className="page py-20 md:py-28">
         <p className="eyebrow">{ui.aboutTeaserEyebrow}</p>
         <blockquote className="measure mt-4 border-l-2 border-accent pl-6 lead text-pretty">
           {about.principle}
         </blockquote>
         <p className="mt-8">
           <Link className="prose-link" href={routes.about(lang)}>
-            {ui.aboutCta} →
+            {ui.aboutCta}
           </Link>
         </p>
       </div>
