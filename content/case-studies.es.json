@@ -76,7 +76,18 @@
       "jQuery",
       "AJAX",
       "Bootstrap"
-    ]
+    ],
+    "flow": {
+      "caption": "El recorrido de un trámite",
+      "loop": "Rechazado: vuelve a carga",
+      "steps": [
+        "Carga",
+        "Validación 1",
+        "Validación 2",
+        "Liquidaciones",
+        "Aprobado"
+      ]
+    }
   },
   {
     "slug": "tramites-expedientes",
@@ -137,7 +148,19 @@
       "jQuery",
       "AJAX",
       "Bootstrap"
-    ]
+    ],
+    "flow": {
+      "caption": "El recorrido de un expediente",
+      "loop": "Reingreso: vuelve a carga y conserva su historial",
+      "loopFrom": 4,
+      "steps": [
+        "Carga",
+        "Enviado",
+        "Recibido",
+        "En trámite",
+        "En guarda / Finalizado"
+      ]
+    }
   },
   {
     "slug": "portfolio-chatbot",
@@ -202,6 +225,18 @@
       "Tailwind CSS",
       "Zod",
       "Vercel"
-    ]
+    ],
+    "flow": {
+      "caption": "El recorrido de una pregunta",
+      "loop": "Falla del proveedor: aviso y reintento",
+      "loopFrom": 3,
+      "steps": [
+        "Pregunta",
+        "Validación (Zod)",
+        "Rate limit por IP",
+        "Prompt + corpus completo",
+        "Respuesta en streaming"
+      ]
+    }
   }
 ]

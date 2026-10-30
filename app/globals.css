@@ -470,12 +470,12 @@ b {
   animation-name: flow-dot-final;
 }
 
-/* El desvío: Liquidaciones rechaza y el trámite vuelve a carga. Un corchete punteado a
-   la derecha de la lista, del último estado intermedio al primero. */
+/* El desvío: un corchete punteado a la derecha de la lista, del estado `--flow-from` al
+   primero (en Salario Familiar, Liquidaciones rechaza y el trámite vuelve a carga). */
 .flow-loop {
   position: absolute;
   top: calc(var(--flow-row) / 2);
-  height: calc(var(--flow-row) * (var(--flow-last) - 1));
+  height: calc(var(--flow-row) * var(--flow-from));
   left: calc(100% + 1rem);
   width: 1.25rem;
   border: 1px dashed var(--border-strong);
@@ -495,14 +495,29 @@ b {
   clip-path: polygon(0 50%, 100% 0, 100% 100%);
 }
 
+/* La leyenda del desvío. En un teléfono va debajo de la lista, con el mismo trazo
+   punteado: al costado no entra cuando los estados son largos ("Prompt + corpus
+   completo"). Desde 40rem se ubica a la derecha del corchete, a la altura de su medio. */
 .flow-loop-label {
-  position: absolute;
-  top: 50%;
-  left: calc(100% + 0.75rem);
-  transform: translateY(-50%);
-  /* Dos renglones y no uno: en un teléfono de 375px una sola línea desbordaba el
-     ancho de la página. */
-  width: 7.5rem;
+  /* Sin esto la leyenda ensancha el contenedor `w-fit` y empuja el corchete fuera de
+     la pantalla: así toma el ancho de la lista y corta el renglón ahí. */
+  contain: inline-size;
+  margin-top: 0.75rem;
+  padding-left: 0.75rem;
+  border-left: 1px dashed var(--border-strong);
+}
+
+@media (width >= 40rem) {
+  .flow-loop-label {
+    position: absolute;
+    top: calc(var(--flow-row) * (var(--flow-from) + 1) / 2);
+    left: calc(100% + 3rem);
+    transform: translateY(-50%);
+    width: 7.5rem;
+    margin: 0;
+    padding: 0;
+    border: 0;
+  }
 }
 
 @keyframes flow-draw {

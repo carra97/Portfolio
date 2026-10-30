@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { Footer } from '@/components/layout/Footer';
 import { Nav } from '@/components/layout/Nav';
 import { ProjectEvidence } from '@/components/sections/ProjectEvidence';
+import { StateFlow } from '@/components/sections/StateFlow';
 import { getCaseStudies, getCaseStudy } from '@/lib/content/case-studies';
 import { getProfile } from '@/lib/content/profile';
 import { env } from '@/lib/env';
@@ -116,6 +117,13 @@ export default async function CaseStudyPage({
                 </li>
               ))}
             </ul>
+
+            {/* El momento de movimiento de la página: el recorrido del sistema. */}
+            {study.flow && (
+              <div className="mt-12">
+                <StateFlow flow={study.flow} lang={lang} />
+              </div>
+            )}
           </header>
         </div>
 

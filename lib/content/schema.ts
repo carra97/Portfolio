@@ -191,6 +191,23 @@ export const skillGroupSchema = z
   })
   .readonly();
 
+/**
+ * Diagrama de estados: el recorrido real de un sistema, dibujado por `StateFlow`. Los
+ * estados los confirma Santiago; no se completan a ojo. Fuera del corpus del bot a
+ * propósito: es presentación, no un dato nuevo.
+ */
+const flowShape = {
+  caption: text,
+  /** El desvío: desde `loopFrom` el recorrido vuelve al primer estado. */
+  loop: text,
+  /** Índice del estado del que sale el desvío. Por defecto, el anteúltimo. */
+  loopFrom: z.number().int().min(1).optional(),
+  /** Estados en orden. El último es el final y es el único en acento. */
+  steps: z.array(text).min(3).readonly(),
+};
+
+export const flowSchema = z.object(flowShape).readonly();
+
 export const spokenLanguageSchema = z.object({ level: text, name: text }).readonly();
 
 export const testimonialSchema = z
@@ -358,25 +375,8 @@ export const profileSchema = z
       .object({
         availability: text,
         eyebrow: text,
-        /**
-         * Diagrama de estados del home: el recorrido real de un trámite de un sistema
-         * con case study. Los estados los confirmó Santiago; no se completan a ojo.
-         * Fuera del corpus del bot a propósito: es presentación, no un dato nuevo.
-         */
-        flow: z
-          .object({
-            caption: text,
-            /**
-             * El desvío: desde el último estado intermedio el trámite vuelve al
-             * primero (en Salario Familiar, Liquidaciones rechaza y vuelve a carga).
-             */
-            loop: text,
-            /** Case study del sistema que se dibuja. */
-            slug: text,
-            /** Estados en orden. El último es el final y es el único en acento. */
-            steps: z.array(text).min(3).readonly(),
-          })
-          .readonly(),
+        /** Diagrama de estados del home, con link al case study del sistema que dibuja. */
+        flow: z.object({ ...flowShape, slug: text }).readonly(),
         headline: text,
         location: text,
         name: text,
@@ -441,7 +441,7 @@ export const caseStudySchema = z
     constraints: z.array(text).min(1).readonly(),
     context: text,
     decisions: z.array(decisionSchema).min(1).readonly(),
-    diagram: text.optional(),
+    flow: flowSchema.optional(),
     lang: langSchema,
     metrics: z.array(metricSchema).readonly().optional(),
     outcome: z.array(text).min(1).readonly(),
@@ -464,6 +464,7 @@ export type Certification = z.infer<typeof certificationSchema>;
 export type CertificationGroup = z.infer<typeof certificationGroupSchema>;
 export type Decision = z.infer<typeof decisionSchema>;
 export type Education = z.infer<typeof educationSchema>;
+export type Flow = z.infer<typeof flowSchema>;
 export type Experience = z.infer<typeof experienceSchema>;
 export type Hobby = z.infer<typeof hobbySchema>;
 export type Lang = z.infer<typeof langSchema>;

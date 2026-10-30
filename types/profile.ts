@@ -11,6 +11,7 @@ export type {
   CertificationGroup,
   Education,
   Experience,
+  Flow,
   Hobby,
   Lang,
   Milestone,
