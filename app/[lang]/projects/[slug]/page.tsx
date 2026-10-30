@@ -3,10 +3,12 @@ import { notFound } from 'next/navigation';
 
 import Link from 'next/link';
 import { Footer } from '@/components/layout/Footer';
+import { Nav } from '@/components/layout/Nav';
 import { getCaseStudies, getCaseStudy } from '@/lib/content/case-studies';
 import { getProfile } from '@/lib/content/profile';
 import { env } from '@/lib/env';
 import { LOCALES, isSupportedLocale } from '@/lib/i18n';
+import { buildNav } from '@/lib/pages/nav';
 import { routes } from '@/lib/routes';
 
 /**
@@ -75,7 +77,17 @@ export default async function CaseStudyPage({
 
   return (
     <>
-      <div className="mx-auto max-w-[1120px] px-6 md:px-10">
+      {/* El nav global también acá: un case study es la página más profunda y la que más
+          se comparte. Sin él, quien llega por un link directo no tiene adónde seguir. El
+          case study cuelga de Proyectos, así que esa pestaña queda marcada. */}
+      <Nav
+        label={profile.ui.navLabel}
+        lang={lang}
+        navigation={buildNav('projects', lang, profile)}
+        themeLabel={profile.ui.themeToggle}
+      />
+
+      <main className="mx-auto max-w-[1120px] px-6 md:px-10" id="content">
         <div className="max-w-[68ch]">
           <nav aria-label={profile.ui.breadcrumbLabel} className="py-8">
             <Link
@@ -87,7 +99,9 @@ export default async function CaseStudyPage({
           </nav>
 
           <header className="pb-12">
-            <p className="eyebrow">{study.context}</p>
+            {/* Es un párrafo, no una etiqueta: en mayúsculas mono de 12px se leía lento
+                y era lo primero que encontraba quien entraba al case study. */}
+            <p className="small measure text-pretty">{study.context}</p>
             <h1 className="display mt-6 !text-[clamp(2rem,4.5vw,2.75rem)]">{study.title}</h1>
             <p className="mt-6 text-pretty text-heading">{study.summary}</p>
             <ul className="mt-8 flex flex-wrap gap-2">
@@ -191,7 +205,7 @@ export default async function CaseStudyPage({
             </Link>
           </div>
         </div>
-      </div>
+      </main>
 
       <Footer lang={lang} profile={profile} />
     </>

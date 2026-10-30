@@ -284,7 +284,6 @@ export const uiStringsSchema = z
     chatError: text,
     chatGreeting: text,
     chatLauncher: text,
-    chatNudge: text,
     chatPlaceholder: text,
     chatReady: text,
     chatRetry: text,

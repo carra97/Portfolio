@@ -19,8 +19,11 @@ export function generateStaticParams() {
 }
 
 /**
- * `theme-color` por esquema para la barra del navegador en mobile (DISENO.md §2).
- * Los valores son los mismos tokens `--bg-page` de cada modo.
+ * `theme-color` para la barra del navegador en mobile (DISENO.md §2).
+ *
+ * Uno solo, el del oscuro, y no uno por `prefers-color-scheme`: el sitio no sigue al
+ * sistema, así que con el sistema en claro la barra quedaba clara sobre una página
+ * oscura. Quien elige el claro lo actualiza `ThemeToggle` al montar.
  */
 export const viewport: Viewport = {
   /**
@@ -36,10 +39,7 @@ export const viewport: Viewport = {
    * detectar ni ninguna rama que mantener.
    */
   interactiveWidget: 'resizes-content',
-  themeColor: [
-    { media: '(prefers-color-scheme: dark)', color: '#0c0b0a' },
-    { media: '(prefers-color-scheme: light)', color: '#faf7f1' },
-  ],
+  themeColor: '#0c0b0a',
 };
 
 /**
@@ -87,13 +87,10 @@ export default async function LangLayout({
 
   /**
    * Avatar de Raukar. Se resuelve en build: si el archivo no está, `publicAsset` devuelve
-   * `null` y el widget cae al monograma en vez de pedir una imagen que responde 404. El
-   * cuadro del saludo es opcional — sin él, el saludo mueve la figura entera.
+   * `null` y el widget cae al monograma en vez de pedir una imagen que responde 404.
    */
   const chatAvatar = {
     base: publicAsset('raukar.webp') ?? publicAsset('raukar.png'),
-    wave: publicAsset('raukar-saludo.webp') ?? publicAsset('raukar-saludo.png'),
-    sequence: publicAsset('raukar-saludo-seq.webp'),
   };
 
   return (
@@ -141,14 +138,12 @@ export default async function LangLayout({
         {chatEnabled && (
           <Chat
             avatar={chatAvatar}
-            homeHref={pageHref('home', lang)}
             labels={{
               close: ui.chatClose,
               disclaimer: ui.chatDisclaimer,
               error: ui.chatError,
               greeting: ui.chatGreeting,
               launcher: ui.chatLauncher,
-              nudge: ui.chatNudge,
               placeholder: ui.chatPlaceholder,
               ready: ui.chatReady,
               retry: ui.chatRetry,

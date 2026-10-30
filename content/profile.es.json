@@ -239,10 +239,6 @@
     "name": "Santiago Carrattini",
     "quickFacts": [
       {
-        "label": "Rol actual",
-        "value": "Team Leader & Senior Full Stack Developer @ PHINX Lab"
-      },
-      {
         "label": "Experiencia",
         "value": "3+ años de desarrollo profesional"
       },
@@ -573,7 +569,6 @@
     "chatError": "No pude responder. Puede ser un problema momentáneo.",
     "chatGreeting": "Hola, soy Raukar: el asistente de este portfolio, una versión en miniatura de Santiago. Conozco su experiencia, sus proyectos, su stack y su formación. Preguntame lo que quieras, o decime qué sección estás buscando y te llevo.",
     "chatLauncher": "Hablar con Raukar",
-    "chatNudge": "¡Hola! Soy Raukar, el mini Santiago que atiende este portfolio. Puedo contarte sobre su experiencia o llevarte directo a la sección que busques.",
     "chatPlaceholder": "Escribí tu pregunta",
     "chatReady": "Respuesta lista",
     "chatRetry": "Reintentar",
