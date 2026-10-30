@@ -721,8 +721,8 @@ b {
   animation-delay: calc(300ms + 650ms * var(--flow-last, 4) + 300ms);
 }
 
-/* Cada sello cae cuando su bloque entra en pantalla (`ReplayOnView`), no al cargar. El
-   rebote de la curva es el golpe del sello contra el papel. */
+/* Cada sello cae cuando su bloque entra en pantalla (`ReplayOnView`), no al cargar.
+   Desacelera fuerte al final (ease-out-quint): el golpe seco contra el papel, sin rebote. */
 @keyframes stamp-drop {
   from {
     opacity: 0;
@@ -731,7 +731,7 @@ b {
 }
 
 .stamp-drop {
-  animation: stamp-drop 380ms cubic-bezier(0.3, 1.6, 0.5, 1) 150ms both;
+  animation: stamp-drop 420ms cubic-bezier(0.22, 1, 0.36, 1) 150ms both;
 }
 
 /* Línea de tiempo de "Sobre mí" (`Journey.tsx`), atada al scroll.
