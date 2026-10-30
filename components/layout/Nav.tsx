@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { ThemeToggle } from '@/components/layout/ThemeToggle';
-import type { SupportedLocale } from '@/lib/i18n';
+import { LOCALE_NAMES, type SupportedLocale } from '@/lib/i18n';
 import type { Navigation } from '@/lib/pages/nav';
 import { routes } from '@/lib/routes';
 
@@ -25,6 +25,10 @@ import { routes } from '@/lib/routes';
  *
  * El degradado del borde derecho —`nav-fade`, solo en pantallas chicas— existe porque
  * una lista que se corta limpia no se lee como deslizable: se lee como completa.
+ *
+ * **El idioma, como un link.** Lleva a la misma página en el otro idioma: un `<a>` con
+ * `hrefLang` y `lang`, sin JavaScript. Dice "EN" o "ES" y el nombre completo, en su
+ * propio idioma, va en `aria-label`.
  *
  * El monograma "SC" en lugar del retrato: DISENO.md §7.1 es explícito en que la foto
  * de tres cuartos desaparece a 40px.
@@ -84,6 +88,16 @@ export function Nav({
             {navigation.cta.label}
           </Link>
         )}
+
+        <Link
+          aria-label={LOCALE_NAMES[navigation.language.lang]}
+          className="-mx-2 shrink-0 px-2 py-1.5 text-sm text-muted uppercase transition-colors duration-150 hover:text-heading"
+          href={navigation.language.href}
+          hrefLang={navigation.language.lang}
+          lang={navigation.language.lang}
+        >
+          {navigation.language.lang}
+        </Link>
 
         <ThemeToggle label={themeLabel} />
       </nav>

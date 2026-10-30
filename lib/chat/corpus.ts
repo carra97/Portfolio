@@ -59,6 +59,12 @@ export function estimateTokens(corpus: string): number {
   return Math.ceil(corpus.length / 4);
 }
 
+/**
+ * ponytail: el andamiaje del corpus (títulos de sección, "Edad", etiquetas de estado) está
+ * en español también para `en`; los datos sí salen del JSON del idioma. El modelo lee
+ * el corpus mixto sin problema y contesta en el idioma de quien pregunta (regla del
+ * prompt). Si algún día una eval en inglés falla por eso, mover esas etiquetas a `ui`.
+ */
 function serialize(lang: SupportedLocale): string {
   const profile = getProfile(lang);
   const caseStudies = getCaseStudies(lang);

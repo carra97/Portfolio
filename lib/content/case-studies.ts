@@ -1,9 +1,11 @@
+import caseStudiesEn from '@/content/case-studies.en.json';
 import caseStudiesEs from '@/content/case-studies.es.json';
 import { createContentLoader } from '@/lib/content/loader';
 import { caseStudiesSchema, type CaseStudy } from '@/lib/content/schema';
 import type { SupportedLocale } from '@/lib/i18n';
 
 const caseStudies = createContentLoader('case-studies', caseStudiesSchema, {
+  en: caseStudiesEn,
   es: caseStudiesEs,
 } satisfies Record<SupportedLocale, unknown>);
 

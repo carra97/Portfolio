@@ -9,7 +9,7 @@ import { StateFlow } from '@/components/sections/StateFlow';
 import { getCaseStudies, getCaseStudy } from '@/lib/content/case-studies';
 import { getProfile } from '@/lib/content/profile';
 import { env } from '@/lib/env';
-import { LOCALES, isSupportedLocale } from '@/lib/i18n';
+import { LOCALES, isSupportedLocale, otherLocale } from '@/lib/i18n';
 import { buildNav } from '@/lib/pages/nav';
 import { routes } from '@/lib/routes';
 
@@ -44,7 +44,12 @@ export async function generateMetadata({
     title: `${study.title} — Santiago Carrattini`,
     description: study.summary,
     metadataBase: new URL(env.SITE_URL),
-    alternates: { canonical: routes.caseStudy(lang, slug) },
+    alternates: {
+      canonical: routes.caseStudy(lang, slug),
+      languages: Object.fromEntries(
+        LOCALES.map((locale) => [locale, routes.caseStudy(locale, slug)]),
+      ),
+    },
     openGraph: {
       type: 'article',
       title: study.title,
@@ -91,7 +96,7 @@ export default async function CaseStudyPage({
       <Nav
         label={profile.ui.navLabel}
         lang={lang}
-        navigation={buildNav('projects', lang, profile)}
+        navigation={buildNav('projects', lang, profile, routes.caseStudy(otherLocale(lang), slug))}
         themeLabel={profile.ui.themeToggle}
       />
 
