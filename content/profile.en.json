@@ -1,0 +1,614 @@
+{
+  "about": {
+    "narrative": [
+      "I got into programming because I wanted to understand how things worked on the inside, including how they broke. That was the spark, but building quickly became more interesting to me than breaking, and I kept going that way. I was about twelve, with an uncle studying electronic engineering in the background. I got hooked on Linux, started tinkering with my own PC and writing scripts to play pranks on my friends. It was a game, but it was also the first time I felt I could make a machine do what I wanted.",
+      "That led to my first blog, and then to something that shaped me more: a scheduling system I built that a clinic used for years, until they bought a commercial one. It was the first time something I wrote was useful to someone else every single day. That's when I understood that programming wasn't the goal: it was the tool for solving real problems.",
+      "It never stopped being a hobby. I just get paid for it now, and I take it with a different kind of responsibility. I still enjoy the same thing I did at twelve: a problem I don't know how to solve yet."
+    ],
+    "principle": "The test of whether you understand something is being able to explain it simply enough for a kid to follow. If you can't get there, you haven't really learned it yet.",
+    "principleSupport": [
+      "I lead a team of three developers: explaining technical decisions and helping others grow is part of the job, not an anecdote.",
+      "I directed the step-by-step tutorial videos for the family allowance system, made for the province's entire education community: people with no technical background."
+    ],
+    "timeline": [
+      {
+        "at": "Around 12",
+        "title": "Curiosity",
+        "body": "Wanting to understand how systems work on the inside. Linux, tinkering with my own PC, cmd scripts for pranks among friends. The machine started doing what I wanted."
+      },
+      {
+        "at": "Teenage years",
+        "title": "The first blog",
+        "body": "The first thing I made running in a browser. It didn't matter that it was simple: it mattered that it was mine and that it worked."
+      },
+      {
+        "at": "The first real user",
+        "title": "A scheduling system",
+        "body": "I built it and a clinic used it for years, until they bought a commercial one. My code serving other people every day. That's when it stopped being an exercise."
+      },
+      {
+        "at": "Education",
+        "title": "UTN and Henry",
+        "body": "Formally studying what I'd been doing on my own: giving a name, structure and method to a decade of trial and error."
+      },
+      {
+        "at": "Today",
+        "title": "From hobby to profession",
+        "body": "Critical public-sector systems used by thousands of people, then applied AI in production. It never stopped being a passion; now it's also a profession."
+      }
+    ]
+  },
+  "carousels": {
+    "projects": {
+      "group": "Featured projects",
+      "next": "Next project",
+      "previous": "Previous project",
+      "slidePosition": "Project {n} of {total}"
+    },
+    "testimonials": {
+      "group": "Recommendations from colleagues",
+      "next": "Next recommendation",
+      "previous": "Previous recommendation",
+      "slidePosition": "Recommendation {n} of {total}"
+    }
+  },
+  "caseStudyLabels": {
+    "architecture": "Architecture",
+    "constraints": "Constraints",
+    "decisions": "Decisions",
+    "outcome": "Outcome",
+    "problem": "The problem",
+    "retrospective": "What I'd do differently today",
+    "tradeoff": "Trade-off"
+  },
+  "certifications": [
+    {
+      "issuer": "Anthropic",
+      "framing": "Structured training across the Claude ecosystem: fundamentals, platform, MCP, subagents and Bedrock.",
+      "items": [
+        {
+          "image": "claude-101.png",
+          "name": "Claude 101",
+          "year": "2026"
+        },
+        {
+          "image": "claude-platform-101.png",
+          "name": "Claude Platform 101",
+          "year": "2026"
+        },
+        {
+          "image": "claude-code-101.png",
+          "name": "Claude Code 101",
+          "year": "2026"
+        },
+        {
+          "image": "claude-cowork.png",
+          "name": "Introduction to Claude Cowork",
+          "year": "2026"
+        },
+        {
+          "image": "introduccion-a-mcp.png",
+          "name": "Introduction to MCP",
+          "year": "2026"
+        },
+        {
+          "image": "mcp-advanced-topics.png",
+          "name": "MCP: Advanced Topics",
+          "year": "2026"
+        },
+        {
+          "image": "subagents.png",
+          "name": "Introduction to Subagents",
+          "year": "2026"
+        },
+        {
+          "image": "ai-fluency-frameworks.png",
+          "name": "AI Fluency: Framework & Foundations",
+          "year": "2026"
+        },
+        {
+          "image": "claude-amazon-bedrock.png",
+          "name": "Claude with Amazon Bedrock",
+          "year": "2026"
+        }
+      ]
+    },
+    {
+      "issuer": "AWS",
+      "items": [
+        {
+          "image": "aws-serverless-mindset.png",
+          "name": "Getting into the Serverless Mindset",
+          "year": "2026"
+        }
+      ]
+    },
+    {
+      "issuer": "HackerRank",
+      "items": [
+        {
+          "image": "hackerrank-sql-advanced.webp",
+          "name": "SQL (Advanced)",
+          "verifyUrl": "https://www.hackerrank.com/certificates/ff5b2fc51635",
+          "year": "2024"
+        },
+        {
+          "image": "hackerrank-problem-solving.webp",
+          "name": "Problem Solving (Basic)",
+          "verifyUrl": "https://www.hackerrank.com/certificates/6d1a91ed4d7b",
+          "year": "2024"
+        }
+      ]
+    },
+    {
+      "issuer": "EF SET",
+      "items": [
+        {
+          "image": "ef-set-c2.webp",
+          "name": "English C2 Proficient — 71/100",
+          "verifyUrl": "https://www.efset.org/cert/xpXxq1",
+          "year": "2023"
+        }
+      ]
+    }
+  ],
+  "education": [
+    {
+      "institution": "UTN (National Technological University), Paraná campus",
+      "title": "Associate degree in Programming (Tecnicatura Superior en Programación)",
+      "note": "Final year, on hold"
+    },
+    {
+      "institution": "Henry",
+      "title": "Full Stack Web Developer",
+      "note": "Bootcamp, 700 hours",
+      "year": "2023"
+    }
+  ],
+  "experience": [
+    {
+      "company": "PHINX Lab",
+      "role": "Team Leader & Senior Full Stack Developer",
+      "period": "Dec 2025 – Present",
+      "location": "Remote",
+      "current": true,
+      "context": "AI platform built on an orchestrator plus skills. Senior since joining; Team Leader since June 2026.",
+      "achievements": [
+        "I lead a team of 3 developers: technical planning, code reviews and architecture decisions, while staying hands-on in backend and applied AI.",
+        "I'm the main author of two of the platform's services — a document analysis agent and an MCP server — where the hard problem isn't calling the model but making the system deterministic and operable.",
+        "I designed a two-level orchestration architecture: a central orchestrator that dispatches to 7 structured-extraction skills, each with its own sub-orchestrator.",
+        "The orchestrator is modeled as a state machine: each analysis moves from one step to the next, the same pattern I used for case files at the Entre Ríos Education Council.",
+        "I built a 5-stage multimodal pipeline: vision, OCR, parsing of vector documents as text, regulatory verification and response synthesis.",
+        "I developed the regulatory verification system end to end: modeling and loading the legal corpus, indexing and search, evaluating compliance rules and generating the results report.",
+        "I exposed internal services over MCP — retrieval, technical report generation and document validation — as tools LLMs can consume.",
+        "Output determinism: state and concurrency guards in the analysis pipeline, contract tests for the skills and regression tests with real fixtures, so a prompt change can't silently break the format.",
+        "I instrumented observability: structured logs for Grafana/Loki and a correlation ID that follows each request end to end, from document upload to agent execution.",
+        "I found and removed rules that contradicted each other across different skills in the system: a class of bug that doesn't show up until the agent gives a wrong answer.",
+        "I designed a cached indexing and selective context-loading strategy that significantly reduced LLM usage costs and lowered document retrieval latency.",
+        "I built specialized workers and consensus engines for structured processing and decision-making in AI workflows.",
+        "I integrated models via the Model Context Protocol (MCP) and tool orchestration toward external systems, with agent and subagent architectures.",
+        "I maintain and fix a binary-format parser written in Python and invoked from the TypeScript pipeline: cross-runtime interoperability within a single workflow.",
+        "Earlier (Dec 2025 – Apr 2026), on a school management platform for the education sector, I developed the notifications module end to end: a Node.js and TypeScript service, the integration with the mailing provider, and the React interface."
+      ],
+      "stack": [
+        "Node.js",
+        "TypeScript",
+        "Fastify",
+        "Express",
+        "PostgreSQL",
+        "TypeORM",
+        "Redis",
+        "Python",
+        "React",
+        "Docker",
+        "Grafana/Loki",
+        "AWS (S3, Bedrock)",
+        "MCP"
+      ]
+    },
+    {
+      "company": "Entre Ríos Provincial Education Council (Consejo General de Educación)",
+      "role": "Full Stack Developer",
+      "period": "Jul 2023 – Dec 2025",
+      "location": "Paraná, Entre Ríos, Argentina",
+      "current": false,
+      "context": "Public sector. The Council (CGE) is the governing body of the education system in the province of Entre Ríos, Argentina.",
+      "achievements": [
+        "I developed the province-wide Family Allowance Certificate Upload and Validation System (Salario Familiar): 20,000 to 30,000 requests per annual cycle and close to 50,000 files, with full auditing and traceability. It cut the average processing time from 4 months to 5 weeks.",
+        "I built the file-upload security layer from scratch in plain PHP — type validation, sanitization and access control — with no external libraries, due to a technical constraint set by the agency.",
+        "I led the Case File, Procedure and Internal Memo Management Platform: I digitized the paper-based workflows of more than 10 departments — around 60 people — with tiered permissions, a per-department work queue, traceability and audit logs on every case file.",
+        "I modeled the case file state machine — putting files on hold, closing them and reopening them with a new report — with requirements gathered together with the Payroll department.",
+        "I wrote the manuals and directed the tutorial videos for the system, for the province's entire education community.",
+        "I optimized SQL Server queries and bulk case-file loading, and refactored legacy code with a focus on performance, security and maintainability."
+      ],
+      "stack": [
+        "PHP 7",
+        "SQL Server",
+        "JavaScript (jQuery, AJAX)",
+        "Bootstrap",
+        "HTML5",
+        "CSS3"
+      ]
+    }
+  ],
+  "hero": {
+    "availability": "Full-time · Remote · Able to travel to Buenos Aires up to every 15 days",
+    "eyebrow": "Paraná, Entre Ríos · Argentina",
+    "headline": "Team Leader & Senior Full Stack Developer",
+    "location": "Paraná, Entre Ríos, Argentina",
+    "name": "Santiago Carrattini",
+    "flow": {
+      "caption": "Family allowance (Salario Familiar): the path of a request",
+      "loop": "Rejected: back to upload",
+      "slug": "salario-familiar",
+      "steps": ["Upload", "Validation 1", "Validation 2", "Payroll", "Approved"]
+    },
+    "quickFacts": [
+      {
+        "label": "Experience",
+        "value": "3+ years of professional development"
+      },
+      {
+        "label": "Focus",
+        "value": "Node.js / TypeScript backend · Applied AI: LLMs, agents and MCP"
+      },
+      {
+        "label": "Team",
+        "value": "Leads 3 developers while staying hands-on"
+      },
+      {
+        "label": "Work setup",
+        "value": "Full-time remote · travel to Buenos Aires up to every 15 days"
+      },
+      {
+        "label": "Languages",
+        "value": "Spanish (native) · English C2 (EF SET 71/100) · Italian (advanced)"
+      }
+    ],
+    "resumeUrl": "/cv/santiago-carrattini-cv-en.pdf",
+    "tagline": "I turn processes that live on paper or in spreadsheets into systems that move them from one state to the next. One of them cut a province-wide procedure from 4 months to 5 weeks. Today I do the same with AI agents in Node.js and TypeScript, and I lead a team of 3."
+  },
+  "hobbies": [
+    {
+      "name": "Robotics and electronics",
+      "emphasis": "lead",
+      "detail": "I built an autonomous obstacle-avoiding rover: a 3D-printed chassis, an HC-SR04 ultrasonic sensor for eyes, a breadboard and an Arduino. It's the most literal example of what I enjoy: hardware, software and iterating until it stops crashing into the wall."
+    },
+    {
+      "name": "Guitar",
+      "emphasis": "compact",
+      "detail": "Self-taught since I was twelve. I play rhythm guitar and sing — the instrument that backs others up, not the one that shows off."
+    },
+    {
+      "name": "Reading",
+      "emphasis": "compact",
+      "detail": "From Hemingway to García Lorca, with some Nietzsche in between. And yes, a self-declared Harry Potter fan."
+    },
+    {
+      "name": "Writing",
+      "emphasis": "compact",
+      "detail": "I write poetry. Working an idea until it reads simply is, at heart, the same job as writing good software."
+    },
+    {
+      "name": "Mixology",
+      "emphasis": "compact",
+      "detail": "I took a bartending course as a teenager and I've been inventing my own drinks since I was twenty-one. Experimenting, iterating and balancing variables until it's just right."
+    }
+  ],
+  "languages": [
+    {
+      "name": "Spanish",
+      "level": "Native"
+    },
+    {
+      "name": "English",
+      "level": "C2 certified — EF SET 71/100"
+    },
+    {
+      "name": "Italian",
+      "level": "Advanced"
+    }
+  ],
+  "meta": {
+    "lang": "en"
+  },
+  "pages": {
+    "about": {
+      "description": "How I got into programming, how I think about the work, and what shaped my judgment along the way.",
+      "heading": "About me",
+      "navLabel": "About",
+      "title": "About me — Santiago Carrattini"
+    },
+    "contact": {
+      "description": "Reach me on WhatsApp or by email, whichever works best for you. I'm also on LinkedIn and GitHub.",
+      "heading": "Let's talk",
+      "navLabel": "Contact",
+      "title": "Contact — Santiago Carrattini"
+    },
+    "education": {
+      "description": "Where I studied, the certifications I've earned and the languages I speak. Each certificate opens right here and, when the issuer publishes a verification page, you can check it with them.",
+      "heading": "Education",
+      "navLabel": "Education",
+      "title": "Education and certifications — Santiago Carrattini"
+    },
+    "experience": {
+      "description": "Where I've worked, what I built at each place and with which tools.",
+      "heading": "Experience",
+      "navLabel": "Experience",
+      "title": "Experience — Santiago Carrattini"
+    },
+    "hobbies": {
+      "description": "Robotics, guitar, reading, writing and mixology. What I do when I'm away from the editor.",
+      "heading": "Away from the editor",
+      "navLabel": "Away from the editor",
+      "title": "Away from the editor — Santiago Carrattini"
+    },
+    "home": {
+      "description": "Full Stack Developer with a strong backend foundation (Node.js/TypeScript) and a focus on applied AI: LLM apps, agents and the Model Context Protocol. Leads a team of 3 developers while staying hands-on.",
+      "heading": "Santiago Carrattini",
+      "navLabel": "Home",
+      "title": "Santiago Carrattini — Team Leader & Senior Full Stack Developer"
+    },
+    "projects": {
+      "description": "The systems I've built. The ones with a case study cover the problem, the constraints, the decisions and what I'd do differently today.",
+      "heading": "Projects",
+      "navLabel": "Projects",
+      "title": "Projects — Santiago Carrattini"
+    }
+  },
+  "projects": [
+    {
+      "name": "Family Allowance Certificate Upload and Validation System (Salario Familiar)",
+      "period": "Entre Ríos Education Council · 2023–2025",
+      "status": "verifiable",
+      "description": "Province-wide: used by all school staff in Entre Ríos — teachers, principals, administrative and support staff. Upload, validation and tracking with full auditing and traceability, integrated with SAGE, the province's school management system. It includes a file-upload security layer written from scratch in plain PHP, with no external libraries due to a technical constraint set by the agency.",
+      "result": "Cut the average processing time from 4 months to 5 weeks. 20,000 to 30,000 requests per annual cycle and close to 50,000 files. Eliminated paper forms at every school. Presented at an official event in April 2024.",
+      "tech": [
+        "PHP 7",
+        "SQL Server",
+        "JavaScript",
+        "Bootstrap"
+      ],
+      "image": {
+        "src": "/presentacion-cge.jpg",
+        "alt": "Santiago Carrattini presenting the system in the Education Council's auditorium, with the application projected behind him",
+        "caption": "Presenting the system at an official event — Entre Ríos Education Council, April 2024."
+      },
+      "press": {
+        "outlet": "Consejo General de Educación de Entre Ríos",
+        "title": "Se presentó la nueva modalidad de carga de documentación de asignaciones familiares",
+        "date": "04/04/2024",
+        "quote": "programador y creador del sistema",
+        "url": "https://cge.entrerios.gov.ar/2024/04/se-presento-la-nueva-modalidad-de-carga-de-documentacion-de-asignaciones-familiares/"
+      },
+      "slug": "salario-familiar"
+    },
+    {
+      "name": "Case File, Procedure and Internal Memo Management Platform",
+      "period": "Entre Ríos Education Council · 2023–2025",
+      "status": "internal",
+      "description": "Covers virtually every case file the Council receives that is tied to payroll processes: thousands of case files, more than 10 departments and around 60 people. It isn't a case-file CRUD — it models the administrative workflow as a state machine, with its own authorization layer separate from SAGE's and managed from a dashboard, plus configurable departments, roles and workflow behavior for whatever changes with day-to-day operations.",
+      "tech": [
+        "PHP 7",
+        "Apache",
+        "SQL Server",
+        "PDO/ODBC",
+        "JavaScript (jQuery, AJAX)",
+        "Bootstrap"
+      ],
+      "slug": "tramites-expedientes",
+      "result": "Replaced a workflow built on paper and informal knowledge with an explicit flow of states, owners, permissions and traceability."
+    },
+    {
+      "name": "This portfolio and its chatbot",
+      "period": "2026",
+      "status": "live",
+      "description": "The chatbot injects the full profile as context, with no RAG: the corpus fits in the context window, so retrieval would be over-engineering at this scale — more moving parts, more latency and a new failure mode in exchange for nothing. The decision is documented in the README. The LLM provider sits behind a swappable interface, with hard rules in the prompt, guardrail evals, rate limiting and a kill switch.",
+      "result": "Public, auditable repo. Zero-cost infrastructure.",
+      "tech": [
+        "Next.js",
+        "TypeScript",
+        "Tailwind CSS",
+        "Zod",
+        "Vercel"
+      ],
+      "slug": "portfolio-chatbot"
+    },
+    {
+      "name": "XSports — E-commerce for a gym",
+      "period": "Apr 2022 – Apr 2023",
+      "status": "archived",
+      "description": "Training project: catalog, cart and checkout for a gym, with Passport authentication and Mercado Pago payments. Structured with Clean Architecture and managed with Scrum and Trello.",
+      "tech": [
+        "Node.js",
+        "Express",
+        "TypeScript",
+        "React",
+        "Chakra UI",
+        "PostgreSQL",
+        "Prisma",
+        "Passport",
+        "Mercado Pago"
+      ]
+    }
+  ],
+  "sections": {
+    "about": "About me",
+    "certifications": "Education",
+    "contact": "Contact",
+    "currentRole": "Current role",
+    "experience": "Experience",
+    "featuredProjects": "Featured projects",
+    "hobbies": "Away from the editor",
+    "journey": "How I got here",
+    "projects": "Projects",
+    "skills": "Stack",
+    "testimonials": "Recommendations"
+  },
+  "skills": [
+    {
+      "category": "languages",
+      "label": "Languages",
+      "items": [
+        "TypeScript",
+        "JavaScript",
+        "PHP",
+        "SQL",
+        "Python",
+        "HTML5",
+        "CSS3"
+      ],
+      "note": "I use Python for interoperability and maintenance inside Node pipelines, not to build complete systems. My working language is TypeScript."
+    },
+    {
+      "category": "backend",
+      "label": "Backend and APIs",
+      "items": [
+        "Node.js",
+        "Fastify",
+        "Express",
+        "NestJS",
+        "Laravel",
+        "REST API design"
+      ]
+    },
+    {
+      "category": "ai",
+      "label": "Generative AI",
+      "items": [
+        "LLM apps",
+        "Agents and subagents",
+        "Multimodal pipelines (vision, OCR)",
+        "Two-level multi-agent orchestration",
+        "Model Context Protocol (MCP)",
+        "Prompt and skill engineering",
+        "Multi-provider integration behind a common interface",
+        "Evals and output determinism",
+        "Amazon Bedrock"
+      ],
+      "note": "I work against a production RAG system and know its architecture in depth, but I didn't build the retrieval service: my work is the agents and skills that consume it."
+    },
+    {
+      "category": "frontend",
+      "label": "Frontend",
+      "items": [
+        "React",
+        "Next.js",
+        "Redux",
+        "Tailwind CSS",
+        "Bootstrap"
+      ],
+      "note": "I use Next.js in this portfolio (App Router and Server Components); in commercial production I work with React."
+    },
+    {
+      "category": "databases",
+      "label": "Databases and ORMs",
+      "items": [
+        "PostgreSQL",
+        "SQL Server",
+        "Redis",
+        "TypeORM",
+        "Prisma"
+      ]
+    },
+    {
+      "category": "devops",
+      "label": "DevOps",
+      "items": [
+        "Docker",
+        "Nginx",
+        "Git",
+        "AWS (S3, Bedrock; serverless fundamentals)"
+      ]
+    },
+    {
+      "category": "practices",
+      "label": "Practices and testing",
+      "items": [
+        "SOLID",
+        "Clean Code",
+        "OOP",
+        "Modular architecture",
+        "Performance optimization",
+        "Jest",
+        "Scrum"
+      ]
+    }
+  ],
+  "testimonials": [
+    {
+      "author": "Ivan Palachuk",
+      "role": "Sr. Full Stack Developer",
+      "relation": "reported-to-santiago",
+      "quote": "Either he reads minds, or he's a Lead who has the whole project and the next steps in his head. (…) The real MVP.",
+      "url": "https://www.linkedin.com/in/ivan-palachuk-frontend/"
+    },
+    {
+      "author": "Nicolás Viruel",
+      "role": "Full Stack Developer, PHINX Lab",
+      "relation": "reported-to-santiago",
+      "quote": "He stands out for his technical judgment and his ability to analyze problems and propose clear solutions. (…) I was able to see his growth and his profile for taking on greater responsibilities, especially in his move into a technical leadership role. I have no doubt Santi can add a lot of value to any team.",
+      "url": "https://www.linkedin.com/in/nicolasviruel6776/"
+    },
+    {
+      "author": "Gabriel A. Franco Cabrera",
+      "role": "Full Stack Developer",
+      "relation": "santiagos-lead",
+      "quote": "His analytical and problem-solving skills are extremely strong, and his knowledge is incredible: languages, frameworks, best practices, architecture and infrastructure, artificial intelligence. (…) Always willing to teach and to keep learning.",
+      "url": "https://www.linkedin.com/in/gabrielfrancoc/"
+    }
+  ],
+  "ui": {
+    "aboutCta": "Read the long version",
+    "aboutTeaserEyebrow": "About me",
+    "breadcrumbLabel": "Breadcrumb",
+    "carouselRole": "carousel",
+    "carouselSlideRole": "slide",
+    "caseStudyContactCta": "Let's talk about this project",
+    "caseStudyLink": "Read the case study",
+    "certificateClose": "Close",
+    "certificateFullSize": "Open full size",
+    "certificateOpen": "View certificate",
+    "certificateVerify": "Verify with the issuer",
+    "chatClose": "Close",
+    "chatDisclaimer": "Answers only about Santiago's profile. Questions are processed by a third-party model.",
+    "chatError": "I couldn't answer. It may be a temporary problem.",
+    "chatGreeting": "Hi, I'm Raukar: this portfolio's assistant, a miniature version of Santiago. I know his experience, projects, stack and education. Ask me anything, or tell me which section you're looking for and I'll take you there.",
+    "chatLauncher": "Talk to Raukar",
+    "chatPlaceholder": "Type your question",
+    "chatReady": "Answer ready",
+    "chatRetry": "Try again",
+    "chatSend": "Send",
+    "chatThinking": "Answering…",
+    "chatTitle": "Raukar",
+    "contactEmail": "Email me",
+    "contactIntro": "Available full-time, remotely. Willing to travel to Buenos Aires for occasional in-person meetings, up to once every fifteen days. Reach me wherever is most convenient for you.",
+    "contactWhatsApp": "Message me on WhatsApp",
+    "currentBadge": "Current",
+    "footerAvailabilityLabel": "Availability",
+    "footerContactLabel": "Contact",
+    "footerCvLink": "Résumé (PDF)",
+    "footerDownloadLabel": "Download",
+    "footerRepoLink": "Source code of this site",
+    "heroContactCta": "Let's talk",
+    "navLabel": "Main navigation",
+    "photoAlt": "Black and white portrait of Santiago Carrattini",
+    "photoCaption": "Santiago Carrattini",
+    "pressEyebrow": "Press",
+    "pressIntro": "The agency's official article (in Spanish) credits me as",
+    "projectArchived": "Closed project — no repository or demo",
+    "projectInternal": "Internal agency system — no repository or public demo",
+    "quickFactsLabel": "At a glance",
+    "relationLead": "Santiago's lead",
+    "relationReportedTo": "Reported to Santiago",
+    "resumeCta": "Download résumé (PDF)",
+    "roverAlt": "Two-wheeled rover with a 3D-printed chassis, Arduino board, breadboard and HC-SR04 ultrasonic sensor",
+    "roverCaption": "Obstacle-avoiding rover: Arduino, HC-SR04 and a printed chassis.",
+    "skipToContent": "Skip to content",
+    "testimonialTranslated": "Translated from Spanish.",
+    "themeToggle": "Toggle theme",
+    "verifiableBadge": "Verifiable",
+    "viewExperience": "See the full experience",
+    "viewProjects": "See all projects"
+  }
+}

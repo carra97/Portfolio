@@ -43,7 +43,12 @@ export function Testimonials({
           className="flex w-[85%] shrink-0 snap-center flex-col rounded-xl border border-line bg-surface p-6 md:w-auto md:shrink"
           role="group"
         >
-          <blockquote className="flex-1 text-pretty">“{testimonial.quote}”</blockquote>
+          <blockquote className="flex-1 text-pretty">
+            “{testimonial.quote}”
+            {ui.testimonialTranslated && (
+              <p className="small mt-3">{ui.testimonialTranslated}</p>
+            )}
+          </blockquote>
           <figcaption className="mt-5 border-t border-line pt-4">
             <p className="text-heading">
               {testimonial.url ? (

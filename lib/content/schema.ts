@@ -335,6 +335,12 @@ export const uiStringsSchema = z
     roverAlt: text,
     roverCaption: text,
     skipToContent: text,
+    /**
+     * Aviso bajo cada recomendación cuando la cita es una traducción. Las originales
+     * están en español en LinkedIn: presentar una traducción como cita textual sería
+     * inventarle palabras a otra persona. En español no hace falta.
+     */
+    testimonialTranslated: text.optional(),
     themeToggle: text,
     verifiableBadge: text,
     viewExperience: text,

@@ -1,0 +1,242 @@
+[
+  {
+    "slug": "salario-familiar",
+    "lang": "en",
+    "title": "Family Allowance Certificate Upload and Validation System (Salario Familiar)",
+    "summary": "Province-wide digitization of a paper-based procedure: average processing time down from 4 months to 5 weeks, with a concentrated annual cycle of 20,000 to 30,000 case files and close to 50,000 files, on a legacy stack and without being able to install a single external library.",
+    "context": "The Entre Ríos Provincial Education Council (Consejo General de Educación) is the governing body of the education system in the province of Entre Ríos, Argentina. The system is province-wide: it's used by all school staff — teachers, principals, administrative and support staff — not just the Council's own employees.",
+    "problem": [
+      "The family allowance procedure was done on paper. Each school kept its own paper forms, and the documents traveled to the Payroll department to be validated by hand.",
+      "The volume isn't continuous: it's concentrated in a single three-to-four-month cycle each year, with 20,000 to 30,000 requests. Each request carries two files and goes through two validation stages, so the cycle moves around 50,000 files in a short window.",
+      "On paper there was no way to answer two basic questions: where is my request, and who validated what. Without traceability, every inquiry was a manual search."
+    ],
+    "constraints": [
+      "Non-negotiable legacy stack: PHP 7 and SQL Server. The agency wasn't going to migrate for this project.",
+      "Technical constraint set by the agency: no external libraries could be installed. Anything that didn't ship with PHP had to be written.",
+      "Mandatory integration with SAGE, the province's school management system already in use.",
+      "The end users are all school staff in the province, the vast majority with no technical background and uneven connectivity.",
+      "The peak is seasonal and can't be postponed: if the system fails during the cycle, the procedure doesn't wait until next year."
+    ],
+    "decisions": [
+      {
+        "title": "Write the file-upload security layer from scratch, in plain PHP",
+        "rationale": "File uploads are the most dangerous attack surface of a public system: if it accepts anything, the server ends up running whatever it's sent. With no libraries available, I implemented real type validation, filename sanitization and access control on downloads, all with the language's own primitives.",
+        "tradeoff": "In-house security code is in-house code to maintain and audit, without the years of public scrutiny an established library has behind it. I accepted it because the alternative wasn't using a library, it was not validating at all."
+      },
+      {
+        "title": "Auditing and traceability inside the data model, not as an attached log",
+        "rationale": "In a procedure that affects someone's paycheck, the question “who validated this and when” isn't a diagnostic: it's part of the case file. Modeling it in the database, rather than in a separate log file, turns the answer into a query instead of an investigation.",
+        "tradeoff": "More writes per request and a heavier schema. In exchange, the traceability can't be lost or rotated away by accident."
+      },
+      {
+        "title": "Two validation stages per request",
+        "rationale": "Splitting validation makes it possible to stop an incomplete case file before it reaches payroll, which is where an error costs real money and rework.",
+        "tradeoff": "One more step for the user and twice the files to process. The cost is paid during the cycle; the error, in someone's salary."
+      },
+      {
+        "title": "Document in two formats: a written manual and tutorial videos",
+        "rationale": "I wrote the manuals as PDFs, but for a province-wide audience with no technical background a document isn't enough: some people will never open it. I also directed the tutorial videos, which show the real screen step by step and were shared with the entire education community. It wasn't choosing one or the other: it was covering both the people who read and the people who don't.",
+        "tradeoff": "Two materials to maintain instead of one. If the interface changes, both have to be redone, and the video is the expensive one. For a system with a single cycle per year, the trade is worth it."
+      }
+    ],
+    "architecture": "PHP 7 backend on SQL Server, with the database modeled around the case file and its validation states. The frontend is JavaScript with jQuery and AJAX so that uploading and tracking don't require reloading the page on slow connections. The file layer is separate from the rest: it receives, validates, sanitizes and only then persists, and every download goes through access control instead of being served straight from the filesystem. Tracking queries and bulk loading are optimized for the cycle's peak, which is when the system is really put to the test.",
+    "metrics": [
+      {
+        "label": "Processing time",
+        "value": "4 months → 5 weeks",
+        "note": "Average per request, before and after"
+      },
+      {
+        "label": "Requests per cycle",
+        "value": "20,000–30,000",
+        "note": "A single annual cycle of 3 to 4 months"
+      },
+      {
+        "label": "Files processed",
+        "value": "≈50,000",
+        "note": "2 files and 2 validation stages per request"
+      }
+    ],
+    "outcome": [
+      "Cut the average processing time from 4 months to 5 weeks.",
+      "Eliminated paper forms at every school in the province.",
+      "Presented at an official event in the Education Council's auditorium in April 2024.",
+      "The agency's official press release credits me as the system's programmer and creator. It's the most verifiable item in my profile, because I didn't write it."
+    ],
+    "retrospective": [
+      "I'd move validation out of the request. During the cycle's peak, doing all the work synchronously turns every slowdown into a wait for the user; a simple queue would have absorbed the peak without touching the experience.",
+      "I'd take the files off the application's filesystem. Separate storage with short-lived signed URLs reduces the attack surface and means growth no longer depends on the server's disk.",
+      "I'd write automated tests for the upload layer. It's the riskiest component and the one I touched by hand the most: exactly where a test suite pays for itself.",
+      "I raised the no-external-libraries constraint and documented it in writing at the time; it was never lifted. What I'd change today isn't having pushed back, but how: bring it as a concrete risk with an estimated cost instead of a technical argument. In a public agency a constraint moves when someone can sign off on the risk, not when they understand the reasoning."
+    ],
+    "tech": [
+      "PHP 7",
+      "SQL Server",
+      "JavaScript",
+      "jQuery",
+      "AJAX",
+      "Bootstrap"
+    ],
+    "flow": {
+      "caption": "The path of a request",
+      "loop": "Rejected: back to upload",
+      "steps": [
+        "Upload",
+        "Validation 1",
+        "Validation 2",
+        "Payroll",
+        "Approved"
+      ]
+    }
+  },
+  {
+    "slug": "tramites-expedientes",
+    "lang": "en",
+    "title": "Case File, Procedure and Internal Memo Management Platform",
+    "summary": "An administrative workflow that lived on paper and in people's memory, turned into an explicit workflow: a state machine, its own authorization layer and configuration for what actually changed. Thousands of case files, more than 10 departments and around 60 people, on PHP 7 and SQL Server, without being able to add a single external library.",
+    "context": "The Entre Ríos Provincial Education Council (Consejo General de Educación) is the governing body of the education system in the province of Entre Ríos, Argentina. The system is internal to the agency and covers virtually every case file the Council receives that is tied to payroll processes.",
+    "problem": [
+      "Before digitization, the workflow depended on paper and on the informal knowledge of the people involved in each process. Finding out where a case file was, who had it and what had happened to it meant asking around.",
+      "Exceptions and special cases weren't written down anywhere: they lived in the heads of the people who had seen them before. When that person wasn't around, the case file stalled.",
+      "Case files could end up in wrong or stuck states, and keeping track of responsibilities across departments was hard.",
+      "Rules, contracts and permissions changed often, so a rigid workflow broke as soon as real operations changed."
+    ],
+    "constraints": [
+      "There was no freedom to add frameworks, libraries or external services. Anything that didn't come with PHP, SQL or JavaScript had to be written.",
+      "Constraints of the agency's own infrastructure and limited resources.",
+      "The work was on legacy technology and existing code, not a greenfield project.",
+      "SAGE, the province's school management system, already had its own scheme of general roles and permissions, but it wasn't enough to represent the rules of the payroll module."
+    ],
+    "decisions": [
+      {
+        "title": "An explicit state machine instead of independent flags",
+        "rationale": "The current state determines which stage and which department the case file is in, and which operations can be performed on it. Several loose boolean flags allow combinations that don't exist in the real workflow, and those are exactly the combinations that leave case files stuck.",
+        "tradeoff": "More upfront complexity: every transition and every exception has to be modeled carefully before writing code. In exchange, the workflow stays consistent and under control."
+      },
+      {
+        "title": "A role and permission system of the module's own, separate from SAGE's",
+        "rationale": "SAGE's general permissions didn't capture what the payroll workflow needed: that certain owners and managers could review or change other users' decisions, while everyone else had a narrower scope. Since roles changed often, they're managed from a dashboard rather than by editing the database by hand.",
+        "tradeoff": "A second authorization layer to maintain and keep consistent with the first. The benefit is independence from SAGE and being able to adapt the module's permissions at the pace they actually change."
+      },
+      {
+        "title": "Make configurable what changes, keep in code what doesn't",
+        "rationale": "Departments, responsibilities and permissions changed with operations, and each change couldn't mean a deployment. That's what the configuration targets: departments, roles and permissions, and workflow behavior.",
+        "tradeoff": "More upfront effort and more validation to write. The risk at the other extreme — making everything configurable — is ending up with dynamic logic that's hard to read and maintain, so the line was drawn at what actually changed."
+      }
+    ],
+    "architecture": "The case file is the central entity and its state drives the workflow: which stage it's in, which department, and which operations it allows. On top of that run two authorization layers — SAGE's general one and the payroll module's own, managed from a dashboard — and a configuration layer for departments, roles and workflow behavior. PHP 7 backend on Apache, SQL Server access through PDO/ODBC, and a JavaScript frontend with jQuery and AJAX on Bootstrap.",
+    "outcome": [
+      "The workflow stopped being paper and informal knowledge and became an explicit flow, with states, owners, permissions and tracking.",
+      "It covers virtually every payroll-related case file the Council receives: thousands of case files, more than 10 departments and around 60 people with different responsibilities within the workflow.",
+      "A good part of the work wasn't adding features but diagnosing and fixing what was already broken: states that got stuck, workflow inconsistencies, duplicates from badly built JOINs, N+1 problems and expensive queries."
+    ],
+    "retrospective": [
+      "I'd keep the two core decisions: the state machine and the separation between general authorization and domain-specific permissions. They fit the problem well. What I'd change is the implementation.",
+      "A more modular architecture, with workflow, authorization, persistence and presentation separated, and a more explicit domain model.",
+      "Automated tests on transitions and authorization. Those are the two areas where an error stays invisible until a case file ends up where it shouldn't.",
+      "Explicit concurrency and transaction control. The system had real concurrency problems and that's the answer that was missing.",
+      "Structured auditing of every transition: who, when, previous state and new state. Not a generic movement log.",
+      "Observability from day one, to catch slow queries, workflow errors and degradations without waiting for someone to report them.",
+      "A clearer line between the rules that are configurable and the ones that belong in code: the goal is to keep the flexibility without turning the system into dynamic logic that's hard to maintain."
+    ],
+    "tech": [
+      "PHP 7",
+      "Apache",
+      "SQL Server",
+      "PDO/ODBC",
+      "JavaScript",
+      "jQuery",
+      "AJAX",
+      "Bootstrap"
+    ],
+    "flow": {
+      "caption": "The path of a case file",
+      "loop": "Reopened: back to upload, keeping its history",
+      "loopFrom": 4,
+      "steps": [
+        "Upload",
+        "Sent",
+        "Received",
+        "In progress",
+        "On hold / Closed"
+      ]
+    }
+  },
+  {
+    "slug": "portfolio-chatbot",
+    "lang": "en",
+    "title": "This portfolio and its chatbot",
+    "summary": "The only project in my profile that whoever evaluates me can audit in full: the repository is public and every architecture decision is justified in writing, including the decision not to use RAG.",
+    "context": "A portfolio with a chatbot that answers questions about my professional profile. I built it in public, with an open repository, because in an applied-AI profile verifiable code is worth more than the description of a project nobody can open.",
+    "problem": [
+      "A résumé makes claims and you have to take its word for it. I wanted at least one project in my profile to be fully auditable by whoever reads it.",
+      "The chatbot adds a risk a static site doesn't have: a model endpoint exposed to the internet is, without limits, an open bill for anyone who finds the URL.",
+      "The content has to stay consistent across the site, the bot and my résumé. Three places stating the same thing will drift apart; it's a matter of time, not discipline."
+    ],
+    "constraints": [
+      "Zero infrastructure cost.",
+      "Public repository: any bad decision is out in the open, and no sensitive data can make it into the Git history.",
+      "The site has to be fully usable with the chatbot turned off.",
+      "A single source of truth for facts: if a fact isn't in the dossier, it doesn't exist for the site or the bot."
+    ],
+    "decisions": [
+      {
+        "title": "No RAG, on purpose",
+        "rationale": "The full corpus of my profile fits comfortably in the model's context window. The rule is that retrieval is justified when the corpus does NOT fit; that's not the case here. It's the decision I'm proudest of in this project, because the easy answer was to add a vector store and say I do RAG.",
+        "tradeoff": "Every call sends the whole corpus, so the cost per request is higher and grows if the corpus grows. At this scale it's irrelevant, and the day it stops being so, the condition for revisiting the decision is already written down."
+      },
+      {
+        "title": "The LLM provider behind an interface",
+        "rationale": "The provider is the dependency most likely to change — for price, availability or quality — and the easiest to isolate. An environment variable selects the implementation and the rest of the code doesn't know which one is active. The abstraction was put to the test sooner than expected: switching providers meant adding one file and one case in the factory, without touching the endpoint, the widget or the corpus.",
+        "tradeoff": "A layer of indirection up front, which I normally avoid. I accept it here because the axis of change is identified, not assumed."
+      },
+      {
+        "title": "Content in typed JSON, no CMS",
+        "rationale": "The content changes a few times a year and only one person edits it. The type schema is the barrier: a project marked as archived can't be rendered as a link, and a recommendation can't exist without declaring the author's relationship to me. The compiler enforces those rules, not memory.",
+        "tradeoff": "Editing content requires a commit. That's acceptable, even desirable: every change to a public claim stays in the history."
+      },
+      {
+        "title": "Environment validated with Zod, failing at build time",
+        "rationale": "Two requirements that contradict each other: the repo has to build right after cloning without credentials, and a malformed value can't reach production. The solution is that nothing is required but everything validates its shape when present. Absent means a planned degradation; present and invalid means a broken build.",
+        "tradeoff": "It's more code to read than using `process.env` directly, and it forces you to think about what happens visually when each variable is missing."
+      },
+      {
+        "title": "Rate limiting and a spending cap as a startup condition",
+        "rationale": "The chat is only enabled if the kill switch is on and both the provider key and the rate-limit backend are present. If any of the three is missing, the chat stays off and the full site is still served.",
+        "tradeoff": "More configuration before the endpoint's first deploy. I'd rather have a portfolio without a chat than a chat usable as free compute."
+      }
+    ],
+    "architecture": "Next.js with the App Router and TypeScript. The site is prerendered as static pages and uses Server Components by default: client-side JavaScript is limited to what really needs interaction — the theme toggle, the recommendations carousel, the certificate viewer and the chat — and with the chat turned off, not even the widget's code is shipped. The content lives in typed JSON validated against the schema at build time, so data that breaks the contract breaks the build instead of the page. The chatbot is a Route Handler that injects the full corpus as context, with the provider behind a swappable interface, hard rules in the prompt, per-IP rate limiting and a kill switch. User input always travels in its own turn, never concatenated into the system prompt.",
+    "outcome": [
+      "A public, auditable repository, with a README that works as a decision log.",
+      "Zero-cost infrastructure.",
+      "The site works in full with the chatbot turned off, which was the main design requirement.",
+      "A content guardrail runs before every build and breaks the compilation if a fact I decided not to publish shows up: the rule enforces itself instead of depending on me remembering it.",
+      "A set of reference questions checks the bot's behavior against the real endpoint — validation and limits included — before the system prompt is touched."
+    ],
+    "retrospective": [
+      "The chatbot isn't deployed yet: the static site goes first. It's a sequence I set for myself on purpose, because the temptation to show off the bot before the rest is solid is strong.",
+      "The set of reference questions exists and runs against the real endpoint, but I still trigger it by hand. It should run in continuous integration on every system prompt change: as long as it depends on me remembering, it isn't a guarantee.",
+      "The rate limiter fails open on purpose: if the counter doesn't respond, requests go through. That's only defensible because the provider's free tier enforces the spending ceiling outside the code. The day the account has billing enabled, the decision has to be revisited — and it's the kind of assumption that ages silently."
+    ],
+    "tech": [
+      "Next.js",
+      "TypeScript",
+      "Tailwind CSS",
+      "Zod",
+      "Vercel"
+    ],
+    "flow": {
+      "caption": "The path of a question",
+      "loop": "Provider failure: notice and retry",
+      "loopFrom": 3,
+      "steps": [
+        "Question",
+        "Validation (Zod)",
+        "Per-IP rate limit",
+        "Prompt + full corpus",
+        "Streaming answer"
+      ]
+    }
+  }
+]
