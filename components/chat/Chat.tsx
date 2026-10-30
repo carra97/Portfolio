@@ -213,7 +213,7 @@ export function Chat({ avatar, labels, lang, routes }: ChatProps) {
       {open && (
         <section
           aria-label={labels.title}
-          className="flex h-[min(70dvh,32rem)] w-[min(92vw,24rem)] flex-col overflow-hidden rounded-xl border border-line bg-surface shadow-2xl shadow-black/40"
+          className="flex h-[min(70dvh,32rem)] w-[min(92vw,24rem)] flex-col overflow-hidden rounded-xl border border-line bg-surface"
           role="dialog"
         >
           <header className="flex items-start justify-between gap-4 border-b border-line p-4">
@@ -221,12 +221,8 @@ export function Chat({ avatar, labels, lang, routes }: ChatProps) {
                 hilo: decir lo mismo en la cabecera y adentro es la clase de repetición
                 que hace que un asistente se sienta un formulario. */}
             <div className="flex items-center gap-2.5">
-              <Avatar
-                size="sm"
-                sources={avatar}
-                state={status === 'streaming' ? 'thinking' : 'idle'}
-              />
-              <p className="eyebrow">{labels.title}</p>
+              <Avatar sources={avatar} state={status === 'streaming' ? 'thinking' : 'idle'} />
+              <p className="text-sm font-medium text-heading">{labels.title}</p>
             </div>
             <button
               aria-label={labels.close}
@@ -279,7 +275,7 @@ export function Chat({ avatar, labels, lang, routes }: ChatProps) {
             */}
             {status === 'streaming' && !messages.some(isStreamingAssistant) && (
               <div aria-hidden="true" className="flex items-center gap-2.5">
-                <Avatar size="sm" sources={avatar} state="thinking" />
+                <Avatar sources={avatar} state="thinking" />
                 <span className="flex items-center gap-1 rounded-full border border-line px-3 py-2.5">
                   {[0, 1, 2].map((index) => (
                     <span
@@ -349,19 +345,22 @@ export function Chat({ avatar, labels, lang, routes }: ChatProps) {
 
       {/* Sin saludo proactivo. Existió y tapaba el CTA y la ficha del hero en mobile,
           justo a quien entra por primera vez: un elemento flotante no tapa contenido
-          sin que la persona lo pida. La presentación vive adentro del panel. */}
+          sin que la persona lo pida. La presentación vive adentro del panel.
+
+          Neutro y no relleno de acento: el CTA de la página es "Hablemos", y dos
+          botones marrones compitiendo en el mismo viewport le restan a los dos. En un
+          teléfono queda solo el avatar —el nombre ya está en `aria-label`—, para no
+          tapar texto en una pantalla de 375px. */}
       <button
         aria-expanded={open}
         aria-label={open ? labels.close : labels.launcher}
-        className="flex items-center gap-2.5 rounded-full bg-accent py-2 pl-2 pr-4 text-accent-on shadow-xl shadow-black/40 transition-colors duration-150 hover:bg-accent-hover"
+        className="flex items-center gap-2.5 rounded-full border border-line bg-surface p-1.5 text-sm text-heading transition-colors duration-150 hover:border-line-strong md:pr-4"
         onClick={() => (open ? close() : setOpen(true))}
         ref={launcherRef}
         type="button"
       >
-        <Avatar size="md" sources={avatar} tone="inverse" />
-        <span className="font-mono text-xs uppercase tracking-[0.12em]">
-          {open ? labels.close : labels.launcher}
-        </span>
+        <Avatar sources={avatar} />
+        <span className="max-md:hidden">{open ? labels.close : labels.launcher}</span>
       </button>
     </div>
   );
@@ -382,34 +381,17 @@ export function Chat({ avatar, labels, lang, routes }: ChatProps) {
  * comunica estado (DISENO.md §5). Un muñeco que respira en una esquina de cada página
  * es un loop permanente compitiendo con la lectura.
  */
-const AVATAR_BOX: Readonly<Record<AvatarSize, string>> = {
-  md: 'h-10 w-10',
-  sm: 'h-8 w-8',
-};
-
-type AvatarSize = 'md' | 'sm';
 type AvatarState = 'idle' | 'thinking';
 
-function Avatar({
-  size,
-  sources,
-  state = 'idle',
-  tone = 'accent',
-}: {
-  size: AvatarSize;
-  sources: AvatarSources;
-  state?: AvatarState;
-  tone?: 'accent' | 'inverse';
-}) {
-  const box = AVATAR_BOX[size];
+function Avatar({ sources, state = 'idle' }: { sources: AvatarSources; state?: AvatarState }) {
+  const box = 'h-8 w-8';
   const motion = state === 'thinking' ? 'raukar-thinking raukar-ring' : '';
 
   if (!sources.base) {
-    const colors = tone === 'inverse' ? 'bg-accent-on/15 text-accent-on' : 'bg-accent-bg text-accent';
     return (
       <span
         aria-hidden="true"
-        className={`${box} ${colors} ${motion} relative grid shrink-0 place-items-center rounded-full font-mono text-sm font-medium`}
+        className={`${box} ${motion} relative grid shrink-0 place-items-center rounded-full bg-accent-bg font-mono text-sm font-medium text-accent`}
       >
         R
       </span>
