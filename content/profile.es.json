@@ -103,7 +103,7 @@
         },
         {
           "image": "ai-fluency-frameworks.png",
-          "name": "AI Fluency: Frameworks & Foundations",
+          "name": "AI Fluency: Framework & Foundations",
           "year": "2026"
         },
         {
@@ -177,26 +177,31 @@
         "Lidero un equipo de 3 desarrolladores: planificación técnica, code reviews y decisiones de arquitectura, manteniéndome hands-on en backend e IA aplicada.",
         "Soy autor principal de dos servicios de la plataforma — un agente de análisis documental y un servidor MCP —, donde el problema difícil no es llamar al modelo sino que el sistema sea determinista y operable.",
         "Diseñé una arquitectura de orquestación en dos niveles: un orquestador central que despacha a 7 skills de extracción estructurada, cada una con su propio sub-orquestador.",
+        "El orquestador está modelado como una máquina de estados: cada análisis avanza de un paso al siguiente, el mismo patrón que usé para los expedientes en el Consejo General de Educación.",
         "Construí un pipeline multimodal de 5 etapas: visión, OCR, parseo de documentos vectorizados como texto, verificación normativa y síntesis de respuesta.",
         "Desarrollé de punta a punta el sistema de verificación normativa: modelado y carga del corpus legal, indexación y búsqueda, evaluación de reglas de compliance y generación del informe de resultados.",
         "Expuse los servicios internos vía MCP —recuperación, generación de informes técnicos y validación documental— como herramientas consumibles por LLMs.",
         "Determinismo de salida: guardas de estado y concurrencia en el pipeline de análisis, tests de contrato para las skills y regresión con fixtures reales, para que un cambio de prompt no rompa el formato en silencio.",
+        "Instrumenté la observabilidad: logs estructurados para Grafana/Loki y un ID de correlación que sigue cada pedido de punta a punta, desde la carga del documento hasta la ejecución del agente.",
         "Detecté y eliminé reglas que se contradecían entre distintas skills del sistema: una clase de bug que no aparece hasta que el agente responde mal.",
         "Diseñé una estrategia de indexación cacheada y carga selectiva de contexto que redujo significativamente los costos de consumo de LLM y bajó la latencia de recuperación documental.",
         "Construí workers especializados y motores de consenso para procesamiento estructurado y toma de decisiones en flujos de IA.",
         "Integré modelos vía Model Context Protocol (MCP) y orquestación de herramientas hacia sistemas externos, con arquitecturas de agentes y subagentes.",
-        "Mantengo y corrijo un parser de formato binario escrito en Python, invocado desde el pipeline TypeScript: interoperabilidad entre runtimes dentro de un mismo flujo."
+        "Mantengo y corrijo un parser de formato binario escrito en Python, invocado desde el pipeline TypeScript: interoperabilidad entre runtimes dentro de un mismo flujo.",
+        "Antes (dic 2025 – abr 2026), en una plataforma de gestión escolar del sector educativo, desarrollé de punta a punta el módulo de notificaciones: servicio en Node.js y TypeScript, integración con el proveedor de mailing e interfaz en React."
       ],
       "stack": [
         "Node.js",
         "TypeScript",
         "Fastify",
+        "Express",
         "PostgreSQL",
         "TypeORM",
         "Redis",
         "Python",
         "React",
         "Docker",
+        "Grafana/Loki",
         "AWS (S3, Bedrock)",
         "MCP"
       ]
@@ -486,10 +491,12 @@
       "label": "Frontend",
       "items": [
         "React",
+        "Next.js",
         "Redux",
         "Tailwind CSS",
         "Bootstrap"
-      ]
+      ],
+      "note": "Next.js lo uso en este portfolio (App Router y Server Components); en producción comercial trabajo con React."
     },
     {
       "category": "databases",
