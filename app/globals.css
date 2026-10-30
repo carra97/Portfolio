@@ -611,11 +611,11 @@ b {
     border-color: var(--border-strong);
   }
   12%,
-  50% {
+  46% {
     background-color: var(--accent);
     border-color: var(--accent);
   }
-  75%,
+  54%,
   100% {
     background-color: var(--border-strong);
     border-color: var(--border-strong);
