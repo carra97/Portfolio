@@ -25,6 +25,9 @@
   --accent-on: #0c0b0a;
   --state-ok: #8fae93;
   --state-error: #ce8e86;
+  /* Tinta de sello. En oscuro es el mismo marrón del acento: no suma un color. */
+  --stamp: #c49a6c;
+  --stamp-blend: normal;
 
   --dur-fast: 150ms;
   --dur-base: 250ms;
@@ -32,25 +35,32 @@
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
+/* Rev. 6: el claro deja de ser un beige genérico y pasa a ser papel de oficina pública
+   —manila, tinta azul-negra y sello violeta—. Es el modo donde el expediente se ve
+   literal; el marrón sigue siendo el acento de CTA y links. Contrastes (AA, texto chico):
+   muted #5f5d59 sobre página 5.1:1; acento sobre página 5.6:1. */
 [data-theme='light'] {
   color-scheme: light;
 
-  --bg-page: #faf7f1;
-  --bg-surface: #ffffff;
-  --bg-hover: #f0ebe1;
-  --border: #e6e0d4;
-  --border-strong: #d3ccbf;
-  --text-heading: #1a1511;
-  --text-body: #4b4740;
-  --text-muted: #6e6961;
-  --beige-quiet: #6e6961;
+  --bg-page: #ece3cf;
+  --bg-surface: #f5efe2;
+  --bg-hover: #e4d9c0;
+  --border: #cbbd9c;
+  --border-strong: #b3a37f;
+  --text-heading: #1d2230;
+  --text-body: #43454e;
+  --text-muted: #5f5d59;
+  --beige-quiet: #5f5d59;
   --accent: #6f5230;
   --accent-hover: #573f22;
-  --accent-dim: #d3ccbf;
-  --accent-bg: #f0ebe1;
-  --accent-on: #faf7f1;
+  --accent-dim: #cbbd9c;
+  --accent-bg: #e4d9c0;
+  --accent-on: #f5efe2;
   --state-ok: #3a6b45;
   --state-error: #a03f36;
+  --stamp: #5b3d8c;
+  /* Multiplica sobre el papel, como la tinta de un sello de verdad. */
+  --stamp-blend: multiply;
 }
 
 @theme inline {
@@ -170,6 +180,37 @@
   color: var(--accent);
 }
 
+/**
+ * Sello de estado ("Resuelto", "Disponible"). La única etiqueta en mayúsculas y a 700
+ * del sitio, y es a propósito: es el vernáculo del sello de goma, no un rótulo de UI.
+ * Lleva dos `<span>`: la palabra y una nota con el dato que la respalda.
+ */
+@utility stamp {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  border: 2px solid currentColor;
+  border-radius: 3px;
+  padding: 0.375rem 0.75rem;
+  color: var(--stamp);
+  line-height: 1.2;
+  text-align: center;
+  transform: rotate(-4deg);
+  mix-blend-mode: var(--stamp-blend);
+
+  & > :first-child {
+    font-size: 0.9375rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  & > :last-child {
+    font-size: 0.8125rem;
+    white-space: nowrap;
+  }
+}
+
 /* Tecnología de un stack. */
 @utility tag {
   border: 1px solid var(--border);
@@ -264,6 +305,17 @@ b {
   font-weight: 500;
   letter-spacing: -0.035em;
   color: var(--text-heading);
+}
+
+/* El `<h1>` del home: la tesis, no el nombre. Más grande que `.display` porque es la
+   frase que tiene que leerse sola; balanceada para que no quede una palabra viuda. */
+.display-hero {
+  font-size: clamp(2.25rem, 5.6vw, 4.5rem);
+  line-height: 1.02;
+  font-weight: 500;
+  letter-spacing: -0.035em;
+  color: var(--text-heading);
+  text-wrap: balance;
 }
 
 /* Escalón de display para páginas internas y case studies: antes se forzaba con
@@ -569,6 +621,143 @@ b {
     background-color: var(--accent);
     border-color: var(--accent);
   }
+}
+
+/* ── Variante a lo ancho, para el home (`StateFlow wide`) ──────────────────────
+   En desktop el recorrido se lee de izquierda a derecha, a todo el ancho: es el
+   momento firma y ocupa el lugar que antes tenía el nombre. Más lento que la versión
+   vertical, porque es el único movimiento de la página y se mira, no se escanea.
+   En un teléfono vuelve a la lista vertical de siempre. */
+
+.flow-wide {
+  --flow-step-delay: 420ms;
+  --flow-start: 300ms;
+}
+
+@media (width >= 48rem) {
+  .flow-wide .flow-list {
+    display: grid;
+    grid-template-columns: repeat(var(--flow-cols), minmax(0, 1fr));
+    width: 100%;
+  }
+
+  .flow-wide .flow-list::before {
+    top: 0.375rem;
+    bottom: auto;
+    left: 0.375rem;
+    right: calc(100% / var(--flow-cols) - 0.375rem);
+    width: auto;
+    height: 1px;
+    transform-origin: left;
+    animation-name: flow-draw-x;
+  }
+
+  .flow-wide .flow-step {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.875rem;
+    height: auto;
+  }
+
+  .flow-wide .flow-step::before {
+    width: 0.75rem;
+    height: 0.75rem;
+  }
+
+  /* El desvío pasa abajo: un corchete del estado que rechaza al primero, con la
+     punta hacia arriba, y la leyenda debajo. */
+  .flow-wide .flow-loop {
+    position: relative;
+    display: block;
+    top: auto;
+    left: auto;
+    margin: 1.25rem 0 0 0.375rem;
+    width: calc(100% / var(--flow-cols) * var(--flow-from));
+    height: 1.25rem;
+    border: 1px dashed var(--border-strong);
+    border-top: 0;
+    border-radius: 0 0 6px 6px;
+  }
+
+  .flow-wide .flow-loop::before {
+    top: -8px;
+    left: -4.5px;
+    width: 8px;
+    height: 6px;
+    clip-path: polygon(50% 0, 100% 100%, 0 100%);
+  }
+
+  .flow-wide .flow-loop-label {
+    position: static;
+    width: auto;
+    transform: none;
+    margin: 0.5rem 0 0 1.375rem;
+  }
+}
+
+@keyframes flow-draw-x {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+/* Lo que pasa cuando el recorrido llega: el resultado. Es el final del mismo momento,
+   no un momento nuevo — por eso el retardo sale del diagrama. */
+.flow-after {
+  animation: rise var(--dur-slow) var(--ease) both;
+  animation-delay: calc(300ms + 420ms * var(--flow-last, 4) + 200ms);
+}
+
+/* Cada sello cae cuando su bloque entra en pantalla (`ReplayOnView`), no al cargar. El
+   rebote de la curva es el golpe del sello contra el papel. */
+@keyframes stamp-drop {
+  from {
+    opacity: 0;
+    transform: rotate(-4deg) scale(1.3);
+  }
+}
+
+.stamp-drop {
+  animation: stamp-drop 380ms cubic-bezier(0.3, 1.6, 0.5, 1) 150ms both;
+}
+
+/* Línea de tiempo de "Sobre mí" (`Journey.tsx`): cada hito dibuja su tramo de línea,
+   marca el punto y después aparece el texto. El tramo es un pseudo-elemento y no un
+   borde para poder dibujarlo de arriba abajo. */
+.journey-line::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 1px;
+  background-color: var(--border);
+  transform-origin: top;
+  animation: flow-draw 500ms var(--ease) both;
+}
+
+@keyframes node-in {
+  from {
+    transform: scale(0);
+  }
+}
+
+.journey-node {
+  animation: node-in var(--dur-base) var(--ease) 120ms both;
+}
+
+.journey-text {
+  animation: rise var(--dur-slow) var(--ease) 220ms both;
+}
+
+/* Fuera de pantalla, sin animación: así vuelve a correr desde cero al regresar. */
+[data-idle] *,
+[data-idle] *::before,
+[data-idle] *::after {
+  animation-name: none !important;
 }
 
 /* ── Avatar de Raukar ─────────────────────────────────────────────────────────

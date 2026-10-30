@@ -213,10 +213,11 @@ function serialize(lang: SupportedLocale): string {
 
   section('Recomendaciones recibidas');
   for (const testimonial of profile.testimonials) {
-    const relation =
-      testimonial.relation === 'reported-to-santiago'
-        ? 'le reportaba a Santiago'
-        : 'fue líder de Santiago';
+    const relation = {
+      'reported-to-santiago': 'le reportaba a Santiago',
+      'same-team': 'trabajó con Santiago en el mismo equipo',
+      'santiagos-lead': 'fue líder de Santiago',
+    }[testimonial.relation];
     line(`- ${testimonial.author} (${testimonial.role}, ${relation}): "${testimonial.quote}"`);
   }
 

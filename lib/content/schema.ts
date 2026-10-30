@@ -47,7 +47,7 @@ export const projectStatusSchema = z.enum(['archived', 'internal', 'live', 'veri
  * personas a las que lideró avalen su liderazgo dice algo que un par no dice.
  * Por eso es obligatoria, no un adorno opcional.
  */
-export const testimonialRelationSchema = z.enum(['reported-to-santiago', 'santiagos-lead']);
+export const testimonialRelationSchema = z.enum(['reported-to-santiago', 'same-team', 'santiagos-lead']);
 
 export const skillCategorySchema = z.enum([
   'ai',
@@ -148,6 +148,13 @@ export const pressSchema = z
   })
   .readonly();
 
+/**
+ * Sello de estado: la palabra que un expediente lleva estampada ("Resuelto",
+ * "Disponible") y una nota corta con el dato que la respalda. Es presentación de un
+ * hecho que ya está en el contenido, nunca un dato nuevo.
+ */
+export const stampSchema = z.object({ label: text, note: text }).readonly();
+
 export const projectSchema = z
   .object({
     description: text,
@@ -162,6 +169,8 @@ export const projectSchema = z
     result: text.optional(),
     /** Si existe, el proyecto tiene case study propio. */
     slug: text.optional(),
+    /** Sello de la foja en el home. Solo lo llevan los proyectos con case study. */
+    stamp: stampSchema.optional(),
     status: projectStatusSchema,
     tech: z.array(text).min(1).readonly(),
     url: url.optional(),
@@ -326,11 +335,18 @@ export const uiStringsSchema = z
     pressEyebrow: text,
     /** Frase que precede a la cita textual. La cita se renderiza aparte, en `<em>`. */
     pressIntro: text,
+    /** "Foja": rótulo del número de cada proyecto en el home. */
+    folioLabel: text,
+    /** Rótulo de la carátula para `hero.extract`. */
+    extractLabel: text,
     projectArchived: text,
     projectInternal: text,
     quickFactsLabel: text,
     relationLead: text,
     relationReportedTo: text,
+    relationSameTeam: text,
+    /** "Informe {n} de {total}": rótulo visible de cada recomendación. */
+    reportLabel: text,
     resumeCta: text,
     roverAlt: text,
     roverCaption: text,
@@ -360,7 +376,7 @@ export const profileSchema = z
       .readonly(),
     /** Un juego de etiquetas por carrusel del sitio. */
     carousels: z
-      .object({ projects: carouselLabelsSchema, testimonials: carouselLabelsSchema })
+      .object({ testimonials: carouselLabelsSchema })
       .readonly(),
     /** Encabezados fijos de la plantilla de case study. */
     caseStudyLabels: z
@@ -381,11 +397,15 @@ export const profileSchema = z
       .object({
         availability: text,
         eyebrow: text,
+        /** Lo que hace hoy, en una frase. Va en la carátula, junto a los botones. */
+        extract: text,
         /** Diagrama de estados del home, con link al case study del sistema que dibuja. */
         flow: z.object({ ...flowShape, slug: text }).readonly(),
         headline: text,
         location: text,
         name: text,
+        /** El resultado del sistema que dibuja el diagrama, dicho después del recorrido. */
+        outcome: z.object({ note: text, value: text }).readonly(),
         /** Datos de escaneo rápido, en el orden en que se muestran. */
         quickFacts: z.array(quickFactSchema).min(1).readonly(),
         /**
@@ -394,7 +414,10 @@ export const profileSchema = z
          * ausencia = degradación prevista; presencia inválida = error ruidoso.
          */
         resumeUrl: text.optional(),
+        stamp: stampSchema,
         tagline: text,
+        /** El `<h1>` del home: qué hace, no cómo se llama. El nombre va arriba, chico. */
+        thesis: text,
       })
       .readonly(),
     hobbies: z.array(hobbySchema).readonly(),

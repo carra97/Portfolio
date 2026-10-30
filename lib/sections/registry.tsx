@@ -140,7 +140,6 @@ const SECTIONS: Readonly<Record<SectionId, SectionDefinition>> = {
     render: ({ lang, profile }) => (
       <FeaturedProjects
         items={profile.projects}
-        labels={profile.carousels.projects}
         lang={lang}
         ui={profile.ui}
       />
@@ -180,6 +179,7 @@ const SECTIONS: Readonly<Record<SectionId, SectionDefinition>> = {
         items={profile.testimonials}
         labels={{
           'reported-to-santiago': profile.ui.relationReportedTo,
+          'same-team': profile.ui.relationSameTeam,
           'santiagos-lead': profile.ui.relationLead,
         }}
         ui={profile.ui}

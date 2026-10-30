@@ -39,12 +39,6 @@
     ]
   },
   "carousels": {
-    "projects": {
-      "group": "Featured projects",
-      "next": "Next project",
-      "previous": "Previous project",
-      "slidePosition": "Project {n} of {total}"
-    },
     "testimonials": {
       "group": "Recommendations from colleagues",
       "next": "Next recommendation",
@@ -266,7 +260,17 @@
       }
     ],
     "resumeUrl": "/cv/santiago-carrattini-cv-en.pdf",
-    "tagline": "I turn processes that live on paper or in spreadsheets into systems that move them from one state to the next. One of them cut a province-wide procedure from 4 months to 5 weeks. Today I do the same with AI agents in Node.js and TypeScript, and I lead a team of 3."
+    "tagline": "I turn processes that live on paper or in spreadsheets into systems that move them from one state to the next. One of them cut a province-wide procedure from 4 months to 5 weeks. Today I do the same with AI agents in Node.js and TypeScript, and I lead a team of 3.",
+    "thesis": "I turn processes that live on paper into systems that move them from one state to the next.",
+    "extract": "Today I do the same with AI agents in Node.js and TypeScript, and I lead a team of 3.",
+    "outcome": {
+      "value": "From 4 months to 5 weeks.",
+      "note": "Average processing time. 20,000 to 30,000 requests per annual cycle, province-wide."
+    },
+    "stamp": {
+      "label": "Available",
+      "note": "Full-time · remote"
+    }
   },
   "hobbies": [
     {
@@ -381,7 +385,11 @@
         "quote": "programador y creador del sistema",
         "url": "https://cge.entrerios.gov.ar/2024/04/se-presento-la-nueva-modalidad-de-carga-de-documentacion-de-asignaciones-familiares/"
       },
-      "slug": "salario-familiar"
+      "slug": "salario-familiar",
+      "stamp": {
+        "label": "Resolved",
+        "note": "4 months → 5 weeks"
+      }
     },
     {
       "name": "Case File, Procedure and Internal Memo Management Platform",
@@ -397,7 +405,11 @@
         "Bootstrap"
       ],
       "slug": "tramites-expedientes",
-      "result": "Replaced a workflow built on paper and informal knowledge with an explicit flow of states, owners, permissions and traceability."
+      "result": "Replaced a workflow built on paper and informal knowledge with an explicit flow of states, owners, permissions and traceability.",
+      "stamp": {
+        "label": "Paperless",
+        "note": "10+ areas, ~60 people"
+      }
     },
     {
       "name": "This portfolio and its chatbot",
@@ -412,7 +424,11 @@
         "Zod",
         "Vercel"
       ],
-      "slug": "portfolio-chatbot"
+      "slug": "portfolio-chatbot",
+      "stamp": {
+        "label": "Public",
+        "note": "auditable end to end"
+      }
     },
     {
       "name": "XSports — E-commerce for a gym",
@@ -438,12 +454,12 @@
     "contact": "Contact",
     "currentRole": "Current role",
     "experience": "Experience",
-    "featuredProjects": "Featured projects",
+    "featuredProjects": "Three systems, three workflows",
     "hobbies": "Away from the editor",
     "journey": "How I got here",
     "projects": "Projects",
     "skills": "Stack",
-    "testimonials": "Recommendations"
+    "testimonials": "Reports from people I've worked with"
   },
   "skills": [
     {
@@ -556,6 +572,12 @@
       "relation": "santiagos-lead",
       "quote": "His analytical and problem-solving skills are extremely strong, and his knowledge is incredible: languages, frameworks, best practices, architecture and infrastructure, artificial intelligence. (…) Always willing to teach and to keep learning.",
       "url": "https://www.linkedin.com/in/gabrielfrancoc/"
+    },
+    {
+      "author": "Enzo Derviche",
+      "role": "Fullstack Developer, PHINX Lab",
+      "relation": "same-team",
+      "quote": "Besides being an excellent professional, he's a great person. He's always willing to help, share what he knows and go the extra mile when the situation calls for it. He's one of those people who make working as a team much easier and more manageable. Without a doubt, someone I would work with again and whom I fully recommend, both professionally and as a person."
     }
   ],
   "ui": {
@@ -609,6 +631,10 @@
     "themeToggle": "Toggle theme",
     "verifiableBadge": "Verifiable",
     "viewExperience": "See the full experience",
-    "viewProjects": "See all projects"
+    "viewProjects": "See all projects",
+    "folioLabel": "Folio",
+    "extractLabel": "Summary",
+    "reportLabel": "Report {n} of {total}",
+    "relationSameTeam": "Worked on the same team"
   }
 }

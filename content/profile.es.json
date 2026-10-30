@@ -39,12 +39,6 @@
     ]
   },
   "carousels": {
-    "projects": {
-      "group": "Proyectos destacados",
-      "next": "Siguiente proyecto",
-      "previous": "Proyecto anterior",
-      "slidePosition": "Proyecto {n} de {total}"
-    },
     "testimonials": {
       "group": "Recomendaciones de colegas",
       "next": "Siguiente recomendación",
@@ -266,7 +260,17 @@
       }
     ],
     "resumeUrl": "/cv/santiago-carrattini-cv-es.pdf",
-    "tagline": "Convierto procesos que viven en papel o en planillas en sistemas que los mueven de un estado al siguiente. Uno de ellos bajó un trámite provincial de 4 meses a 5 semanas. Hoy hago lo mismo con agentes de IA en Node.js y TypeScript, y lidero un equipo de 3."
+    "tagline": "Convierto procesos que viven en papel o en planillas en sistemas que los mueven de un estado al siguiente. Uno de ellos bajó un trámite provincial de 4 meses a 5 semanas. Hoy hago lo mismo con agentes de IA en Node.js y TypeScript, y lidero un equipo de 3.",
+    "thesis": "Convierto procesos que viven en papel en sistemas que los mueven de un estado al siguiente.",
+    "extract": "Hoy hago lo mismo con agentes de IA en Node.js y TypeScript, y lidero un equipo de 3.",
+    "outcome": {
+      "value": "De 4 meses a 5 semanas.",
+      "note": "Tiempo promedio de resolución del trámite. 20.000 a 30.000 trámites por campaña, en toda la provincia."
+    },
+    "stamp": {
+      "label": "Disponible",
+      "note": "Full-time · remoto"
+    }
   },
   "hobbies": [
     {
@@ -381,7 +385,11 @@
         "quote": "programador y creador del sistema",
         "url": "https://cge.entrerios.gov.ar/2024/04/se-presento-la-nueva-modalidad-de-carga-de-documentacion-de-asignaciones-familiares/"
       },
-      "slug": "salario-familiar"
+      "slug": "salario-familiar",
+      "stamp": {
+        "label": "Resuelto",
+        "note": "de 4 meses a 5 semanas"
+      }
     },
     {
       "name": "Plataforma de Gestión de Trámites, Expedientes y Notas Internas",
@@ -397,7 +405,11 @@
         "Bootstrap"
       ],
       "slug": "tramites-expedientes",
-      "result": "Reemplazó un circuito de papel y conocimiento informal por un flujo explícito con estados, responsables, permisos y trazabilidad."
+      "result": "Reemplazó un circuito de papel y conocimiento informal por un flujo explícito con estados, responsables, permisos y trazabilidad.",
+      "stamp": {
+        "label": "Sin papel",
+        "note": "10+ áreas, ~60 personas"
+      }
     },
     {
       "name": "Este portfolio y su chatbot",
@@ -412,7 +424,11 @@
         "Zod",
         "Vercel"
       ],
-      "slug": "portfolio-chatbot"
+      "slug": "portfolio-chatbot",
+      "stamp": {
+        "label": "Público",
+        "note": "auditable de punta a punta"
+      }
     },
     {
       "name": "XSports — E-commerce para gimnasio",
@@ -438,12 +454,12 @@
     "contact": "Contacto",
     "currentRole": "Rol actual",
     "experience": "Experiencia",
-    "featuredProjects": "Proyectos destacados",
+    "featuredProjects": "Tres sistemas, tres recorridos",
     "hobbies": "Fuera del editor",
     "journey": "Cómo llegué acá",
     "projects": "Proyectos",
     "skills": "Stack",
-    "testimonials": "Recomendaciones"
+    "testimonials": "Informes de quienes trabajaron conmigo"
   },
   "skills": [
     {
@@ -556,6 +572,12 @@
       "relation": "santiagos-lead",
       "quote": "Su capacidad de análisis y resolución de problemas es extremadamente alta y posee un nivel de conocimiento increíble: lenguajes, frameworks, buenas prácticas, arquitectura e infraestructura, inteligencia artificial. (…) Siempre dispuesto a enseñar y aprender constantemente.",
       "url": "https://www.linkedin.com/in/gabrielfrancoc/"
+    },
+    {
+      "author": "Enzo Derviche",
+      "role": "Fullstack Developer, PHINX Lab",
+      "relation": "same-team",
+      "quote": "Además de ser un excelente profesional, es una gran persona. Siempre está dispuesto a ayudar, compartir sus conocimientos y dar una milla extra cuando la situación lo requiere. Es de esas personas que hacen que trabajar en equipo sea mucho más fácil y llevadero. Sin dudas, alguien con quien volvería a trabajar y que recomiendo totalmente tanto por su calidad profesional como humana."
     }
   ],
   "ui": {
@@ -608,6 +630,10 @@
     "themeToggle": "Cambiar tema",
     "verifiableBadge": "Verificable",
     "viewExperience": "Ver la experiencia completa",
-    "viewProjects": "Ver todos los proyectos"
+    "viewProjects": "Ver todos los proyectos",
+    "folioLabel": "Foja",
+    "extractLabel": "Extracto",
+    "reportLabel": "Informe {n} de {total}",
+    "relationSameTeam": "Trabajó en el mismo equipo"
   }
 }

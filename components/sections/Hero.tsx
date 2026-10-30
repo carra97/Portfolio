@@ -1,27 +1,26 @@
-import Link from 'next/link';
+import type { CSSProperties } from 'react';
 import { QuickFacts } from '@/components/sections/QuickFacts';
 import { StateFlow } from '@/components/sections/StateFlow';
+import { ReplayOnView } from '@/components/ui/ReplayOnView';
 import type { SupportedLocale } from '@/lib/i18n';
-import { routes } from '@/lib/routes';
 import type { Profile } from '@/types/profile';
 
 /**
  * Hero.
  *
- * Dejó de ser una portada y pasó a ser la ficha. Quien evalúa un perfil decide en
- * segundos si sigue leyendo, y los datos que usa para decidir —seniority, stack, equipo,
- * modalidad, idiomas— estaban repartidos entre cuatro secciones separadas por casi mil
- * palabras.
+ * **El `<h1>` es lo que hace, no cómo se llama** (Rev. 6). Un nombre en 56px arriba de
+ * un cargo, un párrafo y dos botones es el esqueleto de cualquier portfolio de dev, y un
+ * recruiter lo reconoce antes de leer una palabra. El nombre y el cargo siguen siendo lo
+ * primero, en una línea; la frase grande es la tesis.
  *
- * **Texto a la izquierda, el diagrama de estados a la derecha, la ficha abajo.** Una
- * versión anterior ponía la ficha en la segunda columna y dejaba un hueco que había que
- * rellenar. El diagrama no rellena: es la tesis del perfil —sistemas que mueven trabajo
- * de un estado al siguiente— dibujada con un trámite real. En un teléfono va debajo de
- * los botones.
+ * **Después, la tesis demostrada:** el recorrido real de un trámite a todo el ancho, y al
+ * llegar al final, el resultado. Abajo, la carátula con los datos, el extracto y los
+ * botones, sellada.
  *
- * **El hero queda quieto.** El momento de movimiento del home es el recorrido del
- * diagrama (DISENO.md §5, Rev. 5): un solo momento por página. Una entrada escalonada
- * del texto al mismo tiempo serían dos cosas compitiendo por la misma mirada.
+ * **Un solo momento de movimiento** (DISENO.md §5): el recorrido se dibuja y el resultado
+ * aparece cuando termina. Es una secuencia, no dos animaciones: los retardos salen de
+ * `--flow-last`. Se repite cada vez que se vuelve a verla (`ReplayOnView`); el sello de
+ * la carátula cae cuando ella entra en pantalla.
  */
 export function Hero({
   hero,
@@ -32,39 +31,27 @@ export function Hero({
   lang: SupportedLocale;
   ui: Profile['ui'];
 }) {
+  const sequence = { '--flow-last': hero.flow.steps.length - 1 } as CSSProperties;
+
   return (
-    <header className="page pb-14 pt-12 md:pb-20 md:pt-20" id="top">
-      <div className="grid gap-12 md:grid-cols-[minmax(0,1fr)_auto] md:gap-16">
-        <div>
-          <p className="eyebrow">{hero.eyebrow}</p>
+    <header className="page pb-16 pt-12 md:pb-24 md:pt-20" id="top" style={sequence}>
+      <p className="text-pretty text-muted">
+        <span className="text-heading">{hero.name}</span>, {hero.headline}. {hero.location}.
+      </p>
 
-          <h1 className="display mt-3">{hero.name}</h1>
+      <h1 className="display-hero mt-5 max-w-[21ch]">{hero.thesis}</h1>
 
-          <p className="h3 mt-3 font-normal text-heading">{hero.headline}</p>
+      {/* El recorrido y su resultado se repiten juntos cada vez que se vuelve a ellos. */}
+      <ReplayOnView className="mt-14 md:mt-20">
+        <StateFlow flow={hero.flow} lang={lang} linkLabel={ui.caseStudyLink} wide />
 
-          <p className="measure mt-6 text-pretty">{hero.tagline}</p>
+        <p className="flow-after mt-14 grid gap-1 md:mt-16">
+          <span className="h2 text-heading">{hero.outcome.value}</span>
+          <span className="small">{hero.outcome.note}</span>
+        </p>
+      </ReplayOnView>
 
-          <div className="mt-8 flex flex-wrap items-center gap-3">
-            <Link className="btn-primary" href={routes.contact(lang)}>
-              {ui.heroContactCta}
-            </Link>
-
-            {/* Sin archivo de CV no hay botón. Un enlace de descarga roto es peor que la
-                ausencia del botón, porque parece que funciona. Mismo criterio que `lib/env.ts`. */}
-            {hero.resumeUrl && (
-              <a className="btn-secondary" download href={hero.resumeUrl}>
-                {ui.resumeCta}
-              </a>
-            )}
-          </div>
-        </div>
-
-        <div className="md:pt-3">
-          <StateFlow flow={hero.flow} lang={lang} linkLabel={ui.caseStudyLink} />
-        </div>
-      </div>
-
-      <QuickFacts facts={hero.quickFacts} label={ui.quickFactsLabel} />
+      <QuickFacts hero={hero} lang={lang} ui={ui} />
     </header>
   );
 }

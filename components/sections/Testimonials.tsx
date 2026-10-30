@@ -15,6 +15,10 @@ import type { Profile, TestimonialRelation } from '@/types/profile';
  * testimonios siguen enteros en el HTML (ver `components/ui/Carousel.tsx`) y la
  * relación de quien recomienda se muestra siempre: que dos personas a las que lideró
  * avalen su liderazgo dice algo que una recomendación de un par no dice.
+ *
+ * **Informes, no tarjetas** (Rev. 6): cada uno abre con un filete grueso y el rótulo
+ * "Informe n de N", el mismo vocabulario del expediente que el resto del home. Con
+ * cuatro, la grilla de desktop va a dos columnas: tres más uno dejaba una huérfana.
  */
 export function Testimonials({
   carousel,
@@ -29,6 +33,7 @@ export function Testimonials({
 }) {
   return (
     <Carousel
+      columns={items.length % 2 === 0 ? 2 : 3}
       itemCount={items.length}
       labels={{ ...carousel, role: ui.carouselRole }}
     >
@@ -40,9 +45,12 @@ export function Testimonials({
             total: items.length,
           })}
           aria-roledescription={ui.carouselSlideRole}
-          className="flex w-[85%] shrink-0 snap-center flex-col border-t border-line-strong pt-5 md:w-auto md:shrink"
+          className="flex w-[85%] shrink-0 snap-center flex-col border-t-2 border-heading pt-4 md:w-auto md:shrink"
           role="group"
         >
+          <p aria-hidden="true" className="label mb-3">
+            {interpolate(ui.reportLabel, { n: index + 1, total: items.length })}
+          </p>
           <blockquote className="flex-1 text-pretty">
             “{testimonial.quote}”
             {ui.testimonialTranslated && (

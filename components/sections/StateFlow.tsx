@@ -18,25 +18,34 @@ import type { Flow } from '@/types/profile';
  *
  * Muestra el flujo de **un sistema**, nunca una línea de carrera: así no hay forma de que
  * se lea como "años de experiencia".
+ *
+ * `wide` lo dibuja de izquierda a derecha a todo el ancho desde 48rem: es la versión del
+ * home, donde el recorrido es el protagonista. El case study usa la vertical.
  */
 export function StateFlow({
   flow,
   lang,
   linkLabel,
+  wide = false,
 }: {
   flow: Flow & { slug?: string };
   lang: SupportedLocale;
   /** Con `flow.slug`, el link al case study. En el propio case study no va. */
   linkLabel?: string;
+  wide?: boolean;
 }) {
   const last = flow.steps.length - 1;
-  const vars = { '--flow-last': last, '--flow-from': flow.loopFrom ?? last - 1 };
+  const vars = {
+    '--flow-cols': flow.steps.length,
+    '--flow-from': flow.loopFrom ?? last - 1,
+    '--flow-last': last,
+  };
 
   return (
-    <figure className="flow" style={vars as CSSProperties}>
+    <figure className={wide ? 'flow flow-wide' : 'flow'} style={vars as CSSProperties}>
       <figcaption className="label">{flow.caption}</figcaption>
 
-      <div className="relative mt-5 w-fit">
+      <div className={wide ? 'relative mt-6 w-fit md:w-full' : 'relative mt-5 w-fit'}>
         <ol className="flow-list data text-[0.9375rem]">
           {flow.steps.map((step, index) => (
             <li
