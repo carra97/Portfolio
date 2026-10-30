@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useLayoutEffect } from 'react';
 
 /**
  * Selector de tema.
@@ -16,9 +16,20 @@ import { useEffect } from 'react';
  * eligió el claro veía el ícono cambiar al hidratar.
  */
 export function ThemeToggle({ label }: { label: string }) {
+  // Cambiar de idioma vuelve a montar el layout de `[lang]`, y React 19 limpia los
+  // atributos de `<html>` al hacerlo: se perdía el `data-theme` del script inicial y el
+  // claro volvía a oscuro. Se repone antes del paint, así que no hay flash.
+  //
   // `theme-color` acompaña al tema elegido, no al del sistema. Sin esto, con el sistema
   // en claro la barra del navegador mobile quedaba clara sobre una página oscura.
-  useEffect(syncThemeColor, []);
+  useLayoutEffect(() => {
+    try {
+      if (localStorage.getItem('theme') === 'light') document.documentElement.dataset.theme = 'light';
+    } catch {
+      // Storage bloqueado: queda el tema por defecto, igual que en el script inicial.
+    }
+    syncThemeColor();
+  }, []);
 
   function toggle() {
     const root = document.documentElement;

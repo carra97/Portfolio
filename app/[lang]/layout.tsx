@@ -119,6 +119,10 @@ export default async function LangLayout({
      */
     <html
       className={`${schibsted.variable} ${GeistMono.variable}`}
+      // Next 16 solo apaga el `scroll-behavior: smooth` al cambiar de página si lo pide
+      // este atributo. Sin él, el salto al tope se animaba desde donde estaba la página
+      // anterior y el home aparecía a mitad del scroll.
+      data-scroll-behavior="smooth"
       lang={lang}
       suppressHydrationWarning
     >
