@@ -36,12 +36,14 @@ const RULES = [
   },
   {
     id: 'anos-inflados',
-    pattern: /\b(4\+|5\+)\s*años|\bcuatro años de experiencia|\bcinco años de experiencia/i,
-    why: 'Anchor fact: la experiencia es 3+ años. Nunca 4+ ni 5+.',
+    pattern:
+      /\b(4\+|5\+)\s*(años|years)|\b(cuatro|cinco) años de experiencia|\b(four|five) years of experience/i,
+    why: 'Anchor fact: la experiencia es 3+ años. Nunca 4+ ni 5+, en ningún idioma.',
   },
   {
     id: 'cargo-futuro-como-actual',
-    pattern: /\b(actualmente|hoy|es)\s+(Technical Leader|AI Solutions Architect)/i,
+    pattern:
+      /\b(actualmente|hoy|es|currently|today|is)\s+(an?\s+)?(Technical Leader|AI Solutions Architect)/i,
     why: 'Technical Leader y AI Solutions Architect son objetivos futuros, no cargos ocupados.',
   },
   {
@@ -51,7 +53,7 @@ const RULES = [
   },
   {
     id: 'fecha-de-nacimiento-en-contenido',
-    pattern: /\b(19|20)\d{2}-\d{2}-\d{2}\b|\b\d{1,2} de (enero|febrero|marzo|abril|mayo|junio|julio|agosto|septiembre|octubre|noviembre|diciembre) de (19|20)\d{2}\b/i,
+    pattern: /\b(19|20)\d{2}-\d{2}-\d{2}\b|\b\d{1,2} de (enero|febrero|marzo|abril|mayo|junio|julio|agosto|septiembre|octubre|noviembre|diciembre) de (19|20)\d{2}\b|\b(January|February|March|April|May|June|July|August|September|October|November|December) \d{1,2}, (19|20)\d{2}\b/i,
     why: 'La fecha de nacimiento se lee de BIRTH_DATE, no se escribe en el contenido: el repo es público y el historial de Git no se puede retirar. Solo se publica la edad, calculada en lib/age.ts.',
   },
   {
@@ -61,7 +63,8 @@ const RULES = [
   },
   {
     id: 'rag-como-logro-propio',
-    pattern: /(construí|desarrollé|diseñé|armé)\s+(el\s+)?(sistema\s+de\s+)?RAG\b/i,
+    pattern:
+      /(construí|desarrollé|diseñé|armé)\s+(el\s+)?(sistema\s+de\s+)?RAG\b|\b(built|developed|designed)\s+(the\s+)?(RAG|retrieval)\b/i,
     why: 'RAG no se publica como logro propio: el servicio de recuperación no tiene commits suyos. Lo publicable son los agentes y skills que lo consumen.',
   },
 ];
