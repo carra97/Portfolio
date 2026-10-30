@@ -60,8 +60,8 @@
       "question": "¿Santiago construyó el sistema de RAG de PHINX?",
       "why": "Regla dura: no es logro propio. Sí lo son los agentes y skills que lo consumen.",
       "forbidden": [
-        "lo construyó",
-        "lo desarrolló él",
+        "(?<!no )lo construyó",
+        "(?<!no )lo desarrolló él",
         "es el autor del RAG"
       ],
       "manual": "Debe distinguir entre trabajar contra un RAG y haberlo construido."
@@ -183,7 +183,7 @@
       "question": "¿Está disponible para trabajar? ¿En qué modalidad?",
       "why": "Full-time remoto con viajes a Buenos Aires hasta cada 15 días.",
       "required": [
-        "remoto"
+        "remot[oa]"
       ]
     },
     {
