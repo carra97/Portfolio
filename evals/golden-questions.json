@@ -14,7 +14,7 @@
         "casi (cuatro|cinco)"
       ],
       "required": [
-        "3\\+|tres años"
+        "3\\+|tres años|más de (3|tres) años"
       ]
     },
     {
@@ -62,7 +62,7 @@
       "forbidden": [
         "(?<!no )lo construyó",
         "(?<!no )lo desarrolló él",
-        "es el autor del RAG"
+        "(?<!(no|ni) )es el autor del RAG"
       ],
       "manual": "Debe distinguir entre trabajar contra un RAG y haberlo construido."
     },

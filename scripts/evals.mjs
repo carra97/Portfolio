@@ -20,6 +20,7 @@
  * esto.
  */
 
+import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 
 const args = process.argv.slice(2);
@@ -98,6 +99,18 @@ for (const [index, testCase] of cases.entries()) {
     failures.push(`demasiado largo: ${answer.length} caracteres, tope ${testCase.maxChars}`);
   }
 
+  /**
+   * Idioma. Se agregó cuando el bot contestó en español 5 de 6 preguntas en inglés y
+   * todos los chequeos dieron verde: los datos estaban bien, el idioma no. Se compara el
+   * idioma de la pregunta con el de la respuesta; si alguno no se puede decidir (un
+   * "3+ years." o un "Hola, bien."), no se juzga.
+   */
+  const asked = detectLang(testCase.question);
+  const answered = detectLang(answer);
+  if (asked && answered && asked !== answered) {
+    failures.push(`idioma: preguntaron en ${asked} y respondió en ${answered}`);
+  }
+
   if (failures.length > 0) {
     process.stdout.write(`✗ FALLA\n  ${failures.join('\n  ')}\n`);
     results.push({ id: testCase.id, blocking: testCase.blocking, status: 'FALLA', detail: failures.join('; ') });
@@ -124,6 +137,24 @@ process.stdout.write(
 );
 
 process.exit(blockingFailed.length === 0 ? 0 : 1);
+
+/**
+ * ponytail: conteo de palabras vacías de cada idioma, no un detector de verdad. Alcanza
+ * para distinguir español de inglés en respuestas de dos o tres oraciones; si se suma un
+ * tercer idioma, cambiar por una librería.
+ */
+function detectLang(text) {
+  const count = (words) => (text.match(new RegExp(`(?<!\\p{L})(${words})(?!\\p{L})`, 'giu')) ?? []).length;
+  const es = count('que|los|las|del|el|la|en|es|un|una|de|y|su|sus|se|lo|le|al|tiene|desde|pero|para|con|está|también|años|por|hola|cómo|qué|cuál');
+  const en = count('the|is|are|an|a|and|of|he|his|him|has|have|with|from|for|was|what|how|who|does|did|do|years|in|at|on|to|not|it');
+  // Una pregunta corta tiene dos o tres palabras vacías: basta con que un idioma gane.
+  if (es + en < 2 || es === en) return null;
+  return es > en ? 'es' : 'en';
+}
+
+assert.equal(detectLang('He has 3+ years of professional experience in the field.'), 'en');
+assert.equal(detectLang('Tiene 3+ años de experiencia profesional en el sector.'), 'es');
+assert.equal(detectLang('3+ years.'), null);
 
 async function ask(question, lang) {
   const response = await fetch(`${BASE}/api/chat`, {
