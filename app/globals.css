@@ -256,11 +256,13 @@ b {
 
 /* ── Utilidades tipográficas ──────────────────────────────────────────────── */
 
+/* Rev. 5: 500 y tracking cerrado. A 400 y -0.02em el titular era correcto y nada más;
+   Schibsted es una grotesca de diario y a este peso se lee como cabeza de portada. */
 .display {
   font-size: clamp(2.5rem, 6vw, 3.5rem);
-  line-height: 1.05;
-  font-weight: 400;
-  letter-spacing: -0.02em;
+  line-height: 1;
+  font-weight: 500;
+  letter-spacing: -0.035em;
   color: var(--text-heading);
 }
 

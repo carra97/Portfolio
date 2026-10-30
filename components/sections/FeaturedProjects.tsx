@@ -46,7 +46,7 @@ export function FeaturedProjects({
               total: featured.length,
             })}
             aria-roledescription={ui.carouselSlideRole}
-            className="flex w-[85%] shrink-0 snap-center flex-col justify-between rounded-xl border border-line bg-surface p-6 md:w-auto md:shrink"
+            className="flex w-[85%] shrink-0 snap-center flex-col justify-between border-t border-line-strong pt-5 md:w-auto md:shrink"
             role="group"
           >
             <p className="data">

@@ -3,11 +3,15 @@ import type { Profile } from '@/types/profile';
 /**
  * Ficha de escaneo rápido.
  *
- * **Por qué es una tarjeta y no una lista suelta:** medido sobre una versión anterior, en
- * un teléfono de 390×844 la ficha empezaba en el píxel 646 y terminaba en el 1232 — o sea,
- * quien entraba veía el nombre, el titular y el CTA, y la información que realmente busca
- * quedaba abajo del pliegue. Encerrarla en una superficie con borde la vuelve un objeto
- * visual que se distingue del texto corrido, y no un párrafo más.
+ * **Por qué un bloque propio y no una lista suelta:** medido sobre una versión anterior,
+ * en un teléfono de 390×844 la ficha empezaba en el píxel 646 y terminaba en el 1232 — o
+ * sea, quien entraba veía el nombre, el titular y el CTA, y la información que realmente
+ * busca quedaba abajo del pliegue. Tiene que leerse como un objeto, no como un párrafo más.
+ *
+ * **Carátula, no tarjeta.** Fue una caja redondeada con fondo de superficie: el recurso
+ * que usa cualquier landing de SaaS. Ahora se separa como la carátula de un expediente:
+ * un filete fuerte arriba, filetes finos entre filas y uno de cierre. Sigue distinguiéndose
+ * del texto corrido, y con el mismo lenguaje que el resto del sitio.
  *
  * **Una banda horizontal, no una columna lateral.** La ficha ocupa el ancho completo
  * debajo del texto del hero, con una fila por dato: como columna lateral angosta, cada
@@ -31,7 +35,7 @@ export function QuickFacts({
   return (
     <section
       aria-labelledby="quick-facts-title"
-      className="mt-12 rounded-xl border border-line bg-surface p-6 md:mt-14 md:p-8"
+      className="mt-12 border-t border-heading pt-4 md:mt-16"
     >
       <h2 className="eyebrow" id="quick-facts-title">
         {label}
@@ -39,9 +43,9 @@ export function QuickFacts({
 
       {/* Carátula del expediente: el término al margen y el valor en la columna de
           lectura, una fila por dato. Es la misma grilla que el resto del sitio. */}
-      <dl className="mt-4 divide-y divide-line">
+      <dl className="mt-3 divide-y divide-line border-b border-line">
         {facts.map((fact) => (
-          <div key={fact.label} className="doc-row py-3.5 last:pb-0">
+          <div key={fact.label} className="doc-row py-3.5">
             <dt className="label md:pt-px">{fact.label}</dt>
             <dd className="text-pretty text-heading">{fact.value}</dd>
           </div>

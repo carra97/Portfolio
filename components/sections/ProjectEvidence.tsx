@@ -35,7 +35,7 @@ export function ProjectEvidence({
       )}
 
       {project.press && (
-        <div className="mt-8 rounded-xl border border-line bg-surface p-6">
+        <div className="mt-8 border-t border-line pt-5">
           <p className="eyebrow">{ui.pressEyebrow}</p>
           <p className="measure mt-3 text-pretty">
             {ui.pressIntro} <em className="text-heading">“{project.press.quote}”</em>.

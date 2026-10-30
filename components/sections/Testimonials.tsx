@@ -40,7 +40,7 @@ export function Testimonials({
             total: items.length,
           })}
           aria-roledescription={ui.carouselSlideRole}
-          className="flex w-[85%] shrink-0 snap-center flex-col rounded-xl border border-line bg-surface p-6 md:w-auto md:shrink"
+          className="flex w-[85%] shrink-0 snap-center flex-col border-t border-line-strong pt-5 md:w-auto md:shrink"
           role="group"
         >
           <blockquote className="flex-1 text-pretty">
