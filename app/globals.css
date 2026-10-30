@@ -740,7 +740,7 @@ b {
    a medida que el punto se acerca, no de golpe.
 
    Cada hito tiene su propia línea de tiempo de vista, con el área de vista reducida a
-   una línea al 60% de la pantalla (`view-timeline-inset`): el progreso 0 es cuando el
+   una línea al 70% de la pantalla (`view-timeline-inset`): el progreso 0 es cuando el
    borde de arriba del hito cruza esa línea, el 1 cuando la cruza el de abajo.
 
    Fuera de `@supports` y de `no-preference` no se declara nada: la línea queda estática,
@@ -749,7 +749,7 @@ b {
   @media (prefers-reduced-motion: no-preference) {
     .journey-item {
       view-timeline: --journey block;
-      view-timeline-inset: 60% 40%;
+      view-timeline-inset: 70% 30%;
       /* Del centro del punto de un hito al del siguiente, además del alto del tramo:
          en un teléfono la fecha va arriba del texto y suma su renglón. */
       --journey-next: 0.5625rem;
@@ -797,10 +797,12 @@ b {
   }
 }
 
+/* Lo que todavía no se alcanzó se lee atenuado, no invisible: una sección en blanco
+   hasta que llega el punto parecía vacía, no por venir. */
 @keyframes journey-text {
   from {
-    opacity: 0;
-    transform: translateY(14px);
+    opacity: 0.3;
+    transform: translateY(8px);
   }
 }
 
