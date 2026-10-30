@@ -274,10 +274,9 @@ y con un enlace al final de cada bloque de la landing hacia su página completa.
 
 `lib/pages/registry.ts` declara qué páginas existen, su segmento de URL y **qué secciones
 muestra cada una, en qué orden**. `lib/sections/registry.tsx` declara cómo se renderiza
-cada sección. Nav, sitemap, `canonical`, numeración de eyebrows y composición de cada
-página salen de ahí.
+cada sección. Nav, sitemap, `canonical` y composición de cada página salen de ahí.
 
-**Por qué:** el orden, los ids, la numeración "01".."08" y las etiquetas del nav vivían en
+**Por qué:** el orden, los ids y las etiquetas del nav vivían en
 tres lugares a la vez —el JSX de la página, el array `nav` del JSON y el record
 `sections`—. Mover una sección eran tres ediciones coordinadas, y ninguna desincronización
 rompe el build: el síntoma era un link apuntando a algo que ya no existía. Hoy agregar una
