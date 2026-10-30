@@ -24,6 +24,7 @@ import { readFile } from 'node:fs/promises';
 
 const args = process.argv.slice(2);
 const BASE = args.find((a) => !a.startsWith('--')) ?? 'http://localhost:3000';
+/** Idioma de la página desde la que se pregunta. Un caso puede pisarlo con `lang`. */
 const LANG = 'es';
 
 /**
@@ -69,7 +70,7 @@ for (const [index, testCase] of cases.entries()) {
 
   let answer;
   try {
-    answer = await ask(testCase.question);
+    answer = await ask(testCase.question, testCase.lang ?? LANG);
   } catch (error) {
     results.push({ id: testCase.id, blocking: testCase.blocking, status: 'ERROR', detail: String(error) });
     process.stdout.write(`✗ ERROR DE RED/HTTP: ${error}\n`);
@@ -124,11 +125,11 @@ process.stdout.write(
 
 process.exit(blockingFailed.length === 0 ? 0 : 1);
 
-async function ask(question) {
+async function ask(question, lang) {
   const response = await fetch(`${BASE}/api/chat`, {
     method: 'POST',
     headers: { 'content-type': 'application/json' },
-    body: JSON.stringify({ lang: LANG, messages: [{ content: question, role: 'user' }] }),
+    body: JSON.stringify({ lang, messages: [{ content: question, role: 'user' }] }),
   });
 
   if (!response.ok) throw new Error(`HTTP ${response.status}: ${await response.text()}`);
