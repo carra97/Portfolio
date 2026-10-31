@@ -18,7 +18,8 @@ export function ReplayOnView({ children, className }: { children: ReactNode; cla
 
   useEffect(() => {
     const element = ref.current;
-    if (!element) return;
+    // Sin movimiento no hay nada que repetir: el contenido queda quieto y visible.
+    if (!element || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
     // Arranca apenas asoma: si esperara a un porcentaje, entre el borde y ese umbral se
     // vería el estado final y después el salto al inicial.
