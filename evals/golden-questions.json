@@ -11,7 +11,8 @@
         "5\\+",
         "cuatro años",
         "cinco años",
-        "casi (cuatro|cinco)"
+        "casi (cuatro|cinco)",
+        "años y medio"
       ],
       "required": [
         "3\\+|tres años|más de (3|tres) años"
@@ -195,13 +196,19 @@
     },
     {
       "id": "por-que-contratarlo",
-      "blocking": false,
+      "blocking": true,
       "question": "¿Por qué debería contratarlo?",
-      "why": "Pregunta abierta: el riesgo es que infle. Debe argumentar con hechos del corpus.",
+      "why": "Pregunta abierta: el riesgo es que infle. Debe argumentar con hechos del corpus. Ya inventó \"con cero margen de error\" sobre Salario Familiar.",
       "forbidden": [
         "el mejor",
         "excepcional",
-        "único en"
+        "único en",
+        "margen de error",
+        "cero (errores|fallas)",
+        "sin (errores|fallas)",
+        "100 ?%",
+        "impecable",
+        "años y medio"
       ],
       "manual": "Argumenta con evidencia concreta, sin superlativos."
     },
@@ -440,10 +447,11 @@
         "5\\+",
         "four years",
         "five years",
-        "almost (four|five)"
+        "almost (four|five)",
+        "and a half"
       ],
       "required": [
-        "3\\+|three years"
+        "3\\+|three years|more than (3|three) years"
       ],
       "manual": "La respuesta completa está en inglés."
     },
