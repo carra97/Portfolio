@@ -215,7 +215,7 @@
       "A set of reference questions checks the bot's behavior against the real endpoint — validation and limits included — before the system prompt is touched."
     ],
     "retrospective": [
-      "The chatbot isn't deployed yet: the static site goes first. It's a sequence I set for myself on purpose, because the temptation to show off the bot before the rest is solid is strong.",
+      "The static site shipped first and the chatbot only after it. It's a sequence I set for myself on purpose, because the temptation to show off the bot before the rest is solid is strong.",
       "The set of reference questions exists and runs against the real endpoint, but I still trigger it by hand. It should run in continuous integration on every system prompt change: as long as it depends on me remembering, it isn't a guarantee.",
       "The rate limiter fails open on purpose: if the counter doesn't respond, requests go through. That's only defensible because the provider's free tier enforces the spending ceiling outside the code. The day the account has billing enabled, the decision has to be revisited — and it's the kind of assumption that ages silently."
     ],

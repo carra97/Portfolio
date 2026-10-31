@@ -215,7 +215,7 @@
       "Un conjunto de preguntas de referencia verifica el comportamiento del bot contra el endpoint real —validación y límites incluidos— antes de tocar el prompt de sistema."
     ],
     "retrospective": [
-      "El chatbot todavía no está deployado: primero va el sitio estático. Es una secuencia que me impuse a propósito, porque la tentación de mostrar el bot antes de que el resto esté sólido es fuerte.",
+      "Primero salió el sitio estático y recién después el chatbot. Es una secuencia que me impuse a propósito, porque la tentación de mostrar el bot antes de que el resto esté sólido es fuerte.",
       "El conjunto de preguntas de referencia existe y corre contra el endpoint real, pero todavía lo disparo a mano. Falta que lo ejecute la integración continua en cada cambio del prompt de sistema: mientras dependa de que me acuerde, no es una garantía.",
       "El limitador de peticiones falla abierto a propósito: si el contador no responde, deja pasar. Eso sólo es defendible porque el nivel gratuito del proveedor impone el techo de gasto por afuera del código. El día que la cuenta tenga facturación habilitada, la decisión hay que revisarla — y es el tipo de supuesto que envejece en silencio."
     ],
