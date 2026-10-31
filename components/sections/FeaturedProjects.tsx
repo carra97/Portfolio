@@ -70,7 +70,7 @@ export function FeaturedProjects({
                           className="flex items-center gap-1.5 text-[0.8125rem] after:text-muted after:content-['→'] last:after:content-none"
                         >
                           <span
-                            className={`rounded-full border px-2.5 py-0.5 ${
+                            className={`rounded-md border px-2 py-0.5 font-mono ${
                               stepIndex === flow.steps.length - 1
                                 ? 'border-accent text-heading'
                                 : 'border-line-strong'

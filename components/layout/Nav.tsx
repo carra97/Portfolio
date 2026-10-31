@@ -52,7 +52,7 @@ export function Nav({
         className="page flex flex-wrap items-center gap-x-4 gap-y-1 py-2.5 md:flex-nowrap md:gap-6 md:py-3"
       >
         <Link
-          className="mr-auto font-medium text-heading transition-colors duration-150 hover:text-accent md:mr-0"
+          className="mr-auto font-medium text-heading transition-colors duration-150 hover:text-muted md:mr-0"
           href={routes.home(lang)}
         >
           SC
@@ -88,7 +88,7 @@ export function Nav({
             className={`shrink-0 rounded-md border px-3 py-1.5 text-sm transition-colors duration-150 ${
               navigation.cta.current
                 ? 'border-accent text-accent'
-                : 'border-line text-heading hover:border-line-strong hover:text-accent'
+                : 'border-line text-heading hover:border-line-strong'
             }`}
             href={navigation.cta.href}
           >

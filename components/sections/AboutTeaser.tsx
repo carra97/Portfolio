@@ -26,7 +26,7 @@ export function AboutTeaser({
     <section aria-label={ui.aboutTeaserEyebrow} className="border-t border-line">
       <div className="page py-20 md:py-28">
         <p className="eyebrow">{ui.aboutTeaserEyebrow}</p>
-        <blockquote className="measure mt-4 border-l-2 border-accent pl-6 lead text-pretty">
+        <blockquote className="measure mt-4 border-l-2 border-line-strong pl-6 lead text-pretty">
           {about.principle}
         </blockquote>
         <p className="mt-8">

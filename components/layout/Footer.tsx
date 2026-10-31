@@ -31,7 +31,7 @@ export function Footer({ lang: _lang, profile }: { lang: string; profile: Profil
   const hasEmail = env.CONTACT_EMAIL !== '';
 
   return (
-    <footer className="border-t border-line">
+    <footer className="border-t border-line max-md:pb-20">
       <div className="page">
         {/* `divide-*` en vez de `gap` + bordes a mano: la línea vertical entre columnas
             la dibuja el contenedor, así ninguna columna necesita saber si es la primera. */}

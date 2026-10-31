@@ -67,7 +67,7 @@ export async function generateMetadata({
 function Block({ children, title }: { children: React.ReactNode; title: string }) {
   return (
     <section className="doc-row border-t border-line py-12">
-      <h2 className="text-sm md:pt-1">{title}</h2>
+      <h2 className="h3 text-heading">{title}</h2>
       <div className="max-w-[68ch]">{children}</div>
     </section>
   );

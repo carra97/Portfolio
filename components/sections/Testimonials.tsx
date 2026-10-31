@@ -51,13 +51,13 @@ export function Testimonials({
           <p aria-hidden="true" className="label mb-3">
             {interpolate(ui.reportLabel, { n: index + 1, total: items.length })}
           </p>
-          <blockquote className="flex-1 text-pretty">
+          <blockquote className="text-pretty md:flex-1">
             “{testimonial.quote}”
             {ui.testimonialTranslated && (
               <p className="small mt-3">{ui.testimonialTranslated}</p>
             )}
           </blockquote>
-          <figcaption className="mt-5 border-t border-line pt-4">
+          <footer className="mt-5 border-t border-line pt-4">
             <p className="text-heading">
               {testimonial.url ? (
                 <a
@@ -76,7 +76,7 @@ export function Testimonials({
             <p className="label mt-2">
               {labels[testimonial.relation]}
             </p>
-          </figcaption>
+          </footer>
         </li>
       ))}
     </Carousel>

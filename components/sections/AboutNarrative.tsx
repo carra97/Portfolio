@@ -26,14 +26,14 @@ export function AboutNarrative({
           </p>
         ))}
 
-        <figure className="border-l-2 border-accent pl-5">
+        <figure className="border-l-2 border-line-strong pl-5">
           <blockquote className="text-pretty text-heading">{about.principle}</blockquote>
         </figure>
 
         <ul className="space-y-2">
           {about.principleSupport.map((item) => (
             <li key={item.slice(0, 30)} className="flex gap-3 text-pretty">
-              <span aria-hidden="true" className="mt-3 h-px w-4 shrink-0 bg-accent-dim" />
+              <span aria-hidden="true" className="mt-3 h-px w-4 shrink-0 bg-line-strong" />
               <span>{item}</span>
             </li>
           ))}

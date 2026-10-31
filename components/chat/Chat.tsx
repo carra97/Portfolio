@@ -102,6 +102,7 @@ export function Chat({ avatar, labels, lang, routes }: ChatProps) {
 
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const launcherRef = useRef<HTMLButtonElement>(null);
+  const rootRef = useRef<HTMLDivElement>(null);
   const transcriptRef = useRef<HTMLDivElement>(null);
   const abortRef = useRef<AbortController | null>(null);
   /** Si la persona está leyendo el final del hilo. Ver el efecto de scroll. */
@@ -122,6 +123,21 @@ export function Chat({ avatar, labels, lang, routes }: ChatProps) {
     setOpen(false);
     launcherRef.current?.focus();
   }, []);
+
+  /**
+   * En un teléfono el panel tapa casi toda la página: se vuelve modal y lo de atrás queda
+   * `inert`, para que el Tab no caiga en algo tapado (WCAG 2.4.11). En desktop no: el chat
+   * persiste entre rutas a propósito y se puede seguir navegando con él abierto.
+   */
+  useEffect(() => {
+    const root = rootRef.current;
+    if (!open || !root || !matchMedia('(max-width: 47.99rem)').matches) return;
+    const covered = [...document.body.children].filter((element) => !element.contains(root));
+    for (const element of covered) element.setAttribute('inert', '');
+    return () => {
+      for (const element of covered) element.removeAttribute('inert');
+    };
+  }, [open]);
 
   // Escape cierra, como cualquier panel superpuesto.
   useEffect(() => {
@@ -209,7 +225,10 @@ export function Chat({ avatar, labels, lang, routes }: ChatProps) {
   };
 
   return (
-    <div className="fixed bottom-4 right-4 z-50 flex flex-col items-end gap-3 md:bottom-6 md:right-6">
+    <div
+      className="fixed bottom-4 right-4 z-50 flex flex-col items-end gap-3 md:bottom-6 md:right-6"
+      ref={rootRef}
+    >
       {open && (
         <section
           aria-label={labels.title}

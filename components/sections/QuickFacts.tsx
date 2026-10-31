@@ -33,7 +33,7 @@ export function QuickFacts({
   return (
     <section
       aria-labelledby="quick-facts-title"
-      className="relative mt-16 border border-line-strong bg-surface md:mt-20"
+      className="relative mt-12 border border-line-strong bg-surface md:mt-14"
     >
       <h2 className="sr-only" id="quick-facts-title">
         {ui.quickFactsLabel}

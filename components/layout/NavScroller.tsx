@@ -65,7 +65,8 @@ export function NavScroller({
     <div className="relative order-last w-full md:order-none md:w-auto md:flex-1">
       <ul
         ref={ref}
-        className="flex gap-5 overflow-x-auto whitespace-nowrap [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        // -m-1 p-1: el overflow recorta el anillo de foco de los links si no tiene margen.
+        className="-m-1 flex gap-5 overflow-x-auto whitespace-nowrap p-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
       >
         {children}
       </ul>

@@ -1,3 +1,4 @@
+import { Fragment, type CSSProperties } from 'react';
 import { QuickFacts } from '@/components/sections/QuickFacts';
 import { StateFlow } from '@/components/sections/StateFlow';
 import { ReplayOnView } from '@/components/ui/ReplayOnView';
@@ -17,7 +18,8 @@ import type { Profile } from '@/types/profile';
  * botones, sellada.
  *
  * **Un solo momento de movimiento** (DISENO.md §5), en dos tiempos: al entrar, la
- * presentación y la tesis suben, y cuando la tesis asienta el recorrido se dibuja. La
+ * presentación sube y la tesis entra renglón a renglón, y cuando asienta el recorrido
+ * se dibuja. La
  * entrada corre una vez; el recorrido se repite cada vez que se vuelve a verlo
  * (`ReplayOnView`). El resultado está quieto desde el principio: si aparecía al final del
  * recorrido, se leía como un bloque que salta de la nada. El sello de la carátula cae
@@ -33,24 +35,30 @@ export function Hero({
   ui: Profile['ui'];
 }) {
   return (
-    <header className="page pb-16 pt-12 md:pb-24 md:pt-20" id="top">
+    <header className="page pb-16 pt-8 md:pb-24 md:pt-14" id="top">
       <p className="rise text-pretty text-muted">
         <span className="text-heading">{hero.name}</span>, {hero.headline}. {hero.location}.
       </p>
 
-      {/* Más lenta que la presentación: es texto grande y se lee mientras sube. */}
-      <h1
-        className="display-hero rise mt-5 max-w-[21ch]"
-        style={{ animationDelay: '120ms', animationDuration: '700ms' }}
-      >
-        {hero.thesis}
+      {/* La tesis entra palabra por palabra desde la izquierda, así cada renglón se completa
+          antes que el siguiente sin medir dónde corta. ponytail: renglones exactos piden
+          medir con JS después de hidratar; la cascada por palabra se lee igual.
+          El `aria-label` lleva la frase entera: el lector no la recibe en pedazos. */}
+      <h1 aria-label={hero.thesis} className="display-hero mt-5 max-w-[21ch]">
+        {hero.thesis.split(' ').map((word, index) => (
+          <Fragment key={index}>
+            <span aria-hidden="true" className="hero-word" style={{ '--i': index } as CSSProperties}>
+              {word}
+            </span>{' '}
+          </Fragment>
+        ))}
       </h1>
 
-      <ReplayOnView className="mt-14 md:mt-20">
+      <ReplayOnView className="mt-10 md:mt-12">
         <StateFlow flow={hero.flow} lang={lang} linkLabel={ui.caseStudyLink} wide />
       </ReplayOnView>
 
-      <p className="mt-14 grid gap-1 md:mt-16">
+      <p className="mt-10 grid gap-1 md:mt-12">
         <span className="h2 text-heading">{hero.outcome.value}</span>
         <span className="small">{hero.outcome.note}</span>
       </p>

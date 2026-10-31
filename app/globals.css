@@ -388,6 +388,9 @@ b {
    acento subrayado convierten el pie en una sopa; el subrayado solo es obligatorio para
    enlaces embebidos en texto corrido (WCAG 1.4.1), no para listas de enlaces. */
 .footer-link {
+  /* Área táctil de ~32px de alto: a 18px se erraba con el dedo. */
+  display: inline-block;
+  padding-block: 0.375rem;
   font-size: 0.875rem;
   color: var(--text-muted);
   transition: color var(--dur-fast) var(--ease);
@@ -465,6 +468,22 @@ b {
   animation: rise var(--dur-slow) var(--ease) both;
 }
 
+/* La tesis del home: cada palabra entra desde la izquierda, escalonada por su índice
+   (`--i`). Como el texto corre de izquierda a derecha, los renglones se completan en
+   orden: se lee como renglones que entran deslizándose, sin medir dónde corta. */
+@keyframes word-in {
+  from {
+    opacity: 0;
+    transform: translateX(-0.4em);
+  }
+}
+
+.hero-word {
+  display: inline-block;
+  animation: word-in 650ms var(--ease) both;
+  animation-delay: calc(150ms + var(--i) * 40ms);
+}
+
 /* Sin revelado por sección. Existió (fundido y desplazamiento al entrar en vista en
    cada sección) y es el patrón más reconocible de las páginas generadas: diluía el
    único momento de movimiento en doce momentos iguales. */
@@ -527,8 +546,11 @@ b {
   animation-delay: inherit;
 }
 
+/* Peso además de color: en modo claro el marrón contra el gris del cuerpo da 1.33:1 y el
+   remate se distinguía solo por matiz. */
 .flow-step-final {
   animation-name: flow-arrive;
+  font-weight: 500;
 }
 
 .flow-step-final::before {
@@ -660,9 +682,9 @@ b {
 
 .flow-wide {
   --flow-step-delay: 650ms;
-  /* Arranca cuando la tesis del hero termina de subir (120ms + 700ms): una secuencia,
-     no dos animaciones superpuestas. */
-  --flow-start: 800ms;
+  /* Arranca cuando la tesis del hero está terminando de entrar (la última palabra sale a
+     ~750ms y dura 650ms): una secuencia que se encadena, no dos animaciones encimadas. */
+  --flow-start: 1100ms;
 }
 
 @media (width >= 48rem) {

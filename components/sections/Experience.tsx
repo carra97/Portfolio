@@ -70,7 +70,7 @@ export function JobRow({
         <ul className="mt-6 space-y-3">
           {achievements.map((achievement) => (
             <li key={achievement.slice(0, 40)} className="measure flex gap-4 text-pretty">
-              <span aria-hidden="true" className="mt-3.5 h-px w-4 shrink-0 bg-accent-dim" />
+              <span aria-hidden="true" className="mt-3.5 h-px w-4 shrink-0 bg-line-strong" />
               <span>{achievement}</span>
             </li>
           ))}
