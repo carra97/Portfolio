@@ -4,8 +4,7 @@ import { useEffect, useRef, useState, type ReactNode } from 'react';
 
 /**
  * La lista de destinos del nav, deslizable en un teléfono, con flechas que avisan que
- * sigue hacia cada lado. El degradado solo no alcanzaba: un menú que se corta no se lee
- * como deslizable.
+ * sigue hacia cada lado. Un menú que solo se corta en el borde no se lee como deslizable.
  *
  * Las flechas son botones de verdad —deslizan el menú al tocarlas— y cada una
  * desaparece cuando ya no queda nada de su lado. Desde md la lista entra entera y nada
@@ -52,9 +51,7 @@ export function NavScroller({
     <div className="relative order-last w-full md:order-none md:w-auto md:flex-1">
       <ul
         ref={ref}
-        className="nav-fade flex gap-5 overflow-x-auto whitespace-nowrap [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
-        data-after={edges.after || undefined}
-        data-before={edges.before || undefined}
+        className="flex gap-5 overflow-x-auto whitespace-nowrap [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
       >
         {children}
       </ul>
@@ -72,7 +69,10 @@ export function NavScroller({
   );
 }
 
-/** `tabIndex={-1}`: con teclado, el foco ya desliza la lista hasta cada destino. */
+/**
+ * `tabIndex={-1}`: con teclado, el foco ya desliza la lista hasta cada destino. La flecha
+ * va en el margen de página (24px), afuera de la lista: no tapa ningún destino.
+ */
 function NavArrow({
   children,
   label,
@@ -87,8 +87,8 @@ function NavArrow({
   return (
     <button
       aria-label={label}
-      className={`absolute inset-y-0 flex w-8 items-center text-heading md:hidden ${
-        side === 'left' ? 'left-0 justify-start' : 'right-0 justify-end'
+      className={`absolute inset-y-0 flex w-6 items-center justify-center text-heading md:hidden ${
+        side === 'left' ? '-left-6' : '-right-6'
       }`}
       onClick={onClick}
       tabIndex={-1}
