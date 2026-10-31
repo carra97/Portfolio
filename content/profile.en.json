@@ -172,7 +172,7 @@
         "I'm the main author of two of the platform's services — a document analysis agent and an MCP server — where the hard problem isn't calling the model but making the system deterministic and operable.",
         "I designed a two-level orchestration architecture: a central orchestrator that dispatches to 7 structured-extraction skills, each with its own sub-orchestrator.",
         "The orchestrator is modeled as a state machine: each analysis moves from one step to the next, the same pattern I used for case files at the Entre Ríos Education Council.",
-        "I built a 5-stage multimodal pipeline: vision, OCR, parsing of vector documents as text, regulatory verification and response synthesis.",
+        "I built a 5-stage multimodal pipeline: vision, OCR, text extraction from digital PDFs (the ones that don't need OCR), regulatory verification and response synthesis.",
         "I developed the regulatory verification system end to end: modeling and loading the legal corpus, indexing and search, evaluating compliance rules and generating the results report.",
         "I exposed internal services over MCP — retrieval, technical report generation and document validation — as tools LLMs can consume.",
         "Output determinism: state and concurrency guards in the analysis pipeline, contract tests for the skills and regression tests with real fixtures, so a prompt change can't silently break the format.",

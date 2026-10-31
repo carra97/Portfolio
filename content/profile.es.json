@@ -172,7 +172,7 @@
         "Soy autor principal de dos servicios de la plataforma — un agente de análisis documental y un servidor MCP —, donde el problema difícil no es llamar al modelo sino que el sistema sea determinista y operable.",
         "Diseñé una arquitectura de orquestación en dos niveles: un orquestador central que despacha a 7 skills de extracción estructurada, cada una con su propio sub-orquestador.",
         "El orquestador está modelado como una máquina de estados: cada análisis avanza de un paso al siguiente, el mismo patrón que usé para los expedientes en el Consejo General de Educación.",
-        "Construí un pipeline multimodal de 5 etapas: visión, OCR, parseo de documentos vectorizados como texto, verificación normativa y síntesis de respuesta.",
+        "Construí un pipeline multimodal de 5 etapas: visión, OCR, extracción del texto de PDFs digitales (los que no necesitan OCR), verificación normativa y síntesis de respuesta.",
         "Desarrollé de punta a punta el sistema de verificación normativa: modelado y carga del corpus legal, indexación y búsqueda, evaluación de reglas de compliance y generación del informe de resultados.",
         "Expuse los servicios internos vía MCP —recuperación, generación de informes técnicos y validación documental— como herramientas consumibles por LLMs.",
         "Determinismo de salida: guardas de estado y concurrencia en el pipeline de análisis, tests de contrato para las skills y regresión con fixtures reales, para que un cambio de prompt no rompa el formato en silencio.",
