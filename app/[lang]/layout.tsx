@@ -129,7 +129,9 @@ export default async function LangLayout({
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeInit }} />
       </head>
-      <body>
+      {/* Extensiones como ColorZilla o Grammarly le agregan atributos al body antes de
+          hidratar. Solo apaga el aviso de atributos de este nodo, no el de sus hijos. */}
+      <body suppressHydrationWarning>
         <a
           className="sr-only rounded-md bg-accent px-4 py-2 text-accent-on focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50"
           href="#content"
