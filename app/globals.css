@@ -448,8 +448,8 @@ b {
 
 /* ── Movimiento — DISENO.md §5 ────────────────────────────────────────────── */
 
-/* Entrada del encabezado en las páginas internas: su único momento. En el home el
-   momento es el diagrama de estados, y el hero queda quieto. Se ejecuta una vez. */
+/* Entrada del encabezado: en las páginas internas es su único momento; en el home es el
+   primer tiempo del momento, antes de que se dibuje el recorrido. Se ejecuta una vez. */
 @keyframes rise {
   from {
     opacity: 0;
@@ -660,7 +660,9 @@ b {
 
 .flow-wide {
   --flow-step-delay: 650ms;
-  --flow-start: 300ms;
+  /* Arranca cuando la tesis del hero termina de subir (120ms + 700ms): una secuencia,
+     no dos animaciones superpuestas. */
+  --flow-start: 800ms;
 }
 
 @media (width >= 48rem) {

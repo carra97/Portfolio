@@ -16,10 +16,12 @@ import type { Profile } from '@/types/profile';
  * llegar al final, el resultado. Abajo, la carátula con los datos, el extracto y los
  * botones, sellada.
  *
- * **Un solo momento de movimiento** (DISENO.md §5): el recorrido se dibuja. El resultado
- * está quieto desde el principio: si aparecía al final del recorrido, se leía como un
- * bloque que salta de la nada. Se repite cada vez que se vuelve a verlo (`ReplayOnView`);
- * el sello de la carátula cae cuando ella entra en pantalla.
+ * **Un solo momento de movimiento** (DISENO.md §5), en dos tiempos: al entrar, la
+ * presentación y la tesis suben, y cuando la tesis asienta el recorrido se dibuja. La
+ * entrada corre una vez; el recorrido se repite cada vez que se vuelve a verlo
+ * (`ReplayOnView`). El resultado está quieto desde el principio: si aparecía al final del
+ * recorrido, se leía como un bloque que salta de la nada. El sello de la carátula cae
+ * cuando ella entra en pantalla.
  */
 export function Hero({
   hero,
@@ -32,11 +34,17 @@ export function Hero({
 }) {
   return (
     <header className="page pb-16 pt-12 md:pb-24 md:pt-20" id="top">
-      <p className="text-pretty text-muted">
+      <p className="rise text-pretty text-muted">
         <span className="text-heading">{hero.name}</span>, {hero.headline}. {hero.location}.
       </p>
 
-      <h1 className="display-hero mt-5 max-w-[21ch]">{hero.thesis}</h1>
+      {/* Más lenta que la presentación: es texto grande y se lee mientras sube. */}
+      <h1
+        className="display-hero rise mt-5 max-w-[21ch]"
+        style={{ animationDelay: '120ms', animationDuration: '700ms' }}
+      >
+        {hero.thesis}
+      </h1>
 
       <ReplayOnView className="mt-14 md:mt-20">
         <StateFlow flow={hero.flow} lang={lang} linkLabel={ui.caseStudyLink} wide />
