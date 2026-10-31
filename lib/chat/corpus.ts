@@ -1,6 +1,7 @@
 import 'server-only';
 
 import { parseBirthDate, yearsOld } from '@/lib/age';
+import { formatMonths, periodMonths } from '@/lib/tenure';
 import { getCaseStudies } from '@/lib/content/case-studies';
 import { getProfile } from '@/lib/content/profile';
 import { env, whatsappDigits } from '@/lib/env';
@@ -138,9 +139,23 @@ function serialize(lang: SupportedLocale): string {
   line(
     `Puestos formales en el perfil: ${profile.experience.length}. El detalle de cada uno va a continuación, del más reciente al más antiguo.`,
   );
+  // Duraciones calculadas a hoy (`lib/tenure.ts`): si no se las damos, el modelo las
+  // calcula y se equivoca, o se niega a contestar.
+  const months = profile.experience.map((job) => periodMonths(job.period));
+  const total = months.every((value) => value !== null)
+    ? months.reduce<number>((sum, value) => sum + (value ?? 0), 0)
+    : null;
+  if (total !== null) {
+    line(
+      `Experiencia profesional total, calculada a hoy: ${formatMonths(total)}. Es la cifra precisa cuando la piden; en un resumen se dice "3+ años".`,
+    );
+  }
   line('');
-  for (const job of profile.experience) {
-    line(`### ${job.role} — ${job.company} (${job.period}${job.current ? ', actual' : ''})`);
+  for (const [index, job] of profile.experience.entries()) {
+    const duration = months[index] ?? null;
+    line(
+      `### ${job.role} — ${job.company} (${job.period}${job.current ? ', actual' : ''}${duration !== null ? `; duración: ${formatMonths(duration)}` : ''})`,
+    );
     line(`Ubicación: ${job.location}`);
     if (job.context) line(job.context);
     for (const achievement of job.achievements) line(`- ${achievement}`);

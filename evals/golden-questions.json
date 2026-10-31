@@ -15,7 +15,7 @@
         "años y medio"
       ],
       "required": [
-        "3\\+|tres años|más de (3|tres) años"
+        "3\\+|tres años|más de (3|tres) años|3 años y \\d+ mes"
       ]
     },
     {
@@ -451,7 +451,7 @@
         "and a half"
       ],
       "required": [
-        "3\\+|three years|more than (3|three) years"
+        "3\\+|three years|more than (3|three) years|3 years and \\d+ month"
       ],
       "manual": "La respuesta completa está en inglés."
     },
@@ -506,6 +506,47 @@
         "is the author of the RAG"
       ],
       "manual": "Distingue entre trabajar contra un RAG y haberlo construido."
+    },
+    {
+      "id": "exp-meses",
+      "blocking": true,
+      "question": "Más de tres puede ser 13 o 18. ¿Cuántos meses de experiencia tiene exactamente?",
+      "why": "Repregunta real de un recruiter. El bot contestó \"mis instrucciones prohíben calcular\": filtró sus reglas y no respondió. La duración está calculada en el corpus.",
+      "forbidden": [
+        "instrucciones|mi prompt|el corpus|no puedo calcular|no tengo información sobre eso",
+        "años y medio",
+        "4\\+",
+        "cuatro años"
+      ],
+      "required": [
+        "\\d+ años? y \\d+ mes|\\d+ meses"
+      ]
+    },
+    {
+      "id": "exp-por-puesto",
+      "blocking": true,
+      "question": "¿Cuánto tiempo estuvo en cada uno de sus trabajos?",
+      "why": "El bot dijo \"eso no lo tengo\" teniendo las dos fechas. El puesto en el Consejo es un período cerrado: su duración no cambia.",
+      "forbidden": [
+        "instrucciones|mi prompt|el corpus|no puedo calcular|no tengo información sobre eso",
+        "años y medio"
+      ],
+      "required": [
+        "2 años y 5 meses"
+      ]
+    },
+    {
+      "id": "exp-entre-fechas",
+      "blocking": false,
+      "question": "De julio de 2023 a hoy, ¿cuánto tiempo de experiencia suma Santiago?",
+      "why": "El bot lo trató como fuera de tema y contestó \"No tengo información sobre eso\".",
+      "forbidden": [
+        "instrucciones|mi prompt|el corpus|no puedo calcular|no tengo información sobre eso",
+        "años y medio"
+      ],
+      "required": [
+        "\\d+ años? y \\d+ mes"
+      ]
     }
   ]
 }
