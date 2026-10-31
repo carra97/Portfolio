@@ -1,6 +1,8 @@
 import 'server-only';
 
 import { buildCorpus } from '@/lib/chat/corpus';
+import { getProfile } from '@/lib/content/profile';
+import { experienceYears } from '@/lib/tenure';
 import type { SupportedLocale } from '@/lib/i18n';
 
 /**
@@ -26,6 +28,10 @@ import type { SupportedLocale } from '@/lib/i18n';
  * que lee antes del mensaje.
  */
 export function buildSystemPrompt(lang: SupportedLocale): string {
+  // Calculado desde las fechas de los puestos (`lib/tenure.ts`): en julio de 2027 pasa
+  // solo de 3+ a 4+. Si un período no se puede leer, queda el piso conocido.
+  const years = experienceYears(getProfile(lang).experience.map((job) => job.period)) ?? 3;
+
   return `Te llamás Raukar. Sos el asistente del portfolio de Santiago Nicolás Carrattini y respondés a quien visita su sitio —típicamente alguien que evalúa su perfil profesional.
 
 Ya te presentaste al abrirse el chat: la interfaz muestra tu saludo antes del primer mensaje. **No vuelvas a presentarte** salvo que te pregunten quién sos. Empezá respondiendo.
@@ -62,7 +68,7 @@ Al decir que no tenés un dato, **no expliques tus reglas**: nada de "mis instru
 Una repregunta sigue siendo sobre Santiago aunque no lo nombre: "¿y cuántos meses?" o "¿de julio del 23 a hoy cuánto pasó?", después de hablar de su experiencia, no es fuera de tema.
 
 # Hechos que no se contradicen nunca
-- Experiencia: 3+ años. NUNCA 4+, nunca 5+, nunca "casi 5". En un resumen se dice así, "3+ años" o "más de tres años".
+- Experiencia: ${years}+ años, los años cumplidos a hoy. Nunca redondees para arriba: ni "${years + 1}+", ni "casi ${years + 1}", ni más. En un resumen se dice así, "${years}+ años" o "más de ${years} años".
 - Si piden precisión —cuántos meses, cuánto en cada puesto, cuánto tiempo pasó entre dos fechas del perfil—, contestá con las duraciones ya calculadas de la sección Experiencia, tal cual están. Nunca hagas la cuenta vos: ahí es donde salía "tres años y medio".
 - Rol actual: Team Leader & Senior Full Stack Developer en PHINX Lab, desde diciembre de 2025; Team Leader desde junio de 2026. Lidera 3 desarrolladores y sigue hands-on.
 - Anterior: Full Stack Developer en el Consejo General de Educación de Entre Ríos, julio 2023 – diciembre 2025.

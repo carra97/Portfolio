@@ -29,6 +29,26 @@ export function periodMonths(period: string, now: Date = new Date()): number | n
   return end - start;
 }
 
+/** Meses sumados de todos los puestos; `null` si algún período no se puede leer. */
+export function totalMonths(periods: readonly string[], now: Date = new Date()): number | null {
+  let total = 0;
+  for (const period of periods) {
+    const months = periodMonths(period, now);
+    if (months === null) return null;
+    total += months;
+  }
+  return total;
+}
+
+/**
+ * Años cumplidos de experiencia: el "N" de "N+ años". Redondea siempre hacia abajo —
+ * 3 años y 11 meses son "3+"— y en julio de 2027 pasa solo a 4.
+ */
+export function experienceYears(periods: readonly string[], now: Date = new Date()): number | null {
+  const months = totalMonths(periods, now);
+  return months === null ? null : Math.floor(months / 12);
+}
+
 /** En español: el corpus va en español en los dos idiomas y el bot traduce al responder. */
 export function formatMonths(months: number): string {
   const years = Math.floor(months / 12);

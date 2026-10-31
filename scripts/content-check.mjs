@@ -21,7 +21,22 @@
 import { readdir, readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 
+import { experienceYears } from '../lib/tenure.ts';
+
 const CONTENT_DIR = new URL('../content/', import.meta.url);
+
+/** Años cumplidos de experiencia a hoy, desde los puestos: el "N" de "N+ años". */
+const YEARS =
+  experienceYears(
+    JSON.parse(await readFile(new URL('profile.es.json', CONTENT_DIR), 'utf8')).experience.map((job) => job.period),
+  ) ?? 3;
+const NUMBER_WORDS = {
+  es: ['cero', 'un', 'dos', 'tres', 'cuatro', 'cinco', 'seis', 'siete', 'ocho', 'nueve', 'diez'],
+  en: ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten'],
+};
+/** Todo número de años por encima de los cumplidos, en cifras o en palabras. */
+const over = (words) => words.slice(YEARS + 1).join('|');
+const OVER_DIGITS = Array.from({ length: 30 - YEARS }, (_, i) => YEARS + 1 + i).join('|');
 
 /**
  * Cada regla dice qué busca y por qué está prohibido. El `why` no es decorativo: cuando
@@ -36,9 +51,11 @@ const RULES = [
   },
   {
     id: 'anos-inflados',
-    pattern:
-      /\b(4\+|5\+)\s*(años|years)|\b(cuatro|cinco) años de experiencia|\b(four|five) years of experience/i,
-    why: 'Anchor fact: la experiencia es 3+ años. Nunca 4+ ni 5+, en ningún idioma.',
+    pattern: new RegExp(
+      `\\b(${OVER_DIGITS})\\+\\s*(años|years)|\\b(${over(NUMBER_WORDS.es)}) años de experiencia|\\b(${over(NUMBER_WORDS.en)}) years of experience`,
+      'i',
+    ),
+    why: `Anchor fact: la experiencia son ${YEARS}+ años, calculados desde las fechas de los puestos. Nunca más, en ningún idioma.`,
   },
   {
     id: 'cargo-futuro-como-actual',

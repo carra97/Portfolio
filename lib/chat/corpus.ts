@@ -1,7 +1,7 @@
 import 'server-only';
 
 import { parseBirthDate, yearsOld } from '@/lib/age';
-import { formatMonths, periodMonths } from '@/lib/tenure';
+import { formatMonths, periodMonths, totalMonths } from '@/lib/tenure';
 import { getCaseStudies } from '@/lib/content/case-studies';
 import { getProfile } from '@/lib/content/profile';
 import { env, whatsappDigits } from '@/lib/env';
@@ -142,12 +142,10 @@ function serialize(lang: SupportedLocale): string {
   // Duraciones calculadas a hoy (`lib/tenure.ts`): si no se las damos, el modelo las
   // calcula y se equivoca, o se niega a contestar.
   const months = profile.experience.map((job) => periodMonths(job.period));
-  const total = months.every((value) => value !== null)
-    ? months.reduce<number>((sum, value) => sum + (value ?? 0), 0)
-    : null;
+  const total = totalMonths(profile.experience.map((job) => job.period));
   if (total !== null) {
     line(
-      `Experiencia profesional total, calculada a hoy: ${formatMonths(total)}. Es la cifra precisa cuando la piden; en un resumen se dice "3+ años".`,
+      `Experiencia profesional total, calculada a hoy: ${formatMonths(total)}. Es la cifra precisa cuando la piden; en un resumen se dice "${Math.floor(total / 12)}+ años".`,
     );
   }
   line('');
