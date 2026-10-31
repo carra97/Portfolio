@@ -41,8 +41,15 @@ export function StateFlow({
     '--flow-last': last,
   };
 
+  // Con estados de más de 14 caracteres la leyenda no entra al costado en un teléfono
+  // de 320px (ver `.flow-long` en `globals.css`).
+  const long = flow.steps.some((step) => step.length > 14);
+
   return (
-    <figure className={wide ? 'flow flow-wide' : 'flow'} style={vars as CSSProperties}>
+    <figure
+      className={['flow', wide && 'flow-wide', long && 'flow-long'].filter(Boolean).join(' ')}
+      style={vars as CSSProperties}
+    >
       <figcaption className="label">{flow.caption}</figcaption>
 
       <div className={wide ? 'relative mt-6 w-fit md:w-full' : 'relative mt-5 w-fit'}>

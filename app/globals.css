@@ -223,7 +223,10 @@
 }
 
 /* CTA primario: el momento de marca. Relleno de acento en los dos modos. */
+/* `inline-block` en los dos: como `<a>` inline, un texto que no entra en un renglón
+   partía el relleno en dos cajas desfasadas. */
 @utility btn-primary {
+  display: inline-block;
   border-radius: 6px;
   background-color: var(--accent);
   padding: 0.625rem 1.25rem;
@@ -237,6 +240,7 @@
 }
 
 @utility btn-secondary {
+  display: inline-block;
   border: 1px solid var(--border);
   border-radius: 6px;
   padding: 0.625rem 1.25rem;
@@ -430,9 +434,34 @@ b {
   display: none;
 }
 
+/* Las tarjetas que asoman a los costados se desenfocan: la activa es la que se lee.
+   `data-inactive` lo pone `Carousel` al hidratar; sin JavaScript se ven todas nítidas. */
+.carousel-scroller > [data-inactive] {
+  filter: blur(3px);
+  opacity: 0.6;
+}
+
+.carousel-scroller > * {
+  transition:
+    filter var(--dur-base) var(--ease),
+    opacity var(--dur-base) var(--ease);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .carousel-scroller > * {
+    transition: none;
+  }
+}
+
 @media (min-width: 48rem) {
   .carousel-scroller {
     scroll-padding-inline: 0;
+  }
+
+  /* En grilla no hay tarjeta activa: todas a la vista. */
+  .carousel-scroller > [data-inactive] {
+    filter: none;
+    opacity: 1;
   }
 }
 
@@ -551,28 +580,37 @@ b {
   clip-path: polygon(0 50%, 100% 0, 100% 100%);
 }
 
-/* La leyenda del desvío. En un teléfono va debajo de la lista, con el mismo trazo
-   punteado: al costado no entra cuando los estados son largos ("Prompt + corpus
-   completo"). Desde 40rem se ubica a la derecha del corchete, a la altura de su medio. */
-.flow-loop-label {
-  /* Sin esto la leyenda ensancha el contenedor `w-fit` y empuja el corchete fuera de
-     la pantalla: así toma el ancho de la lista y corta el renglón ahí. */
-  contain: inline-size;
-  margin-top: 0.75rem;
-  padding-left: 0.75rem;
-  border-left: 1px dashed var(--border-strong);
+/* La leyenda del desvío: a la derecha del corchete, a la altura de su medio. Abajo
+   colgaba suelta y se leía como un paso después del final. */
+.flow {
+  container-type: inline-size;
 }
 
-@media (width >= 40rem) {
-  .flow-loop-label {
-    position: absolute;
-    top: calc(var(--flow-row) * (var(--flow-from) + 1) / 2);
-    left: calc(100% + 3rem);
-    transform: translateY(-50%);
-    width: 7.5rem;
-    margin: 0;
-    padding: 0;
-    border: 0;
+.flow-loop-label {
+  position: absolute;
+  top: calc(var(--flow-row) * (var(--flow-from) + 1) / 2);
+  left: calc(100% + 3rem);
+  transform: translateY(-50%);
+  /* En un teléfono, el espacio que queda entre el corchete y el borde del diagrama
+     (`100%` es el ancho de la lista). */
+  width: min(7.5rem, 100cqi - 100% - 3rem);
+}
+
+/* ponytail: al costado no entra en un teléfono cuando los estados son largos ("Prompt +
+   corpus completo"); `StateFlow` marca `flow-long` contando caracteres. Ahí va debajo,
+   con el mismo trazo punteado. Si aparece un flujo que no encaja en ninguno de los dos,
+   medir en el cliente. */
+@media (width < 40rem) {
+  .flow-long .flow-loop-label {
+    position: static;
+    transform: none;
+    /* Sin esto la leyenda ensancha el contenedor `w-fit` y empuja el corchete fuera de
+       la pantalla: así toma el ancho de la lista y corta el renglón ahí. */
+    width: auto;
+    contain: inline-size;
+    margin-top: 0.75rem;
+    padding-left: 0.75rem;
+    border-left: 1px dashed var(--border-strong);
   }
 }
 

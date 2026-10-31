@@ -89,6 +89,12 @@ export function Carousel({
     return () => observer.disconnect();
   }, [itemCount]);
 
+  // Marca las tarjetas que no son la activa; el CSS las desenfoca (`globals.css`).
+  useEffect(() => {
+    const items = Array.from(scrollerRef.current?.children ?? []);
+    for (const [index, item] of items.entries()) item.toggleAttribute('data-inactive', index !== active);
+  }, [active, itemCount]);
+
   const goTo = useCallback((index: number) => {
     const scroller = scrollerRef.current;
     const target = scroller?.children.item(index);
