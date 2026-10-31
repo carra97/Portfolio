@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState, type ReactNode } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState, type ReactNode } from 'react';
 
 /**
  * La lista de destinos del nav, deslizable en un teléfono, con flechas que avisan que
@@ -19,6 +19,20 @@ export function NavScroller({
 }) {
   const ref = useRef<HTMLUListElement>(null);
   const [edges, setEdges] = useState({ after: false, before: false });
+
+  // El nav se monta en cada página: antes de pintar, se desliza para que el destino actual
+  // se vea entero y el siguiente también, aunque estuviera cortado en el borde.
+  useLayoutEffect(() => {
+    const list = ref.current;
+    const current = list?.querySelector('[aria-current="page"]')?.closest('li');
+    if (!list || !current) return;
+
+    const bounds = list.getBoundingClientRect();
+    const end = (current.nextElementSibling ?? current).getBoundingClientRect().right;
+    if (end > bounds.right) list.scrollLeft += end - bounds.right;
+    const start = current.getBoundingClientRect().left;
+    if (start < bounds.left) list.scrollLeft -= bounds.left - start;
+  }, []);
 
   useEffect(() => {
     const list = ref.current;
