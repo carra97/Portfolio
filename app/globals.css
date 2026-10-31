@@ -845,7 +845,14 @@ b {
   }
 }
 
-/* Fuera de pantalla, sin animación: así vuelve a correr desde cero al regresar. */
+/* Fuera de pantalla, sin animación: así vuelve a correr desde cero al regresar.
+   Y oculto: sin animación queda en su estado final, y el observer avisa uno o dos
+   cuadros después de que el bloque asoma; sin esto el sello se ve puesto, desaparece y
+   recién ahí cae. Fuera de pantalla nadie ve la diferencia. */
+[data-idle] {
+  visibility: hidden;
+}
+
 [data-idle] *,
 [data-idle] *::before,
 [data-idle] *::after {
