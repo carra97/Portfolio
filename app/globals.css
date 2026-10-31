@@ -384,25 +384,6 @@ b {
   color: var(--accent-hover);
 }
 
-/* ── Navegación ───────────────────────────────────────────────────────────── */
-
-/**
- * Degradado en el borde derecho de la lista de destinos, solo donde la lista no entra.
- * Una lista que se corta limpia se lee como completa; con el degradado se lee como
- * "sigue". Se aplica sobre el contenido con `mask-image` en vez de superponer un
- * rectángulo del color de fondo: así funciona igual en modo claro y oscuro, y no hay
- * que hacer coincidir el color con el `backdrop-blur` del header.
- */
-.nav-fade {
-  mask-image: linear-gradient(to right, #000 88%, transparent 100%);
-}
-
-@media (min-width: 48rem) {
-  .nav-fade {
-    mask-image: none;
-  }
-}
-
 /* Enlaces del footer: apagados y sin subrayado, como los del nav. Cinco enlaces en
    acento subrayado convierten el pie en una sopa; el subrayado solo es obligatorio para
    enlaces embebidos en texto corrido (WCAG 1.4.1), no para listas de enlaces. */

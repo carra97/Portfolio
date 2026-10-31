@@ -33,7 +33,9 @@ export function Credentials({
       <ul className="space-y-5">
         {education.map((item) => (
           <li key={item.title} className="doc-row">
-            <p className="data md:pt-1">
+            {/* Sin año (la UTN, en pausa), en un teléfono el guion quedaba solo en su
+                renglón. Se muestra únicamente en la columna de desktop. */}
+            <p className={item.year ? 'data md:pt-1' : 'data hidden md:block md:pt-1'}>
               {item.year ?? '—'}
             </p>
             <div>
