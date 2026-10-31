@@ -77,7 +77,7 @@ function serialize(lang: SupportedLocale): string {
   out.push('# Perfil profesional de Santiago Nicolás Carrattini');
   out.push('');
   out.push(
-    'Este es el único material sobre el que se puede responder. Todo lo que sigue está publicado en el sitio.',
+    'Estos son los hechos sobre Santiago: todo lo que sigue está publicado en el sitio. Se razona sobre ellos; no se agregan otros.',
   );
 
   section('Identidad y posicionamiento');
@@ -163,7 +163,9 @@ function serialize(lang: SupportedLocale): string {
 
   section('Proyectos');
   for (const project of profile.projects) {
-    line(`### ${project.name} (${project.period})`);
+    // Misma razón que en Experiencia: "¿cuánto Node tiene?" se arma sumando estos tramos.
+    const duration = periodMonths(project.period);
+    line(`### ${project.name} (${project.period}${duration !== null ? `; duración: ${formatMonths(duration)}` : ''})`);
     line(project.description);
     if (project.result) line(project.result);
     line(`Tecnologías: ${project.tech.join(', ')}`);
