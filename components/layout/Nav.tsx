@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { NavScroller } from '@/components/layout/NavScroller';
 import { ThemeToggle } from '@/components/layout/ThemeToggle';
 import { LOCALE_NAMES, type SupportedLocale } from '@/lib/i18n';
 import type { Navigation } from '@/lib/pages/nav';
@@ -57,9 +58,13 @@ export function Nav({
           SC
         </Link>
 
-        {/* En un teléfono los destinos bajan de renglón en vez de desplazarse: un menú
-            que se corta con un degradado no se entiende como deslizable. */}
-        <ul className="order-last flex w-full flex-wrap gap-x-5 whitespace-nowrap md:order-none md:w-auto md:flex-1 md:flex-nowrap">
+        <NavScroller
+          labels={
+            lang === 'en'
+              ? { next: 'More sections', previous: 'Previous sections' }
+              : { next: 'Más secciones', previous: 'Secciones anteriores' }
+          }
+        >
           {navigation.destinations.map((item) => (
             <li key={item.href}>
               <Link
@@ -75,7 +80,7 @@ export function Nav({
               </Link>
             </li>
           ))}
-        </ul>
+        </NavScroller>
 
         {navigation.cta && (
           <Link
