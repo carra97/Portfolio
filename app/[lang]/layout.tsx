@@ -8,7 +8,7 @@ import { Chat } from '@/components/chat/Chat';
 import { publicAsset } from '@/lib/assets';
 import { getCaseStudies } from '@/lib/content/case-studies';
 import { getProfile } from '@/lib/content/profile';
-import { chatEnabled, env } from '@/lib/env';
+import { chatEnabled, env, whatsappDigits } from '@/lib/env';
 import { LOCALES, isSupportedLocale } from '@/lib/i18n';
 import { getPages, pageHref } from '@/lib/pages/registry';
 
@@ -94,6 +94,11 @@ export default async function LangLayout({
     ...getPages().map((page) => pageHref(page.id, lang)),
     ...getCaseStudies(lang).map((study) => `/${lang}/projects/${study.slug}`),
     ...(profile.hero.resumeUrl ? [profile.hero.resumeUrl] : []),
+    // Los mismos datos de contacto que el corpus le da al bot (`lib/chat/corpus.ts`).
+    ...(env.CONTACT_EMAIL ? [env.CONTACT_EMAIL] : []),
+    ...(whatsappDigits ? [`https://wa.me/${whatsappDigits}`] : []),
+    'https://www.linkedin.com/in/santiago-nicolas-carrattini',
+    'https://github.com/carra97',
   ];
 
   /**

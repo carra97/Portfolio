@@ -426,7 +426,8 @@ function Avatar({ sources, state = 'idle' }: { sources: AvatarSources; state?: A
 }
 
 /**
- * Convierte en links las rutas del sitio que aparezcan en una respuesta.
+ * Convierte en links las rutas del sitio y los datos de contacto que aparezcan en una
+ * respuesta.
  *
  * **Lista blanca, no detección de URLs.** Solo se enlaza lo que el registro de páginas
  * declara. No hay parseo de "algo que parezca un link", así que el modelo no puede
@@ -458,6 +459,22 @@ function createLinkifier(routes: readonly string[]): (text: string) => ReactNode
       if (part.endsWith('.pdf')) {
         return (
           <a className="prose-link" download href={part} key={index}>
+            {part}
+          </a>
+        );
+      }
+
+      // Contacto: el email y los perfiles externos también vienen de la lista blanca.
+      if (part.includes('@')) {
+        return (
+          <a className="prose-link" href={`mailto:${part}`} key={index}>
+            {part}
+          </a>
+        );
+      }
+      if (part.startsWith('https://')) {
+        return (
+          <a className="prose-link" href={part} key={index} rel="noopener noreferrer" target="_blank">
             {part}
           </a>
         );
