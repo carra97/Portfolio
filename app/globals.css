@@ -733,13 +733,6 @@ b {
   }
 }
 
-/* Lo que pasa cuando el recorrido llega: el resultado. Es el final del mismo momento,
-   no un momento nuevo — por eso el retardo sale del diagrama. */
-.flow-after {
-  animation: rise var(--dur-slow) var(--ease) both;
-  animation-delay: calc(300ms + 650ms * var(--flow-last, 4) + 300ms);
-}
-
 /* Cada sello cae cuando su bloque entra en pantalla (`ReplayOnView`), no al cargar.
    Desacelera fuerte al final (ease-out-quint): el golpe seco contra el papel, sin rebote. */
 @keyframes stamp-drop {
